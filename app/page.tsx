@@ -202,24 +202,21 @@ export default async function Landing() {
             </div>
             <h3>Weet wie je vandaag moet bellen</h3>
             <p className="x-muted">Elke lead krijgt een score met de reden erbij: heet, warm of koud. Geen tijd meer kwijt aan kijkers.</p>
-            <div className="x-chart">
-              <div className="x-chart-legend">
-                <span className="x-lgd hot">Heet</span>
-                <span className="x-lgd warm">Warm</span>
-                <span className="x-lgd cold">Koud</span>
-              </div>
-              <div className="x-bars" aria-hidden="true">
-                {[
-                  [3, 5, 2], [4, 6, 3], [5, 5, 2], [6, 7, 3], [4, 6, 4], [7, 8, 3], [8, 7, 2],
-                ].map((d, i) => (
-                  <div className="x-col" key={i} style={{ animationDelay: `${i * 80}ms` }}>
-                    <i className="hot" style={{ height: `${d[0] * 7}px` }} />
-                    <i className="warm" style={{ height: `${d[1] * 7}px` }} />
-                    <i className="cold" style={{ height: `${d[2] * 7}px` }} />
-                    <span>{["ma", "di", "wo", "do", "vr", "za", "zo"][i]}</span>
+            <div className="x-quals">
+              {[
+                { c: "hot", l: "Heet", k: "Mark Jansen", q: "Kan ik zaterdag een proefrit maken?", r: "Wil proefrijden, noemt een dag" },
+                { c: "warm", l: "Warm", k: "Linda Bakker", q: "Wat is het trekgewicht?", r: "Concrete vraag, nog geen afspraak" },
+                { c: "cold", l: "Koud", k: "Onbekend", q: "Nog te koop?", r: "Eén zin, geen gegevens" },
+              ].map((x, i) => (
+                <div className={`x-qual ${x.c}`} key={x.l} style={{ animationDelay: `${i * 120}ms` }}>
+                  <span className={`x-tag ${x.c === "hot" ? "hot" : x.c === "warm" ? "warm" : "wait"}`}>{x.l}</span>
+                  <div className="x-qual-body">
+                    <b>{x.k}</b>
+                    <span>&ldquo;{x.q}&rdquo;</span>
                   </div>
-                ))}
-              </div>
+                  <span className="x-qual-why">{x.r}</span>
+                </div>
+              ))}
             </div>
           </Reveal>
 
