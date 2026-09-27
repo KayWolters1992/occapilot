@@ -5,6 +5,8 @@ import { currentDealer } from "@/lib/auth";
 import { closeLead } from "../../../actions";
 import type { Lead, Msg, Followup, RdwInfo } from "@/lib/types";
 import { ReplyBox, TypedText } from "./LeadClient";
+import { statusInfo } from "@/lib/status";
+import { StatusPill } from "@/components/StatusPill";
 
 export const dynamic = "force-dynamic";
 
@@ -33,34 +35,50 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
         .get(dealer.id, lead.license_plate, lead.id) as { n: number }).n
     : 0;
 
+  const info = statusInfo(lead.status);
+  const nextFup = fups.find((f) => f.status === "gepland");
   const lastOutId = msgs.map((m) => m.direction === "out" && !m.meta.startsWith("verkoper") ? m.id : 0).reduce((a, b) => Math.max(a, b), 0);
 
   return (
     <>
       <div className="pagehead">
-        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", flex: 1 }}>
-          <Link href="/leads" style={{ color: "var(--muted)", fontSize: 13, fontWeight: 500 }}>← Leads</Link>
-          <h1 style={{ fontSize: 24 }}>{lead.customer_name || "Onbekende klant"}</h1>
-          <span className="note">{lead.vehicle} · {lead.source}</span>
+        <div className="titles">
+          <Link href="/leads" className="backlink">← Terug naar overzicht</Link>
+          <h1>{lead.customer_name || "Onbekende klant"} <StatusPill status={lead.status} /></h1>
+          <span className="subtitle">{lead.vehicle || "Onbekende auto"}{lead.source ? ` · via ${lead.source}` : ""} · binnengekomen {lead.created_at.slice(5, 16).replace("T", " ")}</span>
         </div>
-        <form action={closeLead} style={{ display: "flex", gap: 10 }}>
+      </div>
+
+      <div className={`beurt ${info.lane} ${lead.status}`}>
+        <div className="beurt-ic">{info.icon}</div>
+        <div className="beurt-body">
+          <span className="beurt-kicker">{info.lane === "jij" ? "Jij bent aan zet" : info.lane === "ai" ? "Occapilot is bezig" : "Afgerond"}</span>
+          <b>{lead.status === "escalatie" && lead.escalation_reason ? lead.escalation_reason : info.uitleg}</b>
+          <span className="beurt-next">
+            <em>Wat doe jij?</em> {info.jijDoet}
+            {info.lane === "ai" && nextFup && <> Volgende herinnering: {nextFup.label.replace("dag", "dag ")} op {nextFup.due_at.slice(5, 16).replace("T", " ")}.</>}
+          </span>
+        </div>
+        <form action={closeLead} className="beurt-actions">
           <input type="hidden" name="id" value={lead.id} />
-          {lead.status === "escalatie" && (
-            <button className="btn small" name="status" value="wacht">Afgehandeld, AI mag door</button>
+          {lead.customer_phone && info.lane !== "klaar" && (
+            <a className="btn small" href={`tel:${lead.customer_phone.replace(/\s/g, "")}`}>📞 Bel {lead.customer_phone}</a>
           )}
-          {lead.status !== "gesloten" && (
-            <button className="btn ghost small" name="status" value="gesloten">Sluit lead</button>
+          {lead.status === "afspraak" && lead.customer_phone && (
+            <a className="btn small" href={`tel:${lead.customer_phone.replace(/\s/g, "")}`}>📞 Bevestig: {lead.customer_phone}</a>
+          )}
+          {info.lane !== "klaar" && <a className="btn ghost small" href="#antwoord">✍️ Zelf reageren</a>}
+          {info.lane === "jij" && (
+            <button className="btn ghost small" name="status" value="wacht">🤖 Geef terug aan Occapilot</button>
+          )}
+          {lead.status !== "gesloten" && lead.status !== "gestopt" && (
+            <button className="btn ghost small subtle" name="status" value="gesloten">Sluit lead</button>
+          )}
+          {lead.status === "gesloten" && (
+            <button className="btn ghost small" name="status" value="wacht">Heropen lead</button>
           )}
         </form>
       </div>
-
-      {lead.status === "escalatie" && (
-        <div className="alertbar">
-          <span className="ic">!</span>
-          <span style={{ flex: 1, fontSize: 13.5 }}><b>Escalatie.</b> {lead.escalation_reason}</span>
-          {lead.customer_phone && <span className="btn danger small" style={{ cursor: "default" }}>Bel {lead.customer_phone}</span>}
-        </div>
-      )}
 
       {sp.nieuw && lastOutId > 0 && (
         <div className="demobar">
@@ -87,7 +105,11 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
             <div className="kvrow"><span>Naam</span><b>{lead.customer_name || "—"}</b></div>
             <div className="kvrow"><span>E-mail</span><b>{lead.customer_email || "—"}</b></div>
             <div className="kvrow"><span>Telefoon</span><b>{lead.customer_phone || "—"}</b></div>
-            <div className="kvrow"><span>Kwalificatie</span><b>{lead.qual_label || "—"}</b></div>
+            <div className="kvrow"><span>Score</span><b>{lead.qual_label ? (
+              <span className={`pill ${lead.qual_label === "Heet" ? "heat" : lead.qual_label === "Warm" ? "warmp" : "wait"}`}>
+                {lead.qual_label === "Heet" ? "🔥 Heet" : lead.qual_label === "Warm" ? "☀️ Warm" : "❄️ Koud"}
+              </span>
+            ) : "—"}</b></div>
             {lead.qual_reason && <p className="note" style={{ margin: 0 }}>{lead.qual_reason}</p>}
           </div>
 
@@ -167,7 +189,9 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
             })}
           </div>
           {!["gestopt", "gesloten"].includes(lead.status) && (
-            <ReplyBox leadId={lead.id} sellerName={dealer.seller_name} escalated={lead.status === "escalatie"} />
+            <div id="antwoord">
+              <ReplyBox leadId={lead.id} sellerName={dealer.seller_name} escalated={lead.status === "escalatie"} />
+            </div>
           )}
         </div>
       </div>

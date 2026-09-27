@@ -21,7 +21,7 @@ const ITEMS = [
   },
   {
     href: "/handleiding",
-    label: "Handleiding",
+    label: "Hulp & uitleg",
     icon: (
       <>
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -33,14 +33,15 @@ const ITEMS = [
 
 const LEAD_FILTERS = [
   { status: "", label: "Alle leads" },
-  { status: "escalatie", label: "Actie nodig" },
-  { status: "afspraak", label: "Afspraken" },
+  { status: "jij", label: "👤 Jij aan zet" },
+  { status: "ai", label: "🤖 Occapilot bezig" },
+  { status: "klaar", label: "✓ Afgerond" },
 ];
 
 export function SideNav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const activeStatus = searchParams.get("status") || "";
+  const activeStatus = searchParams.get("bak") || "";
   const onLeads = pathname.startsWith("/leads");
 
   return (
@@ -58,7 +59,7 @@ export function SideNav() {
               {LEAD_FILTERS.map((f) => (
                 <Link
                   key={f.label}
-                  href={f.status ? `/leads?status=${f.status}` : "/leads"}
+                  href={f.status ? `/leads?bak=${f.status}` : "/leads"}
                   className={activeStatus === f.status ? "active" : ""}
                 >
                   {f.label}

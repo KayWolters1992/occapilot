@@ -77,7 +77,7 @@ export async function updateSettings(form: FormData) {
   if (!dealer) redirect("/login");
   db()
     .prepare(
-      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, opening_hours=? WHERE id=?"
+      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, opening_hours=?, settings_checked=1 WHERE id=?"
     )
     .run(
       String(form.get("name") ?? dealer.name),
@@ -94,11 +94,12 @@ export async function closeLead(form: FormData) {
   const dealer = await currentDealer();
   if (!dealer) redirect("/login");
   const id = Number(form.get("id"));
-  const status = String(form.get("status") ?? "gesloten");
+  const raw = String(form.get("status") ?? "gesloten");
+  const status = ["gesloten", "wacht"].includes(raw) ? raw : "gesloten";
   db()
-    .prepare("UPDATE leads SET status=?, updated_at=datetime('now') WHERE id=? AND dealer_id=?")
+    .prepare("UPDATE leads SET status=?, escalation_reason='', updated_at=datetime('now') WHERE id=? AND dealer_id=?")
     .run(status, id, dealer.id);
-  cancelFollowups(id);
+  if (status === "gesloten") cancelFollowups(id);
   redirect(`/leads/${id}`);
 }
 

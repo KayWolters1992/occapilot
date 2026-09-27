@@ -1,108 +1,177 @@
+import Link from "next/link";
 import { currentDealer } from "@/lib/auth";
+import { LANES, statusInfo } from "@/lib/status";
+import { StatusPill } from "@/components/StatusPill";
+import { InboundAddress } from "../leads/OnboardingCard";
 
 export const dynamic = "force-dynamic";
 
-const STATUSSEN: { pill: string; label: string; uitleg: string }[] = [
-  { pill: "ai", label: "AI volgt op", uitleg: "Occapilot heeft de lead beantwoord en stuurt vanzelf opvolgmails (na 1, 3 en 7 dagen) tot de klant reageert. Je hoeft niets te doen." },
-  { pill: "wait", label: "Wacht op klant", uitleg: "De klant heeft een antwoord gekregen; Occapilot wacht op een reactie. Reageert de klant, dan gaat het gesprek automatisch verder." },
-  { pill: "ok", label: "Afspraak bevestigd", uitleg: "De klant heeft een proefrit- of bezichtigingsmoment gekozen. Je krijgt hiervan direct een melding per e-mail. Bel of mail de klant ter bevestiging." },
-  { pill: "hot", label: "Actie nodig", uitleg: "Occapilot heeft het gesprek bewust aan jou overgedragen (bod, inruilwaarde, boze klant of juridische vraag). De AI stuurt niets meer tot jij de lead afhandelt." },
-  { pill: "wait", label: "Gestopt", uitleg: "De klant heeft zich afgemeld ('stop'). Occapilot stuurt deze klant nooit meer een bericht." },
-  { pill: "wait", label: "Gesloten", uitleg: "Jij hebt de lead handmatig gesloten (verkocht, niet doorgegaan). Alles blijft bewaard in het archief." },
+const OVERDRACHT = [
+  { ic: "💶", t: "Een bod of prijsvraag", s: "\"Kan er nog wat af?\" Onderhandelen doe jij." },
+  { ic: "🔁", t: "Inruil", s: "Occapilot noemt nooit een inruilwaarde." },
+  { ic: "🏦", t: "Financiering of lease", s: "Bedragen en voorwaarden zijn jouw terrein." },
+  { ic: "😠", t: "Een ontevreden klant", s: "Hij reageert neutraal en geeft het direct door." },
+  { ic: "⚖️", t: "Juridische vragen", s: "Garantie, klachten, geschillen: altijd naar jou." },
+  { ic: "❓", t: "Iets wat hij niet zeker weet", s: "Liever jij dan een verzonnen antwoord." },
 ];
 
 const FAQ: { q: string; a: string }[] = [
-  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. Occapilot mag geen prijzen verlagen, geen garanties beloven en geen beschikbaarheid claimen. Bij een bod of prijsvraag draagt hij het gesprek direct aan jou over." },
-  { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentietekst van de lead en uit officiële RDW-voertuigdata (trekgewicht, APK-datum, kleur, tellerstandoordeel). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt. Hij verzint niets." },
-  { q: "Wat gebeurt er als een klant boos wordt of iets juridisch aankaart?", a: "Occapilot reageert dan niet inhoudelijk, stuurt een korte neutrale bevestiging en escaleert direct naar jou, inclusief melding per e-mail met het telefoonnummer van de klant." },
-  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Ja. Open de lead en klik op 'Sluit lead' om Occapilot te stoppen, of handel een escalatie af en klik op 'Afgehandeld, AI mag door' om de opvolging te hervatten." },
-  { q: "Op welke tijden verstuurt Occapilot e-mails?", a: "Alleen tussen 08:00 en 20:30 (Nederlandse tijd). Opvolgmails die daarbuiten gepland staan, worden automatisch op het eerstvolgende nette moment verstuurd." },
-  { q: "Kunnen klanten zich afmelden?", a: "Ja. Elke opvolgmail vanaf dag 3 bevat een afmeldregel. Antwoordt een klant 'stop', dan bevestigt Occapilot dat netjes en stopt alle communicatie permanent." },
-  { q: "Wat als er meerdere leads op dezelfde auto binnenkomen?", a: "Occapilot herkent dat aan het kenteken, verhoogt de prioriteit, laat het zien in het overzicht ('X andere leads') en stuurt jou een melding zodat je die auto met voorrang kunt behandelen." },
+  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. Occapilot verlaagt geen prijzen, belooft geen garanties en claimt geen beschikbaarheid. Bij een bod of prijsvraag geeft hij het gesprek direct aan jou." },
+  { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentie in de lead en uit de officiële RDW-gegevens (trekgewicht, APK, kleur). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt." },
+  { q: "Hoe weet ik dat er iets op mij wacht?", a: "Je krijgt een e-mail zodra een lead aan jou wordt overgedragen of een proefrit is gepland. In het overzicht staat alles bovenaan bij 'Vandaag bellen' en in de bak 'Jij bent aan zet'." },
+  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Open de lead en klik op 'Zelf reageren'. Je bepaalt zelf of Occapilot daarna weer mag opvolgen. Met 'Sluit lead' stop je alles." },
+  { q: "Op welke tijden verstuurt Occapilot berichten?", a: "Het eerste antwoord gaat direct, dag en nacht. Herinneringen gaan alleen tussen 08:00 en 20:30, zodat niemand 's nachts een opvolgmail krijgt." },
+  { q: "Kunnen klanten zich afmelden?", a: "Ja. Antwoordt een klant 'stop', dan bevestigt Occapilot dat netjes en stuurt hij deze klant nooit meer iets." },
+  { q: "Wat als er meerdere leads op dezelfde auto binnenkomen?", a: "Occapilot herkent dat aan het kenteken. Je ziet '👀 andere lead(s) op deze auto' in het overzicht, zodat je die auto met voorrang behandelt." },
 ];
 
 export default async function Handleiding() {
   const dealer = (await currentDealer())!;
   const domain = process.env.INBOUND_DOMAIN || "…";
+  const inbound = `leads-${dealer.inbound_token}@${domain}`;
+  const toc = [
+    ["kort", "In het kort"], ["dag", "Je dag"], ["instellen", "Aan de slag"], ["statussen", "Statussen"],
+    ["overnemen", "Zelf reageren"], ["overdracht", "Wanneer jij het overneemt"], ["vragen", "Vragen"],
+  ];
+
   return (
     <>
       <div className="pagehead">
         <div className="titles">
-          <h1>Handleiding</h1>
-          <span className="subtitle">Alles wat je moet weten, in 5 minuten leesbaar.</span>
+          <h1>Hulp & <em>uitleg</em></h1>
+          <span className="subtitle">Occapilot in 3 minuten. Zoek je iets specifieks? Spring direct naar het onderwerp.</span>
         </div>
       </div>
 
-      <div className="card" style={{ maxWidth: 860 }}>
-        <span className="cardtitle">Zo werkt Occapilot</span>
-        <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
-          Occapilot beantwoordt elke online autolead <b style={{ color: "var(--ink)" }}>binnen 2 minuten</b>, dag en nacht, en blijft
-          vriendelijk opvolgen tot er een proefrit staat, of tot duidelijk is dat de klant afhaakt. Alles wat je hier ziet gebeurt
-          automatisch; jij komt alleen in actie bij een <b style={{ color: "var(--red-ink)" }}>escalatie</b> of een{" "}
-          <b style={{ color: "var(--green)" }}>bevestigde afspraak</b>.
-        </p>
-        <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8, fontSize: 13.5, color: "var(--body)", lineHeight: 1.6 }}>
-          <li><b style={{ color: "var(--ink)" }}>Lead komt binnen:</b> via het doorstuuradres hieronder, vanuit AutoScout24, AutoTrack, Marktplaats of je eigen website.</li>
-          <li><b style={{ color: "var(--ink)" }}>Occapilot leest en verrijkt:</b> haalt klant, voertuig en vraag uit de mail en controleert het kenteken bij de RDW (trekgewicht, APK, kleur).</li>
-          <li><b style={{ color: "var(--ink)" }}>Direct persoonlijk antwoord:</b> namens {dealer.seller_name}, met alleen geverifieerde informatie, en bij serieuze interesse meteen twee voorstelmomenten voor een proefrit.</li>
-          <li><b style={{ color: "var(--ink)" }}>Slimme opvolging:</b> geen reactie? Dan volgt een vriendelijke herinnering na 1, 3 en 7 dagen. Reageert de klant, dan stopt de reeks en gaat het échte gesprek verder.</li>
-          <li><b style={{ color: "var(--ink)" }}>Jij sluit de deal:</b> bij een afspraak of escalatie krijg je direct een e-mail. De complete gespreksgeschiedenis staat bij elke lead.</li>
-        </ol>
-      </div>
+      <nav className="toc">
+        {toc.map(([id, t]) => <a key={id} href={`#${id}`}>{t}</a>)}
+      </nav>
 
-      <div className="card" style={{ maxWidth: 860 }}>
-        <span className="cardtitle">Lead-instroom instellen</span>
-        <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
-          Stel in elk verkoopkanaal (of in je mailprogramma) een automatische doorsturing in van lead-notificaties naar:
+      <section className="card hulp" id="kort">
+        <span className="hulp-n">01</span>
+        <h2>In het kort</h2>
+        <p className="hulp-lead">
+          Occapilot is je tweede verkoper. Elke online lead krijgt <b>binnen 2 minuten</b> een persoonlijk antwoord in jouw naam,
+          dag en nacht. Daarna volgt hij op tot er een proefrit staat. Iets wat een verkoper moet doen? Dan geeft hij het aan jou.
         </p>
-        <code style={{ fontSize: 14, color: "var(--ink)", background: "var(--code-bg)", borderRadius: 10, padding: "10px 14px", width: "max-content", maxWidth: "100%" }}>
-          leads-{dealer.inbound_token}@{domain}
-        </code>
-        <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
-          <b style={{ color: "var(--ink)" }}>Tip:</b> in de meeste mailprogramma&apos;s (Outlook, Gmail) maak je hiervoor een regel aan: &quot;als afzender AutoScout24/AutoTrack/Marktplaats is → doorsturen naar bovenstaand adres&quot;. Dat is eenmalig 5 minuten werk per kanaal.
-        </p>
-      </div>
-
-      <div className="card" style={{ maxWidth: 860 }}>
-        <span className="cardtitle">Wat betekenen de statussen?</span>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {STATUSSEN.map((s) => (
-            <div key={s.label} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-              <span className={`pill ${s.pill}`} style={{ flex: "none", minWidth: 150, textAlign: "center" }}>{s.label}</span>
-              <span className="note" style={{ fontSize: 13, lineHeight: 1.6 }}>{s.uitleg}</span>
+        <div className="flowline">
+          <span>📨 Lead komt binnen</span><i>→</i>
+          <span>⚡ Antwoord binnen 2 min</span><i>→</i>
+          <span>🔁 Opvolging dag 1, 3, 7</span><i>→</i>
+          <span className="ok">✓ Proefrit gepland</span>
+        </div>
+        <p className="hulp-lead" style={{ marginTop: 6 }}>Elke lead staat altijd in precies één van deze drie bakken:</p>
+        <div className="hulp-lanes">
+          {LANES.map((l) => (
+            <div key={l.key} className={`hulp-lane ${l.key}`}>
+              <span className="lane-ic">{l.icon}</span>
+              <b>{l.titel}</b>
+              <span>{l.sub}.</span>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className="card" style={{ maxWidth: 860 }}>
-        <span className="cardtitle">Wat doet de AI wél en niet?</span>
-        <div className="detailgrid" style={{ gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <b style={{ fontSize: 13, color: "var(--green)" }}>✓ Doet Occapilot</b>
-            {["Binnen 2 minuten reageren, ook 's avonds en in het weekend","Vragen beantwoorden met advertentie- en RDW-data","Proefritmomenten voorstellen binnen jouw openingstijden","Vriendelijk opvolgen na 1, 3 en 7 dagen","De aanspreekvorm van de klant spiegelen (je/u)","Escaleren zodra het spannend wordt"].map((t) => (
-              <span key={t} className="note" style={{ fontSize: 13 }}>• {t}</span>
-            ))}
+      <section className="card hulp" id="dag">
+        <span className="hulp-n">02</span>
+        <h2>Zo ziet je dag eruit</h2>
+        <div className="dag">
+          <div><span className="dag-ic">☕</span><b>&apos;s Ochtends</b><span>Open Occapilot en bel de lijst bij <em>Vandaag bellen</em> af. Bovenaan wat op jou wacht, daarna de hete leads.</span></div>
+          <div><span className="dag-ic">🔔</span><b>Tussendoor</b><span>Krijg je een mail &quot;Actie nodig&quot; of &quot;Proefrit gepland&quot;? Klik op de link en handel het af. Meer hoeft niet.</span></div>
+          <div><span className="dag-ic">🌙</span><b>&apos;s Avonds en in het weekend</b><span>Niets. Occapilot beantwoordt en volgt op terwijl jij vrij bent.</span></div>
+        </div>
+      </section>
+
+      <section className="card hulp" id="instellen">
+        <span className="hulp-n">03</span>
+        <h2>Aan de slag: leads doorsturen</h2>
+        <p className="hulp-lead">Occapilot werkt via e-mail. Je stuurt de lead-mails van je kanalen automatisch door naar jouw eigen Occapilot-adres:</p>
+        <InboundAddress address={inbound} />
+        <div className="howto">
+          <div>
+            <b>In Outlook</b>
+            <ol>
+              <li>Ga naar Instellingen → E-mail → Regels → Nieuwe regel.</li>
+              <li>Voorwaarde: afzender bevat <code>autoscout24</code> (herhaal voor AutoTrack en Marktplaats).</li>
+              <li>Actie: Doorsturen naar je Occapilot-adres hierboven. Opslaan.</li>
+            </ol>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <b style={{ fontSize: 13, color: "var(--red-ink)" }}>✗ Doet Occapilot nooit</b>
-            {["Korting geven of over de prijs onderhandelen","Inruilwaardes of financieringsbedragen noemen","Beschikbaarheid van de auto garanderen","Informatie verzinnen die nergens staat","Reageren op een boze klant of juridische kwestie","Mailen buiten 08:00–20:30 of na een afmelding"].map((t) => (
-              <span key={t} className="note" style={{ fontSize: 13 }}>• {t}</span>
-            ))}
+          <div>
+            <b>In Gmail</b>
+            <ol>
+              <li>Instellingen → Alle instellingen → Doorsturen en POP/IMAP: voeg je Occapilot-adres toe.</li>
+              <li>Maak daarna een filter: Van <code>autoscout24</code> → Doorsturen naar dat adres.</li>
+              <li>Herhaal het filter voor AutoTrack en Marktplaats.</li>
+            </ol>
           </div>
         </div>
-      </div>
+        <p className="note" style={{ margin: 0 }}>
+          Tip: stuur daarna een voorbeeldlead vanuit het overzicht om te zien of alles werkt. Kom je er niet uit? Mail{" "}
+          <a href="mailto:hallo@occapilot.nl">hallo@occapilot.nl</a>, dan stellen we het samen in. Kost vijf minuten.
+        </p>
+      </section>
 
-      <div className="card" style={{ maxWidth: 860 }}>
-        <span className="cardtitle">Veelgestelde vragen</span>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <section className="card hulp" id="statussen">
+        <span className="hulp-n">04</span>
+        <h2>Wat betekenen de statussen?</h2>
+        {LANES.map((l) => (
+          <div key={l.key} className="st-group">
+            <span className={`st-lane ${l.key}`}>{l.icon} {l.titel}</span>
+            {l.statuses.map((st) => {
+              const i = statusInfo(st);
+              return (
+                <div key={st} className="st-row">
+                  <div className="st-pill"><StatusPill status={st} /></div>
+                  <div className="st-text">
+                    <span>{i.uitleg}</span>
+                    <span className="st-do"><b>Jij:</b> {i.jijDoet}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </section>
+
+      <section className="card hulp" id="overnemen">
+        <span className="hulp-n">05</span>
+        <h2>Zelf reageren of het gesprek overnemen</h2>
+        <div className="dag">
+          <div><span className="dag-ic">1</span><b>Open de lead</b><span>Bovenaan zie je direct wie aan zet is en wat er van jou verwacht wordt.</span></div>
+          <div><span className="dag-ic">2</span><b>Klik op &quot;Zelf reageren&quot;</b><span>Typ je bericht of kies een snelle zin. Het gaat vanaf jouw adres, in hetzelfde gesprek.</span></div>
+          <div><span className="dag-ic">3</span><b>Kies wie verder gaat</b><span>Vinkje aan: Occapilot volgt daarna weer op. Vinkje uit: jij voert het gesprek en Occapilot blijft stil.</span></div>
+        </div>
+        <p className="note" style={{ margin: 0 }}>
+          Met <b>🤖 Geef terug aan Occapilot</b> laat je hem weer opvolgen. Met <b>Sluit lead</b> stop je alles, bijvoorbeeld als de auto verkocht is.
+        </p>
+      </section>
+
+      <section className="card hulp" id="overdracht">
+        <span className="hulp-n">06</span>
+        <h2>Wanneer geeft Occapilot het aan jou?</h2>
+        <p className="hulp-lead">Occapilot stopt direct en stuurt jou een melding bij:</p>
+        <div className="overdracht">
+          {OVERDRACHT.map((o) => (
+            <div key={o.t}><span>{o.ic}</span><b>{o.t}</b><small>{o.s}</small></div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card hulp" id="vragen">
+        <span className="hulp-n">07</span>
+        <h2>Veelgestelde vragen</h2>
+        <div className="x-faq app-faq">
           {FAQ.map((f) => (
-            <div key={f.q} style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <b style={{ fontSize: 13.5, color: "var(--ink)" }}>{f.q}</b>
-              <span className="note" style={{ fontSize: 13, lineHeight: 1.6 }}>{f.a}</span>
-            </div>
+            <details key={f.q}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
           ))}
         </div>
+      </section>
+
+      <div className="hulp-foot">
+        Nog een vraag? Mail <a href="mailto:hallo@occapilot.nl">hallo@occapilot.nl</a> of <Link href="/leads">ga terug naar je overzicht →</Link>
       </div>
     </>
   );
