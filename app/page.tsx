@@ -11,15 +11,15 @@ const FAQ = [
   { q: "Kan de AI iets beloven wat niet klopt?", a: "Nee. Occapilot gebruikt alleen de advertentie en officiële RDW-data. Weet hij iets niet, dan zegt hij dat de verkoper er persoonlijk op terugkomt. Hij verzint niets." },
   { q: "Wat gebeurt er bij een bod of inruilvraag?", a: "Dan stopt de AI direct en krijg jij een melding. Onderhandelen, inruil en financiering blijven altijd jouw werk." },
   { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Elk gesprek staat woord voor woord in je dashboard. Je kunt meelezen, een lead sluiten of het gesprek overnemen." },
+  { q: "Zit ik vast aan een contract?", a: "Nee. Geen jaarcontract en geen opstartkosten. Je betaalt per maand en zegt maandelijks op." },
   { q: "Voor wie is Occapilot bedoeld?", a: "Voor autobedrijven en occasiondealers in Nederland, van één vestiging tot dealergroepen. Geen technische kennis nodig." },
 ];
 
 const LOG = [
-  { t: "22:14", k: "Mark Jansen", a: "BMW 320i Touring", s: "AutoScout24", st: "hot", l: "Heet" },
-  { t: "22:09", k: "Petra Willems", a: "Audi A4 Avant", s: "AutoScout24", st: "ai", l: "AI volgt op" },
-  { t: "21:47", k: "Ahmed El Idrissi", a: "Audi A4 Avant", s: "Website", st: "ok", l: "Afspraak" },
-  { t: "21:30", k: "Linda Bakker", a: "Toyota Yaris", s: "AutoTrack", st: "wait", l: "Wacht op klant" },
-  { t: "20:58", k: "Sanne de Vries", a: "VW Passat Variant", s: "Marktplaats", st: "esc", l: "Actie nodig" },
+  { t: "22:14", k: "Mark Jansen", a: "BMW 320i Touring", s: "AutoScout24", st: "hot", l: "Heet", dup: false },
+  { t: "22:09", k: "Petra Willems", a: "Audi A4 Avant", s: "AutoScout24", st: "ai", l: "AI volgt op", dup: true },
+  { t: "21:47", k: "Ahmed El Idrissi", a: "Audi A4 Avant", s: "Website", st: "ok", l: "Afspraak", dup: true },
+  { t: "20:58", k: "Sanne de Vries", a: "VW Passat Variant", s: "Marktplaats", st: "esc", l: "Actie nodig", dup: false },
 ];
 
 function Divider() {
@@ -54,22 +54,18 @@ export default async function Landing() {
         <div className="x-hero-bg" aria-hidden="true" />
         <div className="x-hero-in">
           <div className="x-hero-copy">
-            <span className="x-pill"><i className="x-dot" />AI-leadopvolging voor autobedrijven</span>
-            <h1>Terwijl jij slaapt, <em>verkoopt Occapilot door.</em></h1>
+            <span className="x-pill"><i className="x-dot" />Je tweede verkoper, 24/7 aan het werk</span>
+            <h1>Wie het eerst antwoordt, verkoopt de auto. <em>Vanaf nu ben jij dat.</em></h1>
             <p>
-              Elke autolead persoonlijk beantwoord binnen 2 minuten, ook om 23:00 en op zondag.
-              Occapilot voert het gesprek in jouw naam tot de proefrit in de agenda staat.
-              Bij een bod of inruilvraag geeft hij het direct aan jou.
+              Occapilot is je tweede verkoper die nooit slaapt. Hij beantwoordt elke autolead binnen 2 minuten
+              in jouw naam, ook om 23:00 en op zondag, en volgt dagenlang op tot de proefrit in de agenda staat.
+              Bij een bod of inruilvraag geeft hij het gesprek direct aan jou.
             </p>
             <div className="x-ctas">
               <Link href="/registreren" className="x-btn">14 dagen gratis proberen →</Link>
               <a href="#kanalen" className="x-btn ghost">Bekijk live demo</a>
             </div>
-            <div className="x-legend">
-              <span><i className="g" />Proefrit gepland</span>
-              <span><i className="b" />AI antwoordt</span>
-              <span><i className="a" />Naar verkoper</span>
-            </div>
+            <span className="x-note">14 dagen gratis · geen jaarcontract · maandelijks opzegbaar</span>
           </div>
 
           <div className="x-flow">
@@ -134,7 +130,7 @@ export default async function Landing() {
         </Reveal>
         <div className="x-vs">
           <Reveal className="x-card vs bad">
-            <h3>Zonder Occapilot: <em>het gat</em></h3>
+            <h3>Zonder Occapilot: <em>leads die blijven liggen</em></h3>
             <p className="x-muted">Leads blijven liggen tot iemand tijd heeft. Dan is de klant allang verder.</p>
             <ul className="x-list no">
               <li>Tot een derde van de online leads krijgt nooit antwoord</li>
@@ -173,8 +169,8 @@ export default async function Landing() {
         <Reveal>
           <div className="x-head center">
             <span className="x-kicker">Live demo</span>
-            <h2>Gebouwd voor <em>elk kanaal</em> dat je al gebruikt</h2>
-            <p>Klik een kanaal aan en kijk hoe Occapilot een echte lead beantwoordt.</p>
+            <h2>Zo klinkt <em>je tweede verkoper</em></h2>
+            <p>Kies een kanaal en kijk hoe Occapilot een lead beantwoordt: persoonlijk, feitelijk correct en binnen 2 minuten.</p>
           </div>
         </Reveal>
         <Reveal>
@@ -189,9 +185,9 @@ export default async function Landing() {
         <Reveal>
           <div className="x-head row">
             <div>
-              <span className="x-kicker">Wat Occapilot doet</span>
-              <h2>Geen chatbot. <em>Een verkoper die nooit slaapt.</em></h2>
-              <p>Antwoorden, kwalificeren, opvolgen en op tijd overdragen. Alles in één.</p>
+              <span className="x-kicker">Wat hij voor je doet</span>
+              <h2>Niet alleen snel. <em>Ook slim.</em></h2>
+              <p>Je tweede verkoper doet wat een goede verkoper doet: hij weet wie serieus is, checkt de feiten en roept jou op het juiste moment.</p>
             </div>
             <Link href="/registreren" className="x-textlink">Probeer het gratis →</Link>
           </div>
@@ -199,9 +195,12 @@ export default async function Landing() {
 
         <div className="x-bento">
           <Reveal className="x-card b-wide">
-            <span className="x-ic">🔥</span>
-            <h3>Kwalificeert, niet alleen antwoorden</h3>
-            <p className="x-muted">Elke lead krijgt een score met de reden erbij. Jij ziet in één blik waar je vandaag moet bellen.</p>
+            <div className="x-card-head">
+              <span className="x-ic">🔥</span>
+              <span className="x-num">01 · Kwalificeren</span>
+            </div>
+            <h3>Weet welke lead heet is</h3>
+            <p className="x-muted">Elke lead krijgt een score met de reden erbij. Jij ziet in één blik wie je vandaag moet bellen.</p>
             <div className="x-chart">
               <div className="x-chart-legend">
                 <span className="x-lgd hot">Heet</span>
@@ -213,9 +212,9 @@ export default async function Landing() {
                   [3, 5, 2], [4, 6, 3], [5, 5, 2], [6, 7, 3], [4, 6, 4], [7, 8, 3], [8, 7, 2],
                 ].map((d, i) => (
                   <div className="x-col" key={i} style={{ animationDelay: `${i * 80}ms` }}>
-                    <i className="hot" style={{ height: `${d[0] * 9}px` }} />
-                    <i className="warm" style={{ height: `${d[1] * 9}px` }} />
-                    <i className="cold" style={{ height: `${d[2] * 9}px` }} />
+                    <i className="hot" style={{ height: `${d[0] * 7}px` }} />
+                    <i className="warm" style={{ height: `${d[1] * 7}px` }} />
+                    <i className="cold" style={{ height: `${d[2] * 7}px` }} />
                     <span>{["ma", "di", "wo", "do", "vr", "za", "zo"][i]}</span>
                   </div>
                 ))}
@@ -224,9 +223,12 @@ export default async function Landing() {
           </Reveal>
 
           <Reveal className="x-card" delay={100}>
-            <span className="x-ic">🇳🇱</span>
-            <h3>RDW-geverifieerd</h3>
-            <p className="x-muted">Trekgewicht, APK en kleur komen live uit het RDW-register. Geen gegok.</p>
+            <div className="x-card-head">
+              <span className="x-ic">🇳🇱</span>
+              <span className="x-num">02 · Verifiëren</span>
+            </div>
+            <h3>Checkt de feiten bij de RDW</h3>
+            <p className="x-muted">Trekgewicht, APK en kleur komen live uit het register. Hij verzint nooit iets.</p>
             <div className="x-rdw">
               <div className="x-plate"><span>NL</span>K-123-XZ</div>
               <div className="x-rdw-rows">
@@ -238,66 +240,43 @@ export default async function Landing() {
           </Reveal>
 
           <Reveal className="x-card">
-            <span className="x-ic">🛡️</span>
-            <h3>Harde vangrails</h3>
-            <p className="x-muted">Andere AI-tools verzinnen liever iets dan &quot;ik weet het niet&quot; te zeggen. Occapilot niet.</p>
+            <div className="x-card-head">
+              <span className="x-ic">🛡️</span>
+              <span className="x-num">03 · Overdragen</span>
+            </div>
+            <h3>Roept jou bij een bod</h3>
+            <p className="x-muted">Korting, inruil en financiering blijven altijd jouw werk. Daar blijft hij vanaf.</p>
             <div className="x-guards">
               <span className="x-tag no">Korting geven</span>
               <span className="x-tag no">Bod accepteren</span>
               <span className="x-tag no">Inruilwaarde noemen</span>
-              <span className="x-tag no">Info verzinnen</span>
             </div>
-            <div className="x-handoff">→ Bij een bod of klacht neem jij het direct over</div>
+            <div className="x-alert">
+              <span className="x-alert-ic">🔔</span>
+              <div>
+                <b>Actie nodig: bod op de Passat</b>
+                <span>Sanne biedt € 17.500. Gesprek staat klaar voor jou.</span>
+              </div>
+            </div>
           </Reveal>
 
           <Reveal className="x-card b-wide" delay={100}>
-            <div className="x-log-head">
-              <div>
-                <span className="x-ic">📋</span>
-                <h3>Alles live in je dashboard</h3>
-              </div>
-              <span className="x-live"><i />Live</span>
+            <div className="x-card-head">
+              <span className="x-ic">📋</span>
+              <span className="x-num">04 · Overzicht</span>
+              <span className="x-live" style={{ marginLeft: "auto" }}><i />Live</span>
             </div>
+            <h3>Alles in één dashboard</h3>
+            <p className="x-muted">Elk gesprek woord voor woord. Twee kandidaten op dezelfde auto? Dan zie je dat meteen.</p>
             <div className="x-log">
               {LOG.map((r, i) => (
                 <div className="x-log-row" key={r.k} style={{ animationDelay: `${i * 120}ms` }}>
                   <span className="t">{r.t}</span>
                   <span className="k"><b>{r.k}</b>{r.a}</span>
-                  <span className="s">{r.s}</span>
+                  <span className="s">{r.dup ? <span className="x-dup">2 kandidaten</span> : r.s}</span>
                   <span className={`x-tag ${r.st}`}>{r.l}</span>
                 </div>
               ))}
-            </div>
-          </Reveal>
-
-          <Reveal className="x-card">
-            <span className="x-ic">🔁</span>
-            <h3>Opvolging die niet loslaat</h3>
-            <p className="x-muted">Blijft het stil? Vriendelijke herinneringen, alleen tussen 08:00 en 20:30.</p>
-            <div className="x-steps">
-              <span className="done">Dag 1</span><i />
-              <span className="done">Dag 3</span><i />
-              <span className="live">Dag 7</span>
-            </div>
-          </Reveal>
-
-          <Reveal className="x-card" delay={100}>
-            <span className="x-ic">👀</span>
-            <h3>Meerdere leads, één auto</h3>
-            <p className="x-muted">Twee kandidaten op dezelfde occasion? Occapilot ziet het aan het kenteken en waarschuwt je.</p>
-            <div className="x-rivals">
-              <div className="x-plate"><span>NL</span>V-789-KL</div>
-              <span className="x-badge"><i />2 kandidaten</span>
-            </div>
-          </Reveal>
-
-          <Reveal className="x-card" delay={200}>
-            <span className="x-ic">💬</span>
-            <h3>Klinkt als jij</h3>
-            <p className="x-muted">Spiegelt je/u van de klant, schrijft in jouw naam en vanaf jouw adres.</p>
-            <div className="x-chat">
-              <span className="in">Is de trekhaak origineel?</span>
-              <span className="out">Ja, fabrieksmontage ✓</span>
             </div>
           </Reveal>
         </div>
@@ -310,15 +289,15 @@ export default async function Landing() {
         <div className="x-setup">
           <Reveal>
             <span className="x-kicker">Easy setup</span>
-            <h2 className="x-big">Live in één middag. <em>Zonder IT.</em></h2>
+            <h2 className="x-big">Vanmiddag ingesteld. <em>Vanavond aan het werk.</em></h2>
             <p className="x-muted lg">
-              Geen koppelingen, geen installatie, geen gedoe met je voorraadsysteem.
-              Eén doorstuurregel in je mailbox en Occapilot neemt het over.
+              Geen koppelingen, geen installatie, geen jaarcontract. Eén doorstuurregel in je mailbox
+              en je tweede verkoper begint aan zijn eerste dienst.
             </p>
             <div className="x-legend">
               <span><i className="g" />Geen installatie</span>
-              <span><i className="b" />Geen contract</span>
-              <span><i className="a" />Dag 1 live</span>
+              <span><i className="b" />Geen jaarcontract</span>
+              <span><i className="a" />Vandaag live</span>
             </div>
           </Reveal>
           <div className="x-tiles">
@@ -345,7 +324,8 @@ export default async function Landing() {
         <Reveal>
           <div className="x-head center">
             <span className="x-kicker">Prijs</span>
-            <h2>Eén prijs. <em>Geen verrassingen.</em></h2>
+            <h2>Goedkoper dan <em>één gemiste verkoop.</em></h2>
+            <p>Verkoop je één extra occasion per half jaar, dan heeft Occapilot zichzelf al terugverdiend.</p>
           </div>
         </Reveal>
         <Reveal>
@@ -361,7 +341,7 @@ export default async function Landing() {
               <li>Alle kanalen: AutoScout24, AutoTrack, Marktplaats, eigen website</li>
               <li>RDW-verrijking, kwalificatie en escalaties</li>
               <li>Volledige gesprekslog in je dashboard</li>
-              <li>Geen setup-kosten, geen installatie</li>
+              <li>Geen setup-kosten en geen jaarcontract</li>
             </ul>
           </div>
         </Reveal>
@@ -392,7 +372,7 @@ export default async function Landing() {
         <div className="x-final-glow" aria-hidden="true" />
         <span className="x-kicker">14 dagen gratis</span>
         <h2>Laat vanavond geen enkele lead <em>meer liggen.</em></h2>
-        <p className="x-muted lg">Binnen 2 minuten live. Geen creditcard nodig.</p>
+        <p className="x-muted lg">14 dagen gratis · geen creditcard · geen jaarcontract</p>
         <div className="x-ctas center">
           <Link href="/registreren" className="x-btn">Gratis starten →</Link>
           <Link href="/login" className="x-btn ghost">Inloggen</Link>
@@ -404,7 +384,7 @@ export default async function Landing() {
         <div className="x-foot-grid">
           <div className="x-foot-brand">
             <Logo onDark markSize={30} wordHeight={16} />
-            <p>Elke online autolead beantwoord en opgevolgd tot er een proefrit staat. Gebouwd voor Nederlandse autobedrijven.</p>
+            <p>Je tweede verkoper die nooit slaapt. Elke online autolead beantwoord en opgevolgd tot er een proefrit staat.</p>
           </div>
           <div>
             <span>Product</span>
