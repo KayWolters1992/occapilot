@@ -63,7 +63,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <p className="note" style={{ margin: 0 }}>
           Stuur de lead-notificaties van AutoScout24, AutoTrack en de eigen website automatisch door naar:
         </p>
-        <code style={{ fontSize: 14, color: "var(--ink)", background: "#f1f3fa", borderRadius: 10, padding: "10px 14px", width: "max-content", maxWidth: "100%" }}>
+        <code style={{ fontSize: 14, color: "var(--ink)", background: "var(--code-bg)", borderRadius: 10, padding: "10px 14px", width: "max-content", maxWidth: "100%" }}>
           leads-{dealer.inbound_token}@{domain}
         </code>
         <p className="note" style={{ margin: 0 }}>

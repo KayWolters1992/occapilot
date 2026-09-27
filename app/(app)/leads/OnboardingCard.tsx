@@ -17,7 +17,7 @@ export function InboundAddress({ address }: { address: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-      <code style={{ fontSize: 13.5, color: "var(--ink)", background: "#f1f3fa", borderRadius: 10, padding: "10px 14px" }}>
+      <code style={{ fontSize: 13.5, color: "var(--ink)", background: "var(--code-bg)", borderRadius: 10, padding: "10px 14px" }}>
         {address}
       </code>
       <button

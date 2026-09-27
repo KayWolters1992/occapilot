@@ -52,6 +52,7 @@ function hardRules(d: Dealer) {
 - Bij inruilvraag: vraag om kenteken en kilometerstand van de inruilauto, noem geen waarde. Bij financiering: geen bedragen; ${d.seller_name} neemt de mogelijkheden persoonlijk door.
 - DIRECT ESCALEREN (niet inhoudelijk reageren op dat onderwerp) bij: een concreet bod of prijsonderhandeling, vraag naar inruilwaarde, een boze of klagende klant, juridische of garantiekwesties.
 - Geen emoji in e-mails. Sluit af met "${d.seller_name}, ${d.name}".
+- Gebruik nooit gedachtestreepjes (— of –) in je tekst. Schrijf gewone zinnen met punten en komma's.
 - Verzin NOOIT drukte of concurrentie ("veel interesse", "bijna verkocht") die niet expliciet als feit is meegegeven. Staat er hieronder een feitelijk aantal andere lopende leads op hetzelfde voertuig, dan mag je dat één keer, kort en zonder druk te zetten, laten meewegen (bijv. sneller een moment voorstellen) — niet als verkooptruc benoemen.`;
 }
 

@@ -66,7 +66,7 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
   }
   if (!result) {
     d.prepare("UPDATE leads SET status='escalatie', escalation_reason=? WHERE id=?")
-      .run("AI kon de lead niet verwerken — handmatig oppakken.", leadId);
+      .run("AI kon de lead niet verwerken. Handmatig oppakken.", leadId);
     await notifyDealer({
       dealerEmail: dealer.email,
       subject: "Occapilot: lead kon niet automatisch verwerkt worden",
@@ -123,7 +123,7 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
     });
     addMsg(leadId, "out", result.direct.onderwerp, result.direct.tekst, ok ? "direct" : "direct (verzenden mislukt)");
   } else {
-    addMsg(leadId, "system", "", "Geen e-mailadres in de lead — directe reactie niet verzonden.", "info");
+    addMsg(leadId, "system", "", "Geen e-mailadres in de lead. Directe reactie niet verzonden.", "info");
   }
 
   // Opvolgreeks plannen (niet bij directe escalatie)
@@ -140,7 +140,7 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
   if (result.escalatie_nu) {
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `🔔 Occapilot escalatie: ${result.lead.naam || "lead"} — ${result.lead.auto}`,
+      subject: `🔔 Occapilot escalatie: ${result.lead.naam || "lead"} · ${result.lead.auto}`,
       text: `${result.escalatie_reden}\n\nKlant: ${result.lead.naam} · ${result.lead.telefoon || result.lead.email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
   } else if (rivals > 0) {
@@ -194,7 +194,7 @@ export async function handleCustomerReply(leadId: number, sig: string, text: str
     addMsg(leadId, "system", "Overdracht aan verkoper", reden, "escalatie");
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `🔔 Occapilot escalatie: ${lead.customer_name || "lead"} — ${lead.vehicle}`,
+      subject: `🔔 Occapilot escalatie: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
       text: `${reden}\n\nKlant: ${lead.customer_name} · ${lead.customer_phone || lead.customer_email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
     return;
@@ -211,10 +211,10 @@ export async function handleCustomerReply(leadId: number, sig: string, text: str
   await sendOut(dealer, lead, result.onderwerp || `Re: uw vraag over de ${lead.vehicle}`, result.tekst, "antwoord");
   if (result.afspraak) {
     d.prepare("UPDATE leads SET status='afspraak', updated_at=datetime('now') WHERE id=?").run(leadId);
-    addMsg(leadId, "system", "Afspraak", result.reden || "Klant koos een moment — bevestigd.", "afspraak");
+    addMsg(leadId, "system", "Afspraak", result.reden || "Klant koos een moment. Bevestigd.", "afspraak");
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `✅ Occapilot afspraak: ${lead.customer_name || "lead"} — ${lead.vehicle}`,
+      subject: `✅ Occapilot afspraak: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
       text: `${result.reden}\n\nKlant: ${lead.customer_name} · ${lead.customer_phone || lead.customer_email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
   } else {

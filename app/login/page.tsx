@@ -9,7 +9,7 @@ export default function LoginPage() {
   return (
     <main className="loginwrap">
       <div className="login">
-        <Logo markSize={32} wordHeight={18} />
+        <Logo onDark markSize={38} wordHeight={20} />
         <p style={{ margin: 0, fontSize: 13.5, color: "var(--muted)" }}>Log in op het dealerdashboard.</p>
         {state?.error && <div className="err">{state.error}</div>}
         <form action={action} style={{ display: "flex", flexDirection: "column", gap: 16 }}>

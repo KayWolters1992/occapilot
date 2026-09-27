@@ -57,7 +57,7 @@ function addLead(l: {
   return leadId;
 }
 
-// 1) Escalatie — klant vraagt om korting
+// 1) Escalatie, klant vraagt om korting
 addLead({
   status: "escalatie",
   qual_label: "Heet",
@@ -70,16 +70,16 @@ addLead({
   price: "€ 24.950",
   source: "AutoScout24",
   question: "Is er nog onderhandelingsruimte op de prijs? Ik kan snel beslissen als we eruit komen.",
-  escalation_reason: "Klant vraagt expliciet om korting — buiten de bevoegdheid van de AI, verkoper moet zelf bellen.",
+  escalation_reason: "Klant vraagt expliciet om korting, buiten de bevoegdheid van de AI, verkoper moet zelf bellen.",
   created_at: "2026-09-27 08:14:00",
   msgs: [
     { direction: "in", subject: "Vraag over BMW 3-Serie 320i Touring", body: "Goedemorgen, ik zag de BMW 320i Touring op AutoScout24 staan. Mooie auto! Is er nog onderhandelingsruimte op de prijs? Ik kan snel beslissen als we eruit komen.", created_at: "2026-09-27 08:14:00" },
-    { direction: "out", subject: "Re: BMW 3-Serie 320i Touring", body: "Hallo Mark, dank voor je interesse in de BMW 320i Touring! Over de prijs kan ik als digitale assistent zelf geen toezeggingen doen — daarvoor verbind ik je graag met Kay. Zullen we ondertussen een proefrit inplannen zodat je de auto meteen kunt ervaren?", created_at: "2026-09-27 08:16:00" },
-    { direction: "system", body: "Escalatie: klant vraagt om korting — buiten de bevoegdheid van de AI, verkoper moet zelf bellen.", created_at: "2026-09-27 08:16:05" },
+    { direction: "out", subject: "Re: BMW 3-Serie 320i Touring", body: "Hallo Mark, dank voor je interesse in de BMW 320i Touring! Over de prijs kan ik als digitale assistent zelf geen toezeggingen doen, daarvoor verbind ik je graag met Kay. Zullen we ondertussen een proefrit inplannen zodat je de auto meteen kunt ervaren?", created_at: "2026-09-27 08:16:00" },
+    { direction: "system", body: "Escalatie: klant vraagt om korting, buiten de bevoegdheid van de AI, verkoper moet zelf bellen.", created_at: "2026-09-27 08:16:05" },
   ],
 });
 
-// 2) AI volgt op — nette kwalificatievraag, RDW verrijkt
+// 2) AI volgt op, nette kwalificatievraag, RDW verrijkt
 addLead({
   status: "actief",
   qual_label: "Warm",
@@ -96,7 +96,7 @@ addLead({
   created_at: "2026-09-26 19:42:00",
   msgs: [
     { direction: "in", subject: "Vraag over Volkswagen Passat Variant", body: "Hoi, wat is het geremde trekgewicht van deze Passat? Ik wil er een caravan achter hangen.", created_at: "2026-09-26 19:42:00" },
-    { direction: "out", subject: "Re: Volkswagen Passat Variant", body: "Hoi Sanne, goede vraag! Volgens de RDW-gegevens van deze auto is het geremde trekgewicht 1.800 kg — ruim voldoende voor de meeste caravans. De auto heeft een geldige APK tot 14-03-2027 en een logische kilometerstand. Zullen we een proefrit inplannen? Dan kun je meteen voelen hoe hij met een aanhanger rijdt.", created_at: "2026-09-26 19:44:00" },
+    { direction: "out", subject: "Re: Volkswagen Passat Variant", body: "Hoi Sanne, goede vraag! Volgens de RDW-gegevens van deze auto is het geremde trekgewicht 1.800 kg, ruim voldoende voor de meeste caravans. De auto heeft een geldige APK tot 14-03-2027 en een logische kilometerstand. Zullen we een proefrit inplannen? Dan kun je meteen voelen hoe hij met een aanhanger rijdt.", created_at: "2026-09-26 19:44:00" },
   ],
 });
 
@@ -117,12 +117,12 @@ addLead({
   created_at: "2026-09-25 12:05:00",
   msgs: [
     { direction: "in", subject: "Proefrit Audi A4 Avant", body: "Hallo, ik ben erg geïnteresseerd in de Audi A4 Avant. Kan ik zaterdag om 11:00 een proefrit komen doen? Mijn nummer is 06-98765432.", created_at: "2026-09-25 12:05:00" },
-    { direction: "out", subject: "Re: Proefrit Audi A4 Avant", body: "Hallo Ahmed, wat leuk dat je een proefrit wilt inplannen! Zaterdag om 11:00 komt uit — je bent van harte welkom bij Autobedrijf Wolters in Maastricht. Kay neemt voor de zekerheid nog even telefonisch contact met je op ter bevestiging. Tot zaterdag!", created_at: "2026-09-25 12:07:00" },
-    { direction: "system", body: "Afspraak bevestigd: zaterdag 11:00 — proefrit Audi A4 Avant.", created_at: "2026-09-25 12:07:10" },
+    { direction: "out", subject: "Re: Proefrit Audi A4 Avant", body: "Hallo Ahmed, wat leuk dat je een proefrit wilt inplannen! Zaterdag om 11:00 komt uit, je bent van harte welkom bij Autobedrijf Wolters in Maastricht. Kay neemt voor de zekerheid nog even telefonisch contact met je op ter bevestiging. Tot zaterdag!", created_at: "2026-09-25 12:07:00" },
+    { direction: "system", body: "Afspraak bevestigd: zaterdag 11:00, proefrit Audi A4 Avant.", created_at: "2026-09-25 12:07:10" },
   ],
 });
 
-// 4) Koude lead, net binnen — AI volgt nog op (met geplande follow-up)
+// 4) Koude lead, net binnen, AI volgt nog op (met geplande follow-up)
 const koudeLeadId = addLead({
   status: "wacht",
   qual_label: "Koud",
@@ -144,7 +144,7 @@ const koudeLeadId = addLead({
 d.prepare("INSERT INTO followups (lead_id, label, due_at, subject, body, status) VALUES (?,?,?,?,?,?)")
   .run(koudeLeadId, "dag3", "2026-09-30T09:00:00Z", "Nog interesse in de Toyota Yaris?", "Hoi Linda, ik wilde even checken of je nog vragen hebt over de Yaris. Zin om een proefrit te plannen?", "gepland");
 
-// 5) Tweede lead op dezelfde Audi A4 als Ahmed — test de "meerdere leads op dit voertuig"-badge
+// 5) Tweede lead op dezelfde Audi A4 als Ahmed, test de "meerdere leads op dit voertuig"-badge
 addLead({
   status: "actief",
   qual_label: "Warm",

@@ -36,7 +36,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
       <div className="pagehead">
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", flex: 1 }}>
           <Link href="/leads" style={{ color: "var(--muted)", fontSize: 13, fontWeight: 500 }}>← Leads</Link>
-          <h1 style={{ fontSize: 19 }}>{lead.customer_name || "Onbekende klant"}</h1>
+          <h1 style={{ fontSize: 24 }}>{lead.customer_name || "Onbekende klant"}</h1>
           <span className="note">{lead.vehicle} · {lead.source}</span>
         </div>
         <form action={closeLead} style={{ display: "flex", gap: 10 }}>

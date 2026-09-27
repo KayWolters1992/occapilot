@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { currentDealer } from "@/lib/auth";
 import type { Lead } from "@/lib/types";
 import { InboundAddress, TestLeadButton } from "./OnboardingCard";
+import { CountUp } from "../../_lp/Interactive";
 
 export const dynamic = "force-dynamic";
 
@@ -79,9 +80,10 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
       )}
       <div className="pagehead">
         <div className="titles">
-          <h1>{dealer.name} · Leadoverzicht</h1>
-          <span className="subtitle">Alle binnengekomen leads, automatisch beantwoord en opgevolgd door Occapilot.</span>
+          <h1>Leadoverzicht <em>{dealer.name}</em></h1>
+          <span className="subtitle">Elke lead binnen 2 minuten beantwoord en opgevolgd tot de proefrit. Jij ziet hier wie je moet bellen.</span>
         </div>
+        <span className="app-live"><i />Occapilot actief</span>
         <Link href="/handleiding" className="btn ghost small">📖 Handleiding</Link>
       </div>
 
@@ -107,10 +109,10 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
       )}
 
       <div className="kpis">
-        <div className="kpi"><span className="label">Leads deze maand</span><b>{total}</b><span className="sub">alle bronnen</span></div>
-        <div className="kpi"><span className="label">Afspraken</span><b>{afspraken}</b><span className="sub">bevestigd door Occapilot</span></div>
-        <div className="kpi"><span className="label">Actie nodig</span><b>{escal}</b><span className="sub">wacht op de verkoper</span></div>
-        <div className="kpi grad"><span className="label">Indicatieve marge-impact</span><b>€ {marge.toLocaleString("nl-NL")}</b><span className="sub">≈ afspraken × € 1.200 marge</span></div>
+        <div className="kpi"><span className="kic">📨</span><span className="label">Leads deze maand</span><b><CountUp to={total} /></b><span className="sub">uit alle kanalen</span></div>
+        <div className="kpi"><span className="kic">✓</span><span className="label">Proefritten gepland</span><b><CountUp to={afspraken} /></b><span className="sub">door Occapilot ingepland</span></div>
+        <div className={`kpi ${escal > 0 ? "esc" : ""}`}><span className="kic">🔔</span><span className="label">Actie nodig</span><b><CountUp to={escal} /></b><span className="sub">{escal > 0 ? "wacht op jou" : "alles onder controle"}</span></div>
+        <div className="kpi grad"><span className="kic">💰</span><span className="label">Indicatieve marge-impact</span><b><CountUp to={marge} prefix="€ " /></b><span className="sub">≈ proefritten × € 1.200 marge</span></div>
       </div>
 
       <div className="card">

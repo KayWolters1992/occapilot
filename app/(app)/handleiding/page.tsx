@@ -55,7 +55,7 @@ export default async function Handleiding() {
         <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
           Stel in elk verkoopkanaal (of in je mailprogramma) een automatische doorsturing in van lead-notificaties naar:
         </p>
-        <code style={{ fontSize: 14, color: "var(--ink)", background: "#f1f3fa", borderRadius: 10, padding: "10px 14px", width: "max-content", maxWidth: "100%" }}>
+        <code style={{ fontSize: 14, color: "var(--ink)", background: "var(--code-bg)", borderRadius: 10, padding: "10px 14px", width: "max-content", maxWidth: "100%" }}>
           leads-{dealer.inbound_token}@{domain}
         </code>
         <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
