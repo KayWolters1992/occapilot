@@ -795,3 +795,122 @@ table.leads tbody tr:nth-child(n+6){animation-delay:.3s}
 .x-qual-why{font-size:12px;color:var(--x-muted);text-align:right}
 .x-tag.warm{color:#fcd48a;background:#f5a5241a;border-color:#f5a52455}
 @media (max-width:700px){.x-qual{grid-template-columns:56px minmax(0,1fr)}.x-qual-why{grid-column:2;text-align:left}}
+
+/* ── Tool v2.1: vandaag bellen, overnemen, demo-flow, tijdlijn, mobiel ── */
+.pill.heat{color:#fdba74;background:#f9731621;border-color:#f9731655}
+
+/* Vandaag bellen */
+.bellen{gap:16px;border-color:#f5a52433}
+.bellen::before{background:linear-gradient(90deg,transparent,#f5a52499,transparent)}
+.bellen-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.bellen-head>div{display:flex;flex-direction:column;gap:2px}
+.bellen-count{min-width:30px;height:30px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,#f59e0b,#ef4444);box-shadow:0 0 20px #ef444466}
+.bellen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.bel{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;background:#ffffff06;border:1px solid var(--line);animation:appin .5s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s,border-color .2s}
+.bel:hover{transform:translateY(-2px);border-color:var(--line2)}
+.bel.esc{border-color:#ef444455;background:linear-gradient(160deg,#ef444414,transparent 70%)}
+.bel.hot{border-color:#f9731640;background:linear-gradient(160deg,#f973160f,transparent 70%)}
+.bel:nth-child(2){animation-delay:.07s}.bel:nth-child(3){animation-delay:.14s}.bel:nth-child(4){animation-delay:.21s}
+.bel-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.bel>b{color:#fff;font-size:15px}
+.bel-car{font-size:12.5px;color:var(--muted)}
+.bel p{margin:2px 0 6px;font-size:12.5px;line-height:1.5;color:var(--body);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bel-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.bel-actions .btn{text-decoration:none}
+.bellen-empty{padding:14px 16px;border-radius:12px;background:#22c55e12;border:1px solid #22c55e40;color:#86efac;font-size:13.5px;font-weight:600}
+
+/* Demo- en bevestigingsbalk */
+.demobar{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#4f7cff26,#8b5cf61a);border:1px solid #6f93ff66;box-shadow:0 0 40px #4f7cff26}
+.demobar.ok{background:linear-gradient(135deg,#22c55e1f,#22c55e08);border-color:#22c55e55;box-shadow:none}
+.demobar-ic{flex:none;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--grad);color:#fff;box-shadow:0 0 20px #6f93ff66}
+.demobar.ok .demobar-ic{background:#22c55e;box-shadow:0 0 20px #22c55e55}
+.demobar b{display:block;color:#fff;font-size:14.5px}
+.demobar span{font-size:13px;color:var(--body)}
+
+/* Tijdlijn */
+.tl{display:flex;flex-direction:column;position:relative;padding-left:4px}
+.tl-item{position:relative;display:flex;gap:12px;padding:0 0 16px 0}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:5px;top:14px;bottom:0;width:2px;background:var(--line2)}
+.tl-item:last-child::before{display:none}
+.tl-item>i{flex:none;width:12px;height:12px;border-radius:50%;margin-top:3px;background:#ffffff26;border:2px solid var(--card)}
+.tl-item.done>i{background:#6f93ff;box-shadow:0 0 10px #6f93ff88}
+.tl-item.done.ok>i{background:#22c55e;box-shadow:0 0 10px #22c55e88}
+.tl-item.next>i{background:var(--grad);box-shadow:0 0 0 4px #8b5cf626,0 0 14px #8b5cf699;animation:xglow 1.8s ease-in-out infinite}
+.tl-item.next.esc>i{background:#ef4444;box-shadow:0 0 0 4px #ef444426,0 0 14px #ef444499}
+.tl-item.skip{opacity:.55}
+.tl-item div{display:flex;flex-direction:column}
+.tl-item b{font-size:13px;color:var(--ink);font-weight:600}
+.tl-item span{font-size:12px;color:var(--muted)}
+
+/* Gesprek: verkoper + niet verstuurd */
+.turn.dealer{align-self:flex-start}
+.turn.dealer .who{color:#86efac}
+.turn.dealer .bub{background:#22c55e14;border:1px solid #22c55e44;color:var(--ink)}
+.unsent{margin-left:8px;font-size:10.5px;font-weight:600;color:var(--faint);border:1px solid var(--line2);border-radius:99px;padding:1px 8px;white-space:nowrap}
+
+/* Antwoordvak */
+.replybox{margin-top:8px;padding:18px;border-radius:16px;background:#ffffff05;border:1px solid var(--line2);display:flex;flex-direction:column;gap:12px}
+.replybox-head{display:flex;flex-direction:column;gap:2px}
+.replybox-head b{color:#fff;font-size:14.5px}
+.replybox-head span{font-size:12.5px;color:var(--muted)}
+.replybox-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{all:unset;cursor:pointer;font-size:12px;color:var(--body);background:#ffffff0a;border:1px solid var(--line2);border-radius:99px;padding:6px 12px;transition:border-color .2s,color .2s}
+.chip:hover{border-color:#6f93ff;color:#fff}
+.replybox textarea{resize:vertical;min-height:96px;line-height:1.55}
+.replybox-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.check{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--body);cursor:pointer}
+.check input{accent-color:#6f93ff;width:16px;height:16px}
+
+/* Verwerkings-overlay (demo) */
+.proc-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:#050718cc;backdrop-filter:blur(6px);animation:appin .3s ease both}
+.proc{width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:20px;background:linear-gradient(180deg,#151a4a,#0e1236);border:1px solid #6f93ff55;box-shadow:0 0 0 6px #4f7cff0d,0 30px 80px #000a,0 0 80px #4f7cff33}
+.proc>span{align-self:flex-start}
+.proc>b{color:#fff;font-size:18px;letter-spacing:-.3px}
+.proc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.proc li{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--faint);transition:color .3s}
+.proc li .dot{flex:none;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:1px solid var(--line2)}
+.proc li.done{color:var(--body)}
+.proc li.done .dot{background:#22c55e;border-color:#22c55e;color:#fff;box-shadow:0 0 10px #22c55e88}
+.proc li.now{color:#fff}
+.proc li.now .dot{border-color:#6f93ff;box-shadow:0 0 0 4px #4f7cff26;animation:xglow 1.2s ease-in-out infinite}
+
+/* Mobiel: tabel wordt kaartjes */
+@media (max-width:700px){
+  .tscroll{overflow:visible;margin:0;padding:0}
+  table.leads{min-width:0}
+  table.leads thead{display:none}
+  table.leads tbody{display:flex;flex-direction:column;gap:10px}
+  table.leads tr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:#ffffff05}
+  table.leads tr.esc{border-color:#ef444455;background:#ef44440d}
+  table.leads td{display:block;padding:0;border:0 !important;background:none !important;border-radius:0 !important}
+  table.leads td:nth-child(1){grid-column:1;grid-row:1}
+  table.leads td:nth-child(2){grid-column:2;grid-row:1}
+  table.leads td:nth-child(6){grid-column:3;grid-row:1;text-align:right}
+  table.leads td:nth-child(3){grid-column:1/-1;grid-row:2}
+  table.leads td:nth-child(4){grid-column:1/3;grid-row:3}
+  table.leads td:nth-child(5){display:none}
+  table.leads td:nth-child(7){grid-column:3;grid-row:3;text-align:right}
+  .pagehead{align-items:flex-start}
+  .replybox-foot .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){.bel,.tl-item.next>i,.proc li.now .dot,.proc-overlay{animation:none}}
+/* Vandaag bellen als rijen */
+.bellen-grid{display:flex;flex-direction:column;gap:10px}
+.bel{display:grid;grid-template-columns:230px minmax(0,1fr) auto;align-items:center;gap:10px 20px;padding:14px 18px}
+.bel-top{flex-direction:column;align-items:flex-start;margin:0;gap:8px}
+.bel-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bel-info b{color:#fff;font-size:15px}
+.bel-info .bel-car{font-weight:500}
+.bel-info p{margin:0}
+.bel-actions{margin:0;flex-wrap:nowrap}
+.bel-top{flex-direction:row;align-items:center}
+@media (max-width:900px){.bel{grid-template-columns:1fr}.bel-actions{flex-wrap:wrap}}
+@media (max-width:700px){
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:14px}
+  .kpi b{font-size:24px}
+  .kpi .kic{width:28px;height:28px;font-size:13px;top:12px;right:12px}
+  .kpi .label{font-size:11px;padding-right:30px}
+  .kpi .sub{font-size:10.5px}
+}

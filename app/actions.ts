@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import { verifyPassword, hashPassword, sessionToken, currentDealer } from "@/lib/auth";
-import { cancelFollowups } from "@/lib/pipeline";
-import type { Dealer } from "@/lib/types";
+import { revalidatePath } from "next/cache";
+import { cancelFollowups, sendDealerReply } from "@/lib/pipeline";
+import type { Dealer, Lead } from "@/lib/types";
 
 export async function register(_prev: { error?: string }, form: FormData) {
   const name = String(form.get("name") ?? "").trim();
@@ -99,4 +100,17 @@ export async function closeLead(form: FormData) {
     .run(status, id, dealer.id);
   cancelFollowups(id);
   redirect(`/leads/${id}`);
+}
+
+export async function replyToLead(form: FormData) {
+  const dealer = await currentDealer();
+  if (!dealer) redirect("/login");
+  const id = Number(form.get("id"));
+  const text = String(form.get("text") ?? "").trim();
+  const handBack = form.get("handback") === "1";
+  const lead = db().prepare("SELECT * FROM leads WHERE id=? AND dealer_id=?").get(id, dealer.id) as Lead | undefined;
+  if (!lead || !text) redirect(`/leads/${id}`);
+  await sendDealerReply(dealer, lead, text, handBack);
+  revalidatePath(`/leads/${id}`);
+  redirect(`/leads/${id}?verzonden=1`);
 }

@@ -28,6 +28,7 @@ function StatusPill({ l }: { l: Lead }) {
     case "gestopt": return <span className="pill wait">Afgemeld</span>;
     case "gesloten": return <span className="pill wait">Gesloten</span>;
     case "wacht": return <span className="pill wait">Wacht op klant</span>;
+    case "overgenomen": return <span className="pill ai">✋ Jij voert gesprek</span>;
     default: return <span className="pill ai">AI volgt op</span>;
   }
 }
@@ -58,6 +59,13 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
     plateCounts.set(row.license_plate, row.n);
   }
 
+  const bellen = d
+    .prepare(
+      `SELECT * FROM leads WHERE dealer_id=? AND (status='escalatie' OR (qual_label='Heet' AND status NOT IN ('gesloten','gestopt','afspraak','overgenomen')))
+       ORDER BY (status='escalatie') DESC, created_at DESC LIMIT 4`
+    )
+    .all(dealer.id) as Lead[];
+
   const month = new Date().toISOString().slice(0, 7);
   const stat = (sql: string) => (d.prepare(sql).get(dealer.id, `${month}%`) as { n: number }).n;
   const total = stat("SELECT COUNT(*) n FROM leads WHERE dealer_id=? AND created_at LIKE ?");
@@ -84,7 +92,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
           <span className="subtitle">Elke lead binnen 2 minuten beantwoord en opgevolgd tot de proefrit. Jij ziet hier wie je moet bellen.</span>
         </div>
         <span className="app-live"><i />Occapilot actief</span>
-        <Link href="/handleiding" className="btn ghost small">📖 Handleiding</Link>
+        <TestLeadButton compact />
       </div>
 
       {leads.length === 0 && !statusFilter && (
@@ -114,6 +122,40 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
         <div className={`kpi ${escal > 0 ? "esc" : ""}`}><span className="kic">🔔</span><span className="label">Actie nodig</span><b><CountUp to={escal} /></b><span className="sub">{escal > 0 ? "wacht op jou" : "alles onder controle"}</span></div>
         <div className="kpi grad"><span className="kic">💰</span><span className="label">Indicatieve marge-impact</span><b><CountUp to={marge} prefix="€ " /></b><span className="sub">≈ proefritten × € 1.200 marge</span></div>
       </div>
+
+      {leads.length > 0 && !statusFilter && (
+        <div className="card bellen">
+          <div className="bellen-head">
+            <div>
+              <span className="cardtitle">📞 Vandaag bellen</span>
+              <span className="note">Gesorteerd op urgentie. Hier ligt je omzet van vandaag.</span>
+            </div>
+            {bellen.length > 0 && <span className="bellen-count">{bellen.length}</span>}
+          </div>
+          {bellen.length === 0 ? (
+            <div className="bellen-empty">✓ Niemand wacht op je. Occapilot heeft alles onder controle.</div>
+          ) : (
+            <div className="bellen-grid">
+              {bellen.map((l) => (
+                <div key={l.id} className={`bel ${l.status === "escalatie" ? "esc" : "hot"}`}>
+                  <div className="bel-top">
+                    <span className={`pill ${l.status === "escalatie" ? "hot" : "heat"}`}>{l.status === "escalatie" ? "⚠ Actie nodig" : "🔥 Heet"}</span>
+                    <Plate p={l.license_plate} />
+                  </div>
+                  <div className="bel-info">
+                    <b>{l.customer_name || "Onbekend"} <span className="bel-car">· {l.vehicle || "Onbekende auto"}</span></b>
+                    <p>{l.status === "escalatie" ? l.escalation_reason : l.qual_reason}</p>
+                  </div>
+                  <div className="bel-actions">
+                    {l.customer_phone && <a className="btn small" href={`tel:${l.customer_phone.replace(/\s/g, "")}`}>📞 Bel {l.customer_phone}</a>}
+                    <Link className="btn ghost small" href={`/leads/${l.id}`}>Open gesprek →</Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="card">
         <span className="cardtitle">

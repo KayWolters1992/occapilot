@@ -167,6 +167,18 @@ export async function handleCustomerReply(leadId: number, sig: string, text: str
 
   if (lead.status === "gestopt") return;
 
+  // Verkoper heeft het gesprek overgenomen: AI blijft stil, verkoper krijgt een seintje
+  if (lead.status === "overgenomen") {
+    await notifyDealer({
+      dealerEmail: dealer.email,
+      subject: `💬 ${lead.customer_name || "Klant"} reageerde · ${lead.vehicle}`,
+      text: `${text}
+
+Jij voert dit gesprek. Bekijk: ${process.env.APP_URL}/leads/${leadId}`,
+    });
+    return;
+  }
+
   const transcript = (d
     .prepare("SELECT * FROM messages WHERE lead_id=? ORDER BY created_at")
     .all(leadId) as Msg[])
@@ -220,6 +232,32 @@ export async function handleCustomerReply(leadId: number, sig: string, text: str
   } else {
     d.prepare("UPDATE leads SET status='wacht', updated_at=datetime('now') WHERE id=?").run(leadId);
   }
+}
+
+/* ── Verkoper neemt het gesprek over ──────────────────────────── */
+
+export async function sendDealerReply(dealer: Dealer, lead: Lead, text: string, handBack: boolean): Promise<boolean> {
+  const subject = `Re: ${lead.vehicle || "uw aanvraag"}`;
+  let ok = false;
+  if (lead.customer_email) {
+    ok = await sendOut(dealer, lead, subject, text, "verkoper");
+  } else {
+    addMsg(lead.id, "out", subject, text, "verkoper (geen e-mailadres, niet verzonden)");
+  }
+  cancelFollowups(lead.id);
+  db()
+    .prepare("UPDATE leads SET status=?, escalation_reason='', updated_at=datetime('now') WHERE id=?")
+    .run(handBack ? "wacht" : "overgenomen", lead.id);
+  addMsg(
+    lead.id,
+    "system",
+    handBack ? "Terug naar Occapilot" : "Overgenomen door verkoper",
+    handBack
+      ? `${dealer.seller_name} heeft gereageerd. Occapilot pakt het gesprek weer op zodra de klant antwoordt.`
+      : `${dealer.seller_name} voert dit gesprek nu zelf. Occapilot blijft stil.`,
+    "overname"
+  );
+  return ok;
 }
 
 /* ── Cron: geplande opvolgingen versturen ─────────────────────── */
