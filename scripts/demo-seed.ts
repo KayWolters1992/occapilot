@@ -26,7 +26,7 @@ if (existing) {
   dealerId = Number(info.lastInsertRowid);
 }
 
-d.prepare("UPDATE dealers SET settings_checked=1 WHERE id=?").run(dealerId);
+d.prepare("UPDATE dealers SET settings_checked=1, schedule_json='' WHERE id=?").run(dealerId);
 
 // Schoon eerdere demo-leads op zodat dit script herhaalbaar is
 d.prepare("DELETE FROM followups WHERE lead_id IN (SELECT id FROM leads WHERE dealer_id=?)").run(dealerId);

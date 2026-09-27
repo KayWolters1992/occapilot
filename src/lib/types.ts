@@ -9,6 +9,7 @@ export interface Dealer {
   inbound_token: string;
   opening_hours: string;
   settings_checked?: number;
+  schedule_json?: string;
 }
 
 export interface Lead {

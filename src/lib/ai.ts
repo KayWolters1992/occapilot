@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { planningForAI, parseSchedule } from "./schedule";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { Dealer } from "./types";
@@ -47,7 +48,8 @@ function hardRules(d: Dealer) {
   return `HARDE REGELS:
 - Nooit kortingen, prijsverlagingen of toezeggingen over garantie, staat of levertijd die niet in de lead of RDW-data staan. Niets verzinnen; ontbreekt informatie, zeg dan dat ${d.seller_name} het direct checkt en er vandaag nog op terugkomt.
 - Claim NOOIT dat de auto nog beschikbaar is; formuleer voorwaardelijk ("mocht u nog interesse hebben").
-- Afspraakmomenten alleen binnen deze openingstijden: ${d.opening_hours || "onbekend — stel dan alleen dagdelen voor, nooit exacte tijdstippen"}.
+- AFSPRAAKMOMENTEN (strikt volgen):
+${planningForAI(parseSchedule(d.schedule_json))}
 - SPIEGEL de aanspreekvorm van de klant (je/jij bij informele klant, anders u).
 - Bij inruilvraag: vraag om kenteken en kilometerstand van de inruilauto, noem geen waarde. Bij financiering: geen bedragen; ${d.seller_name} neemt de mogelijkheden persoonlijk door.
 - DIRECT ESCALEREN (niet inhoudelijk reageren op dat onderwerp) bij: een concreet bod of prijsonderhandeling, vraag naar inruilwaarde, een boze of klagende klant, juridische of garantiekwesties.

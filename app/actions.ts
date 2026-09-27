@@ -8,6 +8,7 @@ import { verifyPassword, hashPassword, sessionToken, currentDealer } from "@/lib
 import { revalidatePath } from "next/cache";
 import { cancelFollowups, sendDealerReply } from "@/lib/pipeline";
 import type { Dealer, Lead } from "@/lib/types";
+import { parseSchedule, scheduleSummary } from "@/lib/schedule";
 
 export async function register(_prev: { error?: string }, form: FormData) {
   const name = String(form.get("name") ?? "").trim();
@@ -77,14 +78,13 @@ export async function updateSettings(form: FormData) {
   if (!dealer) redirect("/login");
   db()
     .prepare(
-      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, opening_hours=?, settings_checked=1 WHERE id=?"
+      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, settings_checked=1 WHERE id=?"
     )
     .run(
       String(form.get("name") ?? dealer.name),
       String(form.get("city") ?? dealer.city),
       String(form.get("seller_name") ?? dealer.seller_name),
       String(form.get("from_email") ?? dealer.from_email),
-      String(form.get("opening_hours") ?? dealer.opening_hours),
       dealer.id
     );
   redirect("/instellingen?opgeslagen=1");
@@ -114,4 +114,14 @@ export async function replyToLead(form: FormData) {
   await sendDealerReply(dealer, lead, text, handBack);
   revalidatePath(`/leads/${id}`);
   redirect(`/leads/${id}?verzonden=1`);
+}
+
+export async function updateSchedule(form: FormData) {
+  const dealer = await currentDealer();
+  if (!dealer) redirect("/login");
+  const schedule = parseSchedule(String(form.get("schedule_json") ?? ""));
+  db()
+    .prepare("UPDATE dealers SET schedule_json=?, opening_hours=?, settings_checked=1 WHERE id=?")
+    .run(JSON.stringify(schedule), scheduleSummary(schedule), dealer.id);
+  redirect("/instellingen?opgeslagen=rooster#rooster");
 }

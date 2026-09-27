@@ -121,7 +121,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       <Link href="/handleiding#instellen" className="start-link">Hoe stel ik dit in? →</Link>
                     </div>
                   )}
-                  {!s.done && i === 2 && <div><Link href="/instellingen" className="btn ghost small">Naar instellingen →</Link></div>}
+                  {!s.done && i === 2 && <div><Link href="/instellingen#rooster" className="btn ghost small">Naar je rooster →</Link></div>}
                 </div>
               </li>
             ))}

@@ -1,5 +1,7 @@
 import { currentDealer } from "@/lib/auth";
 import { updateSettings } from "../../actions";
+import { parseSchedule } from "@/lib/schedule";
+import { ScheduleEditor } from "./ScheduleEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +18,10 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <div className="pagehead">
         <div className="titles">
           <h1>Instellingen</h1>
-          <span className="subtitle">Bedrijfsgegevens, verzendmomenten en de lead-instroom.</span>
+          <span className="subtitle">Je gegevens, je proefritrooster en hoe leads binnenkomen.</span>
         </div>
       </div>
-      {sp.opgeslagen && <span className="pill ok" style={{ alignSelf: "flex-start" }}>✓ Opgeslagen</span>}
+      {sp.opgeslagen && <span className="pill ok" style={{ alignSelf: "flex-start" }}>✓ {sp.opgeslagen === "rooster" ? "Proefritrooster opgeslagen" : "Opgeslagen"}</span>}
 
       <div className="profileband">
         <span className="avatar">{initials(dealer.seller_name || dealer.name)}</span>
@@ -46,10 +48,19 @@ export default async function Settings({ searchParams }: { searchParams: Promise
             <input id="seller_name" name="seller_name" type="text" defaultValue={dealer.seller_name} /></div>
           <div className="field"><label htmlFor="from_email">Afzenderadres richting klant (geverifieerd in Postmark)</label>
             <input id="from_email" name="from_email" type="email" defaultValue={dealer.from_email} /></div>
-          <div className="field"><label htmlFor="opening_hours">Proefrit- / bezichtigingsmomenten</label>
-            <input id="opening_hours" name="opening_hours" type="text" defaultValue={dealer.opening_hours} /></div>
           <button className="btn" style={{ alignSelf: "flex-start" }}>Opslaan</button>
         </form>
+      </div>
+
+      <div className="card warmcard" id="rooster" style={{ maxWidth: 1040, scrollMarginTop: 20 }}>
+        <div className="cardhead">
+          <span className="cardic">🗓️</span>
+          <div>
+            <span className="cardtitle">Proefrit- en bezichtigingsmomenten</span>
+            <span className="carddesc">Occapilot stelt klanten alleen momenten voor die in dit rooster passen. In het voorbeeld zie je live wat hij nu zou voorstellen.</span>
+          </div>
+        </div>
+        <ScheduleEditor initial={parseSchedule(dealer.schedule_json)} />
       </div>
 
       <div className="card warmcard" style={{ maxWidth: 680 }}>

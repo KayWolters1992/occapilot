@@ -80,5 +80,6 @@ function migrate(d: Database.Database) {
   `);
   // Latere kolommen: veilig toevoegen op bestaande databases
   const cols = (d.prepare("PRAGMA table_info(dealers)").all() as { name: string }[]).map((c) => c.name);
+  if (!cols.includes("schedule_json")) d.exec("ALTER TABLE dealers ADD COLUMN schedule_json TEXT DEFAULT ''");
   if (!cols.includes("settings_checked")) d.exec("ALTER TABLE dealers ADD COLUMN settings_checked INTEGER DEFAULT 0");
 }
