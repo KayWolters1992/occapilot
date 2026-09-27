@@ -11,14 +11,6 @@ const STEPS = [
   { ic: "🤝", t: "Jij sluit de deal", s: "Bij een afspraak of een gesprek dat om jou vraagt, krijg je meteen een melding. Jij doet alleen nog het leukste deel: verkopen." },
 ];
 
-const FEATS = [
-  { t: "🇳🇱 RDW-geverifieerde antwoorden", s: "Trekgewicht, APK-vervaldatum, kleur en tellerstandoordeel worden live bij de RDW opgehaald. Geen gegok. De klant krijgt officiële data." },
-  { t: "🔥 Automatische leadkwalificatie", s: "Elke lead wordt gescoord als heet, warm of koud, met de reden erbij. Zo zie je in één oogopslag waar je aandacht naartoe moet." },
-  { t: "👀 Meerdere leads, één auto", s: "Twee kandidaten op dezelfde occasion? Occapilot herkent het aan het kenteken, verhoogt de prioriteit en waarschuwt je direct." },
-  { t: "🛡️ Harde vangrails", s: "Geen kortingen, geen toezeggingen, geen verzonnen antwoorden. Bij een bod, inruilvraag of boze klant draagt de AI het gesprek meteen aan jou over." },
-  { t: "✉️ Nette opvolgreeks", s: "Herinneringen alleen tussen 08:00 en 20:30, altijd met afmeldmogelijkheid. Antwoordt een klant 'stop', dan stopt écht alles." },
-  { t: "📋 Volledig gelogd", s: "Elk gesprek staat woord voor woord in je dashboard. Jij en je collega's kunnen elk moment meelezen of het overnemen." },
-];
 
 const FAQ = [
   { q: "Moet ik iets installeren of koppelen?", a: "Nee. Eén regel instellen in je mailbox per verkoopkanaal en je bent live. Geen koppelingen met je voorraadsysteem nodig om te starten." },
@@ -142,12 +134,72 @@ export default async function Landing() {
         <span className="lp-kicker">Functies</span>
         <h2>Gebouwd om de concurrentie te verpletteren</h2>
         <div className="lp-feats">
-          {FEATS.map((f) => (
-            <div className="lp-feat" key={f.t}>
-              <b>{f.t}</b>
-              <span>{f.s}</span>
+
+          <div className="lp-feat">
+            <span className="feat-ic">🇳🇱</span>
+            <b>RDW-geverifieerde antwoorden</b>
+            <span>Trekgewicht, APK-vervaldatum, kleur en tellerstandoordeel worden live bij de RDW opgehaald. Geen gegok. De klant krijgt officiële data.</span>
+            <div className="feat-widget">
+              <span className="fw-chip ok">Trekgewicht 1.500 kg ✓</span>
+              <span className="fw-chip ok">APK 03/2027 ✓</span>
+              <span className="fw-chip ok">Kleur grijs ✓</span>
             </div>
-          ))}
+          </div>
+
+          <div className="lp-feat">
+            <span className="feat-ic">🔥</span>
+            <b>Automatische leadkwalificatie</b>
+            <span>Elke lead wordt gescoord als heet, warm of koud, met de reden erbij. Zo zie je in één oogopslag waar je aandacht naartoe moet.</span>
+            <div className="feat-widget fw-quals">
+              <span className="fw-qual"><span className="bars heet"><i /><i /><i /></span>Heet</span>
+              <span className="fw-qual"><span className="bars warm"><i /><i /><i /></span>Warm</span>
+              <span className="fw-qual"><span className="bars koud"><i /><i /><i /></span>Koud</span>
+            </div>
+          </div>
+
+          <div className="lp-feat">
+            <span className="feat-ic">👀</span>
+            <b>Meerdere leads, één auto</b>
+            <span>Twee kandidaten op dezelfde occasion? Occapilot herkent het aan het kenteken, verhoogt de prioriteit en waarschuwt je direct.</span>
+            <div className="feat-widget fw-rivals">
+              <span className="fw-plate">V-789-KL</span>
+              <span className="fw-badge">2 kandidaten<i className="fw-dot" /></span>
+            </div>
+          </div>
+
+          <div className="lp-feat">
+            <span className="feat-ic">🛡️</span>
+            <b>Harde vangrails</b>
+            <span>Geen kortingen, geen toezeggingen, geen verzonnen antwoorden. Bij een bod, inruilvraag of boze klant draagt de AI het gesprek meteen aan jou over.</span>
+            <div className="feat-widget">
+              <span className="fw-chip no">Korting geven ✕</span>
+              <span className="fw-chip no">Bod accepteren ✕</span>
+            </div>
+          </div>
+
+          <div className="lp-feat">
+            <span className="feat-ic">✉️</span>
+            <b>Nette opvolgreeks</b>
+            <span>Herinneringen alleen tussen 08:00 en 20:30, altijd met afmeldmogelijkheid. Antwoordt een klant 'stop', dan stopt écht alles.</span>
+            <div className="feat-widget fw-timeline">
+              <span className="fw-step done">Dag 1</span>
+              <i className="fw-line" />
+              <span className="fw-step done">Dag 3</span>
+              <i className="fw-line" />
+              <span className="fw-step live">Dag 7</span>
+            </div>
+          </div>
+
+          <div className="lp-feat">
+            <span className="feat-ic">📋</span>
+            <b>Volledig gelogd</b>
+            <span>Elk gesprek staat woord voor woord in je dashboard. Jij en je collega's kunnen elk moment meelezen of het overnemen.</span>
+            <div className="feat-widget fw-chat">
+              <span className="fw-bub in">Is de trekhaak origineel?</span>
+              <span className="fw-bub out">Ja, fabrieksmontage ✓</span>
+            </div>
+          </div>
+
         </div>
 
         <div className="lp-nooit">

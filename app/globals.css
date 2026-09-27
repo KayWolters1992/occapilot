@@ -238,9 +238,37 @@ input:focus,textarea:focus{outline:none;border-color:var(--blue)}
   .lp-steps::before{content:"";position:absolute;top:39px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,#4f7cff33,#8b5cf633);z-index:0}
 }
 .lp-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:32px}
-.lp-feat{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:6px}
+.lp-feat{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:8px;transition:transform .2s,box-shadow .2s}
+.lp-feat:hover{transform:translateY(-4px);box-shadow:0 16px 34px #1b234020}
+.lp-feat .feat-ic{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#4f7cff1f,#8b5cf61f);font-size:21px;margin-bottom:4px}
 .lp-feat b{color:var(--ink);font-size:14.5px}
-.lp-feat span{font-size:13px;color:var(--muted);line-height:1.65}
+.lp-feat>span{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* Levende mini-widgets per functiekaart */
+.feat-widget{margin-top:10px;padding-top:14px;border-top:1px solid var(--line-soft);display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:34px}
+.fw-chip{font-size:11.5px;font-weight:600;border-radius:99px;padding:5px 11px;white-space:nowrap;animation:fwfade .5s ease both}
+.fw-chip.ok{color:var(--green);background:var(--green-soft)}
+.fw-chip.no{color:var(--red-ink);background:var(--red-soft);text-decoration:line-through;text-decoration-color:#c6282888}
+.fw-chip:nth-child(2){animation-delay:.12s}
+.fw-chip:nth-child(3){animation-delay:.24s}
+@keyframes fwfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.fw-quals{gap:16px}
+.fw-qual{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.fw-rivals{justify-content:space-between}
+.fw-plate{font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:.5px;background:var(--plate);color:var(--plate-ink);border-radius:4px;padding:3px 8px}
+.fw-badge{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:99px;padding:5px 11px}
+.fw-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:fwpulse 1.6s ease-in-out infinite}
+@keyframes fwpulse{0%,100%{opacity:1;box-shadow:0 0 0 0 #f0a02066}50%{opacity:.6;box-shadow:0 0 0 5px #f0a02000}}
+.fw-timeline{gap:0}
+.fw-step{font-size:10.5px;font-weight:700;color:#fff;background:var(--faint);border-radius:99px;padding:5px 10px;white-space:nowrap}
+.fw-step.done{background:var(--blue-deep)}
+.fw-step.live{background:var(--grad);box-shadow:0 0 0 4px #4f7cff26;animation:fwpulse2 1.8s ease-in-out infinite}
+@keyframes fwpulse2{0%,100%{box-shadow:0 0 0 4px #4f7cff26}50%{box-shadow:0 0 0 8px #4f7cff0d}}
+.fw-line{flex:1;min-width:14px;height:2px;background:var(--line);margin:0 4px}
+.fw-chat{flex-direction:column;align-items:stretch;gap:6px}
+.fw-bub{font-size:11px;line-height:1.4;border-radius:10px;padding:6px 10px;max-width:90%}
+.fw-bub.in{align-self:flex-start;background:#f1f3fa;color:#2b3355;border-radius:3px 10px 10px 10px}
+.fw-bub.out{align-self:flex-end;background:var(--grad);color:#fff;border-radius:10px 3px 10px 10px}
 
 /* De belofte: nooit doet / jij neemt over */
 .lp-nooit{position:relative;overflow:hidden;background:linear-gradient(160deg,#171d43,#10143a);color:#b9c1e8;border-radius:22px;padding:44px;margin-top:40px}
