@@ -73,13 +73,13 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
         <div className="alertbar" style={{ borderColor: "var(--amber-line)", background: "var(--amber-soft)" }}>
           <span className="ic" style={{ background: "var(--grad)", color: "#fff" }}>✓</span>
           <span style={{ flex: 1, fontSize: 13.5 }}>
-            <b>Welkom bij Occapilot!</b> Je account staat klaar. Stel hieronder je lead-instroom in — daarna doet Occapilot de rest.
+            <b>Welkom bij Occapilot!</b> Je account staat klaar. Stel hieronder je lead-instroom in. Daarna doet Occapilot de rest.
           </span>
         </div>
       )}
       <div className="pagehead">
         <div className="titles">
-          <h1>{dealer.name} — Leadoverzicht</h1>
+          <h1>{dealer.name} · Leadoverzicht</h1>
           <span className="subtitle">Alle binnengekomen leads, automatisch beantwoord en opgevolgd door Occapilot.</span>
         </div>
         <Link href="/handleiding" className="btn ghost small">📖 Handleiding</Link>
@@ -115,7 +115,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
 
       <div className="card">
         <span className="cardtitle">
-          {statusFilter === "escalatie" ? "Leads — actie nodig" : statusFilter === "afspraak" ? "Leads — afspraken" : "Leads"}
+          {statusFilter === "escalatie" ? "Leads · actie nodig" : statusFilter === "afspraak" ? "Leads · afspraken" : "Leads"}
         </span>
         {leads.length === 0 ? (
           <p className="note" style={{ margin: 0 }}>

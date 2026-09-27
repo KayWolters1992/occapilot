@@ -57,7 +57,7 @@ export function TestLeadButton() {
             if (!res.ok) throw new Error();
             router.refresh();
           } catch {
-            setError("Kon geen voorbeeldlead versturen — probeer het zo nog eens.");
+            setError("Kon geen voorbeeldlead versturen. Probeer het zo nog eens.");
           } finally {
             setBusy(false);
           }

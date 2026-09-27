@@ -42,7 +42,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
         <form action={closeLead} style={{ display: "flex", gap: 10 }}>
           <input type="hidden" name="id" value={lead.id} />
           {lead.status === "escalatie" && (
-            <button className="btn small" name="status" value="wacht">Afgehandeld — AI mag door</button>
+            <button className="btn small" name="status" value="wacht">Afgehandeld, AI mag door</button>
           )}
           {lead.status !== "gesloten" && (
             <button className="btn ghost small" name="status" value="gesloten">Sluit lead</button>
@@ -107,7 +107,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
         </div>
 
         <div className="card">
-          <span className="cardtitle">Gesprek <span className="note" style={{ fontWeight: 400 }}>— e-mail, volledig gelogd</span></span>
+          <span className="cardtitle">Gesprek <span className="note" style={{ fontWeight: 400 }}>· e-mail, volledig gelogd</span></span>
           <div className="thread">
             {msgs.map((m) => (
               <div key={m.id} className={`turn ${m.direction === "in" ? "in" : m.direction === "system" ? "system" : ""}`}>

@@ -7,7 +7,7 @@ import { Logo } from "@/components/Logo";
 
 const PERKS = [
   { ic: "⚡", t: "Live binnen één middag", s: "Eén doorstuurregel instellen en Occapilot beantwoordt vanaf dat moment elke lead." },
-  { ic: "🌙", t: "Nooit meer een gemiste lead", s: "24/7, ook om 23:00 en op zondag — precies wanneer de concurrentie slaapt." },
+  { ic: "🌙", t: "Nooit meer een gemiste lead", s: "24/7, ook om 23:00 en op zondag. Precies wanneer de concurrentie slaapt." },
   { ic: "🛡️", t: "Veilig en onder controle", s: "Harde vangrails, volledige logging, jij houdt altijd de regie." },
 ];
 
@@ -41,7 +41,7 @@ export default function RegisterPage() {
           <div>
             <h2 style={{ margin: "0 0 4px" }}>Maak je gratis account</h2>
             <p style={{ margin: 0, fontSize: 13.5, color: "var(--muted)" }}>
-              Binnen 2 minuten klaar — geen creditcard nodig.
+              Binnen 2 minuten klaar. Geen creditcard nodig.
             </p>
           </div>
           {state?.error && <div className="err">{state.error}</div>}
@@ -67,7 +67,7 @@ export default function RegisterPage() {
               <input id="password" name="password" type="password" autoComplete="new-password" minLength={8} required />
               <span className="note">Minstens 8 tekens.</span>
             </div>
-            <button className="btn" disabled={pending}>{pending ? "Bezig…" : "Account aanmaken — gratis"}</button>
+            <button className="btn" disabled={pending}>{pending ? "Bezig…" : "Account aanmaken · gratis"}</button>
           </form>
           <p style={{ margin: 0, fontSize: 13, color: "var(--muted)", textAlign: "center" }}>
             Heb je al een account? <Link href="/login">Log hier in</Link>

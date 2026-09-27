@@ -57,7 +57,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           <span className="cardic">📥</span>
           <div>
             <span className="cardtitle">Leads binnen laten komen</span>
-            <span className="carddesc">Eén doorstuurregel — daarna doet Occapilot de rest, voorgoed.</span>
+            <span className="carddesc">Eén doorstuurregel. Daarna doet Occapilot de rest, voorgoed.</span>
           </div>
         </div>
         <p className="note" style={{ margin: 0 }}>
@@ -67,7 +67,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           leads-{dealer.inbound_token}@{domain}
         </code>
         <p className="note" style={{ margin: 0 }}>
-          Dat is alles — vanaf dan beantwoordt en volgt Occapilot elke lead automatisch op.
+          Dat is alles. Vanaf dan beantwoordt en volgt Occapilot elke lead automatisch op.
         </p>
       </div>
     </>

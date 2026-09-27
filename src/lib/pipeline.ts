@@ -115,7 +115,7 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
   if (result.lead.email) {
     const ok = await sendEmail({
       from: dealer.from_email,
-      fromName: `${dealer.seller_name} — ${dealer.name}`,
+      fromName: `${dealer.seller_name}, ${dealer.name}`,
       to: result.lead.email,
       replyTo: replyAddress(leadId, secret),
       subject: result.direct.onderwerp,
@@ -252,7 +252,7 @@ export async function sendDueFollowups(): Promise<number> {
 async function sendOut(dealer: Dealer, lead: Lead, subject: string, text: string, meta: string): Promise<boolean> {
   const ok = await sendEmail({
     from: dealer.from_email,
-    fromName: `${dealer.seller_name} — ${dealer.name}`,
+    fromName: `${dealer.seller_name}, ${dealer.name}`,
     to: lead.customer_email,
     replyTo: replyAddress(lead.id, lead.reply_secret),
     subject,

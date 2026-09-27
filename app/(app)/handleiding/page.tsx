@@ -5,17 +5,17 @@ export const dynamic = "force-dynamic";
 const STATUSSEN: { pill: string; label: string; uitleg: string }[] = [
   { pill: "ai", label: "AI volgt op", uitleg: "Occapilot heeft de lead beantwoord en stuurt vanzelf opvolgmails (na 1, 3 en 7 dagen) tot de klant reageert. Je hoeft niets te doen." },
   { pill: "wait", label: "Wacht op klant", uitleg: "De klant heeft een antwoord gekregen; Occapilot wacht op een reactie. Reageert de klant, dan gaat het gesprek automatisch verder." },
-  { pill: "ok", label: "Afspraak bevestigd", uitleg: "De klant heeft een proefrit- of bezichtigingsmoment gekozen. Je krijgt hiervan direct een melding per e-mail — bel of mail de klant ter bevestiging." },
-  { pill: "hot", label: "Escalatie — actie nodig", uitleg: "Occapilot heeft het gesprek bewust aan jou overgedragen (bod, inruilwaarde, boze klant of juridische vraag). De AI stuurt niets meer tot jij de lead afhandelt." },
+  { pill: "ok", label: "Afspraak bevestigd", uitleg: "De klant heeft een proefrit- of bezichtigingsmoment gekozen. Je krijgt hiervan direct een melding per e-mail. Bel of mail de klant ter bevestiging." },
+  { pill: "hot", label: "Actie nodig", uitleg: "Occapilot heeft het gesprek bewust aan jou overgedragen (bod, inruilwaarde, boze klant of juridische vraag). De AI stuurt niets meer tot jij de lead afhandelt." },
   { pill: "wait", label: "Gestopt", uitleg: "De klant heeft zich afgemeld ('stop'). Occapilot stuurt deze klant nooit meer een bericht." },
   { pill: "wait", label: "Gesloten", uitleg: "Jij hebt de lead handmatig gesloten (verkocht, niet doorgegaan). Alles blijft bewaard in het archief." },
 ];
 
 const FAQ: { q: string; a: string }[] = [
   { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. Occapilot mag geen prijzen verlagen, geen garanties beloven en geen beschikbaarheid claimen. Bij een bod of prijsvraag draagt hij het gesprek direct aan jou over." },
-  { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentietekst van de lead en uit officiële RDW-voertuigdata (trekgewicht, APK-datum, kleur, tellerstandoordeel). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt — hij verzint niets." },
+  { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentietekst van de lead en uit officiële RDW-voertuigdata (trekgewicht, APK-datum, kleur, tellerstandoordeel). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt. Hij verzint niets." },
   { q: "Wat gebeurt er als een klant boos wordt of iets juridisch aankaart?", a: "Occapilot reageert dan niet inhoudelijk, stuurt een korte neutrale bevestiging en escaleert direct naar jou, inclusief melding per e-mail met het telefoonnummer van de klant." },
-  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Ja. Open de lead en klik op 'Sluit lead' om Occapilot te stoppen, of handel een escalatie af en klik op 'Afgehandeld — AI mag door' om de opvolging te hervatten." },
+  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Ja. Open de lead en klik op 'Sluit lead' om Occapilot te stoppen, of handel een escalatie af en klik op 'Afgehandeld, AI mag door' om de opvolging te hervatten." },
   { q: "Op welke tijden verstuurt Occapilot e-mails?", a: "Alleen tussen 08:00 en 20:30 (Nederlandse tijd). Opvolgmails die daarbuiten gepland staan, worden automatisch op het eerstvolgende nette moment verstuurd." },
   { q: "Kunnen klanten zich afmelden?", a: "Ja. Elke opvolgmail vanaf dag 3 bevat een afmeldregel. Antwoordt een klant 'stop', dan bevestigt Occapilot dat netjes en stopt alle communicatie permanent." },
   { q: "Wat als er meerdere leads op dezelfde auto binnenkomen?", a: "Occapilot herkent dat aan het kenteken, verhoogt de prioriteit, laat het zien in het overzicht ('X andere leads') en stuurt jou een melding zodat je die auto met voorrang kunt behandelen." },
@@ -29,7 +29,7 @@ export default async function Handleiding() {
       <div className="pagehead">
         <div className="titles">
           <h1>Handleiding</h1>
-          <span className="subtitle">Alles wat je moet weten — in 5 minuten leesbaar.</span>
+          <span className="subtitle">Alles wat je moet weten, in 5 minuten leesbaar.</span>
         </div>
       </div>
 
@@ -37,16 +37,16 @@ export default async function Handleiding() {
         <span className="cardtitle">Zo werkt Occapilot</span>
         <p className="note" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.7 }}>
           Occapilot beantwoordt elke online autolead <b style={{ color: "var(--ink)" }}>binnen 2 minuten</b>, dag en nacht, en blijft
-          vriendelijk opvolgen tot er een proefrit staat — of tot duidelijk is dat de klant afhaakt. Alles wat je hier ziet gebeurt
+          vriendelijk opvolgen tot er een proefrit staat, of tot duidelijk is dat de klant afhaakt. Alles wat je hier ziet gebeurt
           automatisch; jij komt alleen in actie bij een <b style={{ color: "var(--red-ink)" }}>escalatie</b> of een{" "}
           <b style={{ color: "var(--green)" }}>bevestigde afspraak</b>.
         </p>
         <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8, fontSize: 13.5, color: "var(--body)", lineHeight: 1.6 }}>
-          <li><b style={{ color: "var(--ink)" }}>Lead komt binnen</b> — via het doorstuuradres hieronder, vanuit AutoScout24, AutoTrack, Marktplaats of je eigen website.</li>
-          <li><b style={{ color: "var(--ink)" }}>Occapilot leest en verrijkt</b> — haalt klant, voertuig en vraag uit de mail en controleert het kenteken bij de RDW (trekgewicht, APK, kleur).</li>
-          <li><b style={{ color: "var(--ink)" }}>Direct persoonlijk antwoord</b> — namens {dealer.seller_name}, met alleen geverifieerde informatie, en bij serieuze interesse meteen twee voorstelmomenten voor een proefrit.</li>
-          <li><b style={{ color: "var(--ink)" }}>Slimme opvolging</b> — geen reactie? Dan volgt een vriendelijke herinnering na 1, 3 en 7 dagen. Reageert de klant, dan stopt de reeks en gaat het échte gesprek verder.</li>
-          <li><b style={{ color: "var(--ink)" }}>Jij sluit de deal</b> — bij een afspraak of escalatie krijg je direct een e-mail. De complete gespreksgeschiedenis staat bij elke lead.</li>
+          <li><b style={{ color: "var(--ink)" }}>Lead komt binnen:</b> via het doorstuuradres hieronder, vanuit AutoScout24, AutoTrack, Marktplaats of je eigen website.</li>
+          <li><b style={{ color: "var(--ink)" }}>Occapilot leest en verrijkt:</b> haalt klant, voertuig en vraag uit de mail en controleert het kenteken bij de RDW (trekgewicht, APK, kleur).</li>
+          <li><b style={{ color: "var(--ink)" }}>Direct persoonlijk antwoord:</b> namens {dealer.seller_name}, met alleen geverifieerde informatie, en bij serieuze interesse meteen twee voorstelmomenten voor een proefrit.</li>
+          <li><b style={{ color: "var(--ink)" }}>Slimme opvolging:</b> geen reactie? Dan volgt een vriendelijke herinnering na 1, 3 en 7 dagen. Reageert de klant, dan stopt de reeks en gaat het échte gesprek verder.</li>
+          <li><b style={{ color: "var(--ink)" }}>Jij sluit de deal:</b> bij een afspraak of escalatie krijg je direct een e-mail. De complete gespreksgeschiedenis staat bij elke lead.</li>
         </ol>
       </div>
 
