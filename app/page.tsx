@@ -21,11 +21,13 @@ const FEATS = [
 ];
 
 const FAQ = [
-  { q: "Moet ik iets installeren of koppelen?", a: "Nee. Occapilot werkt via e-mail-doorsturing: één regel instellen in je mailbox per verkoopkanaal en je bent live. Geen koppelingen met je voorraadsysteem nodig om te starten." },
-  { q: "Wat merkt de klant ervan?", a: "De klant krijgt gewoon een persoonlijke e-mail namens jouw verkoper, vanaf jouw eigen e-mailadres. Snel, vriendelijk en inhoudelijk correct." },
+  { q: "Moet ik iets installeren of koppelen?", a: "Nee. Eén regel instellen in je mailbox per verkoopkanaal en je bent live. Geen koppelingen met je voorraadsysteem nodig om te starten." },
+  { q: "Wat merkt de klant ervan?", a: "Niets geks. Gewoon een persoonlijke e-mail namens jouw verkoper, vanaf jouw eigen e-mailadres. Snel, vriendelijk en inhoudelijk correct." },
   { q: "Kan de AI iets beloven wat niet klopt?", a: "Nee. Occapilot mag alleen informatie gebruiken uit de advertentie en de officiële RDW-data. Weet hij iets niet, dan zegt hij dat de verkoper er persoonlijk op terugkomt." },
   { q: "Voor wie is dit bedoeld?", a: "Voor universele autobedrijven en occasiondealers in Nederland, van één vestiging tot dealergroepen. Geen technische kennis nodig." },
 ];
+
+const CHANNELS = ["AutoScout24", "AutoTrack", "Marktplaats", "Eigen website"];
 
 export default async function Landing() {
   const dealer = await currentDealer();
@@ -80,33 +82,50 @@ export default async function Landing() {
         </div>
       </section>
 
+      <section className="lp-channels">
+        <span className="ch-label">Werkt met de kanalen die je al gebruikt</span>
+        <div className="ch-tiles">
+          {CHANNELS.map((c) => (
+            <span className="ch-tile" key={c}>{c}</span>
+          ))}
+        </div>
+      </section>
+
       <section className="lp-section">
-        <span className="lp-kicker">Het probleem</span>
-        <h2>Elke minuut stilte kost je een verkoop</h2>
+        <span className="lp-kicker">Zonder vs. met Occapilot</span>
+        <h2>Wat verandert er echt voor jouw showroom?</h2>
         <p className="lp-lead">
           &apos;s Avonds, in het weekend, of midden in een drukke showroomdag: precies wanneer jij geen tijd hebt,
           komen de beste leads binnen. Reactiesnelheid is het enige dat écht bepaalt wie de auto verkoopt.
         </p>
 
-        <div className="lp-herostat">
-          <div className="hs-num">25<span>&ndash;</span>34%</div>
-          <div className="hs-text">
-            <b>van alle online leads bij autobedrijven wordt nooit beantwoord</b>
-            <span>Bron: onderzoek DCDW. Elke onbeantwoorde lead is een auto die bij de buurman wordt gekocht.</span>
+        <div className="lp-vs">
+          <div className="vs-col bad">
+            <span className="vs-label">Zonder Occapilot</span>
+            <div className="vs-stat">25<span>&ndash;</span>34%</div>
+            <ul>
+              <li>van de leads krijgt nooit een antwoord (onderzoek DCDW)</li>
+              <li>reactietijd van uren, soms pas de volgende dag</li>
+              <li>een gemiste lead is een auto die bij de buurman wordt gekocht</li>
+            </ul>
           </div>
-        </div>
-
-        <div className="lp-stats">
-          <div className="lp-stat"><span className="ic">⚡</span><b>&lt; 2 min</b><span>reactietijd van Occapilot, op elk uur van de dag, elke dag van het jaar</span></div>
-          <div className="lp-stat"><span className="ic">🔁</span><b>1-3-7</b><span>dagen automatische, vriendelijke opvolging zolang de klant nog niet reageert</span></div>
-          <div className="lp-stat"><span className="ic">💰</span><b>€ 1.200+</b><span>gemiddelde marge per extra verkochte occasion. Eén geredde lead per maand betaalt de tool ruimschoots terug</span></div>
+          <div className="vs-arrow" aria-hidden="true">→</div>
+          <div className="vs-col good">
+            <span className="vs-label">Met Occapilot</span>
+            <div className="vs-stat">&lt; 2 min</div>
+            <ul>
+              <li>elke lead krijgt altijd een persoonlijk antwoord</li>
+              <li>opvolging na 1, 3 en 7 dagen, volledig automatisch</li>
+              <li>één geredde lead betaalt de tool die maand al terug (€ 1.200+ marge)</li>
+            </ul>
+          </div>
         </div>
       </section>
 
       <section className="lp-section wide" id="hoe">
         <div>
           <span className="lp-kicker">Hoe het werkt</span>
-          <h2>Live in één middag, zonder technische kennis</h2>
+          <h2>Hoe sta jij hier vanmiddag al mee live?</h2>
           <div className="lp-steps">
             {STEPS.map((s, i) => (
               <div className="lp-step" key={s.t}>
