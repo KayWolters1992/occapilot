@@ -47,7 +47,7 @@ export async function register(_prev: { error?: string }, form: FormData) {
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
-  redirect("/leads?welkom=1");
+  redirect("/dashboard?welkom=1");
 }
 
 export async function login(_prev: { error?: string }, form: FormData) {
@@ -64,7 +64,7 @@ export async function login(_prev: { error?: string }, form: FormData) {
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
-  redirect("/leads");
+  redirect("/dashboard");
 }
 
 export async function logout() {

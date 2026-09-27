@@ -29,7 +29,7 @@ function Divider() {
 
 export default async function Landing() {
   const dealer = await currentDealer();
-  const appLink = dealer ? "/leads" : "/registreren";
+  const appLink = dealer ? "/dashboard" : "/registreren";
   const appLabel = dealer ? "Naar je dashboard" : "Gratis starten";
 
   return (

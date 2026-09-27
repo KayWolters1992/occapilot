@@ -77,7 +77,7 @@ addLead({
   msgs: [
     { direction: "in", subject: "Vraag over BMW 3-Serie 320i Touring", body: "Goedemorgen, ik zag de BMW 320i Touring op AutoScout24 staan. Mooie auto! Is er nog onderhandelingsruimte op de prijs? Ik kan snel beslissen als we eruit komen.", created_at: "2026-09-27 08:14:00" },
     { direction: "out", subject: "Re: BMW 3-Serie 320i Touring", body: "Hallo Mark, dank voor je interesse in de BMW 320i Touring! Over de prijs kan ik als digitale assistent zelf geen toezeggingen doen, daarvoor verbind ik je graag met Kay. Zullen we ondertussen een proefrit inplannen zodat je de auto meteen kunt ervaren?", created_at: "2026-09-27 08:16:00" },
-    { direction: "system", body: "Escalatie: klant vraagt om korting, buiten de bevoegdheid van de AI, verkoper moet zelf bellen.", created_at: "2026-09-27 08:16:05" },
+    { direction: "system", subject: "Overdracht aan verkoper", meta: "escalatie", body: "Klant vraagt om korting. Dat is aan de verkoper, dus Occapilot heeft het gesprek overgedragen.", created_at: "2026-09-27 08:16:05" },
   ],
 });
 
@@ -120,7 +120,7 @@ addLead({
   msgs: [
     { direction: "in", subject: "Proefrit Audi A4 Avant", body: "Hallo, ik ben erg geïnteresseerd in de Audi A4 Avant. Kan ik zaterdag om 11:00 een proefrit komen doen? Mijn nummer is 06-98765432.", created_at: "2026-09-25 12:05:00" },
     { direction: "out", subject: "Re: Proefrit Audi A4 Avant", body: "Hallo Ahmed, wat leuk dat je een proefrit wilt inplannen! Zaterdag om 11:00 komt uit, je bent van harte welkom bij Autobedrijf Wolters in Maastricht. Kay neemt voor de zekerheid nog even telefonisch contact met je op ter bevestiging. Tot zaterdag!", created_at: "2026-09-25 12:07:00" },
-    { direction: "system", body: "Afspraak bevestigd: zaterdag 11:00, proefrit Audi A4 Avant.", created_at: "2026-09-25 12:07:10" },
+    { direction: "system", subject: "Afspraak", meta: "afspraak", body: "Proefrit bevestigd voor zaterdag 11.00 in de Audi A4 Avant.", created_at: "2026-09-25 12:07:10" },
   ],
 });
 
