@@ -78,13 +78,14 @@ export async function updateSettings(form: FormData) {
   if (!dealer) redirect("/login");
   db()
     .prepare(
-      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, settings_checked=1 WHERE id=?"
+      "UPDATE dealers SET name=?, city=?, seller_name=?, from_email=?, stock_live=?, settings_checked=1 WHERE id=?"
     )
     .run(
       String(form.get("name") ?? dealer.name),
       String(form.get("city") ?? dealer.city),
       String(form.get("seller_name") ?? dealer.seller_name),
       String(form.get("from_email") ?? dealer.from_email),
+      form.get("stock_live") === "on" ? 1 : 0,
       dealer.id
     );
   redirect("/instellingen?opgeslagen=1");

@@ -10,6 +10,7 @@ export interface Dealer {
   opening_hours: string;
   settings_checked?: number;
   checklist_hidden?: number;
+  stock_live?: number;
   schedule_json?: string;
 }
 

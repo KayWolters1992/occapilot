@@ -48,6 +48,13 @@ export default async function Settings({ searchParams }: { searchParams: Promise
             <input id="seller_name" name="seller_name" type="text" defaultValue={dealer.seller_name} /></div>
           <div className="field"><label htmlFor="from_email">Afzenderadres richting klant (geverifieerd in Postmark)</label>
             <input id="from_email" name="from_email" type="email" defaultValue={dealer.from_email} /></div>
+          <label className="check-row">
+            <input type="checkbox" name="stock_live" defaultChecked={dealer.stock_live !== 0} />
+            <span>
+              <b>Mijn advertenties staan alleen online zolang de auto te koop is</b>
+              <small>Aan: RepRight mag zeggen dat een auto nog te koop staat. Uit: hij zegt dat nooit en nodigt de klant uit voor een proefrit, waarbij jij de auto vooraf bevestigt.</small>
+            </span>
+          </label>
           <button className="btn" style={{ alignSelf: "flex-start" }}>Opslaan</button>
         </form>
       </div>

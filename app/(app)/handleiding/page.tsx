@@ -16,7 +16,7 @@ const OVERDRACHT = [
 ];
 
 const FAQ: { q: string; a: string }[] = [
-  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. RepRight verlaagt geen prijzen, belooft geen garanties en claimt geen beschikbaarheid. Bij een bod of prijsvraag geeft hij het gesprek direct aan jou." },
+  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. RepRight verlaagt geen prijzen, belooft geen garanties en doet geen beloftes die jij niet hebt gedaan. Of hij mag zeggen dat een auto nog te koop staat, bepaal je zelf bij Instellingen. Bij een bod of prijsvraag geeft hij het gesprek direct aan jou." },
   { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentie in de lead en uit de officiële RDW-gegevens (trekgewicht, APK, kleur). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt." },
   { q: "Hoe weet ik dat er iets op mij wacht?", a: "Je krijgt een e-mail zodra een lead aan jou wordt overgedragen of een proefrit is gepland. In het overzicht staat alles bovenaan bij 'Vandaag bellen' en in de bak 'Jij bent aan zet'." },
   { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Open de lead en klik op 'Zelf reageren'. Je bepaalt zelf of RepRight daarna weer mag opvolgen. Met 'Sluit lead' stop je alles." },

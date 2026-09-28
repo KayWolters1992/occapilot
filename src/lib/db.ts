@@ -82,5 +82,6 @@ function migrate(d: Database.Database) {
   const cols = (d.prepare("PRAGMA table_info(dealers)").all() as { name: string }[]).map((c) => c.name);
   if (!cols.includes("schedule_json")) d.exec("ALTER TABLE dealers ADD COLUMN schedule_json TEXT DEFAULT ''");
   if (!cols.includes("settings_checked")) d.exec("ALTER TABLE dealers ADD COLUMN settings_checked INTEGER DEFAULT 0");
+  if (!cols.includes("stock_live")) d.exec("ALTER TABLE dealers ADD COLUMN stock_live INTEGER DEFAULT 1");
   if (!cols.includes("checklist_hidden")) d.exec("ALTER TABLE dealers ADD COLUMN checklist_hidden INTEGER DEFAULT 0");
 }

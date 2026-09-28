@@ -1192,3 +1192,8 @@ select:focus{outline:none;border-color:#6f93ff;box-shadow:0 0 0 3px #4f7cff26}
 .klantvraag q{font-size:17px;font-weight:600;color:#fff;line-height:1.45;quotes:"“" "”"}
 .klantvraag .start-link{flex:none;white-space:nowrap}
 @media (max-width:760px){.klantvraag{flex-wrap:wrap}.klantvraag .start-link{width:100%}}
+.check-row{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#ffffff05;cursor:pointer}
+.check-row input{margin-top:3px;width:18px;height:18px;accent-color:#6f7cff;flex:none}
+.check-row span{display:flex;flex-direction:column;gap:4px}
+.check-row b{color:#fff;font-size:14px;font-weight:600}
+.check-row small{color:var(--muted);font-size:12.5px;line-height:1.5}

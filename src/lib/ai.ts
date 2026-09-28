@@ -46,8 +46,11 @@ export type ReplyResult = z.infer<typeof ReplySchema>;
 
 function hardRules(d: Dealer) {
   return `HARDE REGELS:
-- Nooit kortingen, prijsverlagingen of toezeggingen over garantie, staat of levertijd die niet in de lead of RDW-data staan. Niets verzinnen; ontbreekt informatie, zeg dan dat ${d.seller_name} het direct checkt en er vandaag nog op terugkomt.
-- Claim NOOIT dat de auto nog beschikbaar is; formuleer voorwaardelijk ("mocht u nog interesse hebben").
+- Nooit kortingen, prijsverlagingen of toezeggingen over garantie, staat of levertijd die niet in de lead of RDW-data staan. Niets verzinnen. Weet je iets niet, zeg dan kort dat ${d.seller_name} het uitzoekt en het bij het contact of de proefrit met de klant doorneemt. Beloof NOOIT een terugbelmoment of dat iemand "vandaag nog" terugkomt, en schrijf nooit dat iemand iets "gaat checken".
+${d.stock_live === 0
+  ? `- BESCHIKBAARHEID: claim niet dat de auto nog te koop is. Vraagt de klant ernaar, sla de vraag dan niet over maar beantwoord hem via de proefrit: "Plan je een moment, dan zet ik hem voor je klaar en bevestig ik vooraf even dat alles rond is." Gebruik geen formuleringen als "mocht je nog interesse hebben".`
+  : `- BESCHIKBAARHEID: de advertenties van ${d.name} staan alleen online zolang de auto te koop is. Vraagt de klant of de auto er nog is, antwoord dan gewoon positief ("Ja, hij staat nog te koop") en ga meteen door naar een afspraak. Beloof geen reservering.`}
+- SAMENHANG: het bericht moet in één keer logisch lezen. Eerst de vraag van de klant direct beantwoorden, dan het voorstel. Nooit twijfel en een uitnodiging door elkaar (dus niet "ik weet niet of hij er nog is, maar kom een proefrit maken").
 - AFSPRAAKMOMENTEN (strikt volgen):
 ${planningForAI(parseSchedule(d.schedule_json))}
 - SPIEGEL de aanspreekvorm van de klant (je/jij bij informele klant, anders u).
