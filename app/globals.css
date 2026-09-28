@@ -1197,3 +1197,45 @@ select:focus{outline:none;border-color:#6f93ff;box-shadow:0 0 0 3px #4f7cff26}
 .check-row span{display:flex;flex-direction:column;gap:4px}
 .check-row b{color:#fff;font-size:14px;font-weight:600}
 .check-row small{color:var(--muted);font-size:12.5px;line-height:1.5}
+
+/* ── Gesprek als heldere chat: klant links, RepRight en jij rechts ── */
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.chat-legend{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.chat-legend span{display:inline-flex;align-items:center;gap:6px}
+.chat-legend i{width:9px;height:9px;border-radius:50%}
+.lg-klant i{background:#cbd5ff}.lg-ai i{background:linear-gradient(135deg,#4f7cff,#8b5cf6)}.lg-jij i{background:#22c55e}
+.chat{display:flex;flex-direction:column;gap:18px;padding:6px 0 4px}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:88%}
+.msg.klant{align-self:flex-start}
+.msg.ai,.msg.jij{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+.msg.klant .msg-av{background:#2a3163;border:1px solid #ffffff22;color:#dfe5ff}
+.msg.ai .msg-av{background:#0b1026;border:1px solid #7b6cff66;box-shadow:0 0 14px #7b6cff44}
+.msg.jij .msg-av{background:#16a34a;border:1px solid #4ade8066}
+.msg-col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.msg.ai .msg-col,.msg.jij .msg-col{align-items:flex-end}
+.msg-who{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;font-size:12px}
+.msg.ai .msg-who,.msg.jij .msg-who{justify-content:flex-end}
+.msg-who b{color:#fff;font-size:13px}
+.msg-who em{font-style:normal;color:var(--muted)}
+.msg-when{color:var(--faint)}
+.msg-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#ffffff0d;border:1px solid var(--line);color:var(--muted)}
+.msg-bub{padding:14px 16px;font-size:13.5px;line-height:1.65;white-space:pre-wrap;border-radius:16px;text-align:left;word-break:break-word}
+.msg.klant .msg-bub{background:#eef1ff;color:#151a3d;border-radius:4px 16px 16px 16px;box-shadow:0 8px 24px #0005}
+.msg.ai .msg-bub{background:linear-gradient(160deg,#4f7cff26,#8b5cf61f);border:1px solid #7b8cff55;color:var(--ink);border-radius:16px 4px 16px 16px}
+.msg.jij .msg-bub{background:#22c55e17;border:1px solid #22c55e55;color:var(--ink);border-radius:16px 4px 16px 16px}
+.msg-subj{display:block;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #ffffff14;white-space:normal}
+.msg-raw{margin-top:10px;font-size:12px;white-space:normal}
+.msg-raw summary{cursor:pointer;color:#4a57a8;font-weight:600}
+.msg-raw pre{margin:8px 0 0;padding:10px;border-radius:8px;background:#dfe4fb;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;color:#2b3355;max-height:260px;overflow:auto}
+.msg.planned{opacity:.75}
+.msg.planned .msg-bub{background:transparent;border:1px dashed #7b8cff66;padding:10px 14px}
+.msg.planned summary{cursor:pointer;color:#a9b8ff;font-weight:600;font-size:12.5px;white-space:normal}
+.msg.planned details[open] summary{margin-bottom:10px}
+.chat-event{align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;max-width:80%;text-align:center;padding:8px 14px;border-radius:12px;font-size:12.5px;color:var(--muted);background:#ffffff08;border:1px solid var(--line)}
+.chat-event b{color:var(--ink)}
+.chat-event small{color:var(--faint);font-size:11px}
+.chat-event.escalatie{border-color:#ef444455;background:#ef444412}.chat-event.escalatie b{color:#fca5a5}
+.chat-event.afspraak{border-color:#22c55e55;background:#22c55e12}.chat-event.afspraak b{color:#86efac}
+.chat-event.stop{border-color:var(--line2)}
+@media (max-width:760px){.msg{max-width:100%}.msg-av{width:28px;height:28px;font-size:11px}}

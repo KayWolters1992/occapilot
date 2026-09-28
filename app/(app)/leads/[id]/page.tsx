@@ -8,6 +8,7 @@ import type { Lead, Msg, Followup, RdwInfo } from "@/lib/types";
 import { ReplyBox, TypedText } from "./LeadClient";
 import { statusInfo } from "@/lib/status";
 import { StatusPill } from "@/components/StatusPill";
+import { LogoMark } from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
   if (!lead) notFound();
 
   const msgs = d
-    .prepare("SELECT * FROM messages WHERE lead_id=? AND meta != 'lead' ORDER BY created_at")
+    .prepare("SELECT * FROM messages WHERE lead_id=? ORDER BY created_at, id")
     .all(lead.id) as Msg[];
   const fups = d
     .prepare("SELECT * FROM followups WHERE lead_id=? ORDER BY due_at")
@@ -177,28 +178,78 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
         </div>
 
         <div className="card" id="gesprek">
-          <span className="cardtitle">Gesprek <span className="note" style={{ fontWeight: 400 }}>· e-mail, volledig gelogd</span></span>
-          <div className="thread">
+          <div className="chat-head">
+            <span className="cardtitle">Gesprek</span>
+            <div className="chat-legend">
+              <span className="lg-klant"><i />Klant</span>
+              <span className="lg-ai"><i />RepRight</span>
+              <span className="lg-jij"><i />Jij</span>
+            </div>
+          </div>
+          <div className="chat">
             {msgs.map((m) => {
+              if (m.direction === "system") {
+                return (
+                  <div key={m.id} className={`chat-event ${m.meta}`}>
+                    <span><b>{m.subject || "Update"}</b>{m.body ? ` · ${m.body}` : ""}</span>
+                    <small>{wanneer(m.created_at)}</small>
+                  </div>
+                );
+              }
+              const isKlant = m.direction === "in";
               const isDealer = m.direction === "out" && m.meta.startsWith("verkoper");
               const failed = m.meta.includes("mislukt") || m.meta.includes("niet verzonden");
               const typeIt = sp.nieuw && m.id === lastOutId;
+              const isLead = m.meta === "lead";
+              const soort = isKlant ? "klant" : isDealer ? "jij" : "ai";
+              const naamKlant = lead.customer_name || "Klant";
+              const tekst = isLead ? schoonLead(m.body) : m.body;
+              const label = m.meta.startsWith("dag") ? `Herinnering ${m.meta.replace("dag", "dag ").split(" (")[0]}` : isLead ? `Aanvraag via ${lead.source || "online"}` : "";
               return (
-                <div key={m.id} className={`turn ${m.direction === "in" ? "in" : m.direction === "system" ? "system" : isDealer ? "dealer" : ""}`}>
-                  <span className="who">
-                    {m.direction === "in" ? (lead.customer_name || "Klant") :
-                     m.direction === "system" ? `→ ${m.subject || "Systeem"}` :
-                     isDealer ? `${dealer.seller_name} (jij)` : "RepRight"}
-                    {" "}<span className="when">· {wanneer(m.created_at)}</span>
-                    {failed && m.direction === "out" && <span className="unsent">{m.meta.includes("geen e-mailadres") ? "niet verstuurd · klant heeft geen e-mailadres" : "niet verstuurd · e-mail nog niet gekoppeld"}</span>}
+                <div key={m.id} className={`msg ${soort}`}>
+                  <span className="msg-av">
+                    {soort === "ai" ? <LogoMark size={22} onDark /> : initialen(soort === "klant" ? naamKlant : dealer.seller_name)}
                   </span>
-                  <div className="bub">
-                    {m.direction !== "system" && m.subject ? `${m.subject}\n\n` : ""}
-                    {typeIt ? <TypedText text={m.body} /> : m.body}
+                  <div className="msg-col">
+                    <span className="msg-who">
+                      <b>{soort === "klant" ? naamKlant : soort === "jij" ? `Jij (${dealer.seller_name})` : "RepRight"}</b>
+                      {soort === "ai" && <em>namens {dealer.seller_name}</em>}
+                      {label && <span className="msg-tag">{label}</span>}
+                      <span className="msg-when">{wanneer(m.created_at)}</span>
+                    </span>
+                    <div className="msg-bub">
+                      {m.subject && !isLead && <span className="msg-subj">{m.subject}</span>}
+                      {typeIt ? <TypedText text={tekst} /> : tekst}
+                      {isLead && (
+                        <details className="msg-raw">
+                          <summary>Originele e-mail tonen</summary>
+                          <pre>{m.body}</pre>
+                        </details>
+                      )}
+                    </div>
+                    {failed && m.direction === "out" && (
+                      <span className="unsent">{m.meta.includes("geen e-mailadres") ? "niet verstuurd · klant heeft geen e-mailadres" : "niet verstuurd · e-mail nog niet gekoppeld"}</span>
+                    )}
                   </div>
                 </div>
               );
             })}
+            {info.lane === "ai" && fups.filter((f) => f.status === "gepland").slice(0, 1).map((f) => (
+              <div key={f.id} className="msg ai planned">
+                <span className="msg-av"><LogoMark size={22} onDark /></span>
+                <div className="msg-col">
+                  <span className="msg-who">
+                    <b>RepRight</b><span className="msg-tag">Gepland: herinnering {f.label.replace("dag", "dag ")}</span>
+                    <span className="msg-when">{wanneer(f.due_at)}</span>
+                  </span>
+                  <details className="msg-bub">
+                    <summary>Alleen als de klant niet reageert. Tekst bekijken</summary>
+                    <span className="msg-subj">{f.subject}</span>
+                    {f.body}
+                  </details>
+                </div>
+              </div>
+            ))}
           </div>
           {!["gestopt", "gesloten"].includes(lead.status) && (
             <div id="antwoord">
@@ -209,4 +260,16 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
       </div>
     </>
   );
+}
+
+function initialen(naam: string) {
+  return naam.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("") || "?";
+}
+
+/** Toon van een binnengekomen lead-mail alleen het bericht, zonder kopregels. */
+function schoonLead(raw: string) {
+  const regels = raw.split("\n");
+  let i = 0;
+  while (i < regels.length && (/^(van|aan|onderwerp|datum|from|to|subject|date)\s*:/i.test(regels[i]) || regels[i].trim() === "")) i++;
+  return regels.slice(i).join("\n").trim() || raw;
 }
