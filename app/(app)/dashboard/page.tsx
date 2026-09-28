@@ -6,6 +6,7 @@ import { statusInfo, LANES, type Lane } from "@/lib/status";
 import { Plate, groet, wanneer } from "@/components/LeadBits";
 import { InboundAddress, TestLeadButton } from "../leads/OnboardingCard";
 import { CountUp } from "../../_lp/Interactive";
+import { setChecklist } from "../../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -38,9 +39,17 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const count = { jij: 0, ai: 0, klaar: 0 } as Record<Lane, number>;
   for (const l of all) count[laneOf(l)]++;
 
+  // Moet: wat op jou wacht (overdracht, zelf overgenomen) en proefritten om te bevestigen.
+  // Kan: hete leads die RepRight al heeft beantwoord; een belletje erbij vergroot de kans op een proefrit.
+  const soort = (l: Lead): "moet" | "rit" | "kan" | null =>
+    laneOf(l) === "jij" ? "moet" : l.status === "afspraak" && l.customer_phone ? "rit" : l.qual_label === "Heet" && laneOf(l) === "ai" && l.customer_phone ? "kan" : null;
+  const volgorde = { moet: 0, rit: 1, kan: 2 };
   const bellen = all
-    .filter((l) => l.status === "escalatie" || (l.qual_label === "Heet" && laneOf(l) === "ai"))
-    .slice(0, 4);
+    .map((l) => ({ l, k: soort(l) }))
+    .filter((x): x is { l: Lead; k: "moet" | "rit" | "kan" } => x.k !== null)
+    .sort((a, b) => volgorde[a.k] - volgorde[b.k])
+    .slice(0, 5);
+  const moetAantal = bellen.filter((x) => x.k !== "kan").length;
 
   const month = new Date().toISOString().slice(0, 7);
   const afspraken = all.filter((l) => l.status === "afspraak" && l.created_at.startsWith(month)).length;
@@ -90,17 +99,26 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <h1>{groet()}, <em>{dealer.seller_name}</em></h1>
           <span className="subtitle">{samenvatting}</span>
         </div>
-        <TestLeadButton compact />
+        <div className="pagehead-actions">
+          {klaar < stappen.length && !!dealer.checklist_hidden && (
+            <form action={setChecklist}><input type="hidden" name="hidden" value="0" /><button className="btn ghost small">🚀 Aan de slag tonen</button></form>
+          )}
+          <TestLeadButton compact />
+        </div>
       </div>
 
-      {klaar < stappen.length && (
+      {klaar < stappen.length && !dealer.checklist_hidden && (
         <div className="card start">
           <div className="start-head">
             <div>
               <span className="cardtitle">🚀 Aan de slag</span>
-              <span className="note">{klaar} van {stappen.length} stappen gedaan</span>
+              <span className="note">{klaar} van {stappen.length} stappen gedaan · verdwijnt vanzelf als alles klaar is</span>
             </div>
             <div className="start-bar"><i style={{ width: `${(klaar / stappen.length) * 100}%` }} /></div>
+            <form action={setChecklist}>
+              <input type="hidden" name="hidden" value="1" />
+              <button className="start-hide" aria-label="Aan de slag verbergen" title="Verbergen">Verbergen ✕</button>
+            </form>
           </div>
           <ol className="start-list">
             {stappen.map((s, i) => (
@@ -146,26 +164,35 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <div className="bellen-head">
             <div>
               <span className="cardtitle">📞 Vandaag bellen</span>
-              <span className="note">Bovenaan wat op jou wacht, daarna de hete leads.</span>
+              <span className="note">Bovenaan wat moet. Daaronder hete leads: RepRight heeft ze al gemaild, een belletje erbij is optioneel maar vergroot de kans op een proefrit.</span>
             </div>
-            {bellen.length > 0 && <span className="bellen-count">{bellen.length}</span>}
+            {moetAantal > 0 && <span className="bellen-count">{moetAantal}</span>}
           </div>
           {bellen.length === 0 ? (
             <div className="bellen-empty">✓ Niemand wacht op je. RepRight heeft alles onder controle.</div>
           ) : (
             <div className="bellen-grid">
-              {bellen.map((l) => (
-                <div key={l.id} className={`bel compact ${l.status === "escalatie" ? "esc" : "hot"}`}>
+              {bellen.map(({ l, k }) => (
+                <div key={l.id} className={`bel compact ${k === "moet" ? "esc" : k === "rit" ? "rit" : "hot"}`}>
                   <div className="bel-top">
-                    <span className={`pill ${l.status === "escalatie" ? "hot" : "heat"}`}>{l.status === "escalatie" ? "👤 Actie nodig" : "🔥 Heet"}</span>
+                    <span className={`pill ${k === "moet" ? "hot" : k === "rit" ? "ok" : "heat"}`}>
+                      {k === "moet" ? "👤 Moet: wacht op jou" : k === "rit" ? "📅 Proefrit bevestigen" : "🔥 Optioneel: heet"}
+                    </span>
                     <Plate p={l.license_plate} />
                   </div>
                   <div className="bel-info">
                     <b>{l.customer_name || "Onbekend"} <span className="bel-car">· {l.vehicle || "Onbekende auto"}</span></b>
-                    <p>{l.status === "escalatie" ? l.escalation_reason : l.qual_reason}</p>
+                    {l.question && <q className="bel-q">{l.question}</q>}
+                    <p>
+                      {k === "moet"
+                        ? l.escalation_reason || "Jij voert dit gesprek."
+                        : k === "rit"
+                          ? "De klant koos een moment. Bel even ter bevestiging en zet de auto klaar."
+                          : "✓ Al beantwoord door RepRight. Nabellen is niet nodig, wel een kans."}
+                    </p>
                   </div>
                   <div className="bel-actions">
-                    {l.customer_phone && <a className="btn small" href={`tel:${l.customer_phone.replace(/\s/g, "")}`}>📞 Bel</a>}
+                    {l.customer_phone && <a className={`btn small ${k === "kan" ? "ghost" : ""}`} href={`tel:${l.customer_phone.replace(/\s/g, "")}`}>📞 Bel</a>}
                     <Link className="btn ghost small" href={`/leads/${l.id}`}>Open →</Link>
                   </div>
                 </div>

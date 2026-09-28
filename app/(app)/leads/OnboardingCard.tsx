@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 const VOORBEELD_LEAD = `Van: Testklant <testklant@voorbeeld.nl>
 Onderwerp: Vraag via AutoScout24
@@ -81,7 +82,7 @@ export function TestLeadButton({ compact = false }: { compact?: boolean }) {
         {busy ? "RepRight is bezig…" : "▶ Probeer met een voorbeeldlead"}
       </button>
       {error && <span className="note" style={{ color: "var(--red-ink)" }}>{error}</span>}
-      {busy && (
+      {busy && typeof document !== "undefined" && createPortal(
         <div className="proc-overlay" role="status" aria-live="polite">
           <div className="proc">
             <span className="app-live"><i />RepRight werkt</span>
@@ -94,7 +95,8 @@ export function TestLeadButton({ compact = false }: { compact?: boolean }) {
               ))}
             </ul>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

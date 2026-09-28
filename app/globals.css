@@ -1176,3 +1176,19 @@ select:focus{outline:none;border-color:#6f93ff;box-shadow:0 0 0 3px #4f7cff26}
   .bel.compact{grid-template-columns:1fr}
   .bel.compact .bel-actions{grid-column:1;grid-row:auto}
 }
+
+/* ── Fixes sept: klantvraag, bellen-soorten, aan-de-slag verbergen ── */
+.pagehead-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.start-head{position:relative}
+.start-hide{background:none;border:1px solid var(--line2);color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap}
+.start-hide:hover{color:#fff;border-color:#6f93ff88}
+.bel.rit{border-color:#22c55e44;background:linear-gradient(160deg,#22c55e10,transparent 70%)}
+.bel-q{display:block;font-size:13px;color:#fff;font-style:italic;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bel-q::before{content:"💬 “";font-style:normal}.bel-q::after{content:"”"}
+.klantvraag{display:flex;align-items:center;gap:16px;padding:18px 22px;margin-bottom:16px;border-radius:18px;background:linear-gradient(135deg,#4f7cff1c,#8b5cf614);border:1px solid #6f93ff44;box-shadow:0 0 40px #4f7cff14}
+.klantvraag-ic{flex:none;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;background:#4f7cff22;border:1px solid #6f93ff44}
+.klantvraag>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.klantvraag-k{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#a9b8ff}
+.klantvraag q{font-size:17px;font-weight:600;color:#fff;line-height:1.45;quotes:"“" "”"}
+.klantvraag .start-link{flex:none;white-space:nowrap}
+@media (max-width:760px){.klantvraag{flex-wrap:wrap}.klantvraag .start-link{width:100%}}

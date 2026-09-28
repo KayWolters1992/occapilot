@@ -28,5 +28,7 @@ export function wanneer(ts: string) {
   const tijd = f({ hour: "2-digit", minute: "2-digit" });
   if (dag === vandaag) return `vandaag ${tijd}`;
   if (dag === gist) return `gisteren ${tijd}`;
+  const morgen = new Intl.DateTimeFormat("nl-NL", { timeZone: "Europe/Amsterdam", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(nu.getTime() + 86400000));
+  if (dag === morgen) return `morgen ${tijd}`;
   return `${f({ day: "2-digit", month: "2-digit" })} ${tijd}`;
 }

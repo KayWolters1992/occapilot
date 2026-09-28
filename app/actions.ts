@@ -125,3 +125,12 @@ export async function updateSchedule(form: FormData) {
     .run(JSON.stringify(schedule), scheduleSummary(schedule), dealer.id);
   redirect("/instellingen?opgeslagen=rooster#rooster");
 }
+
+/** "Aan de slag"-blok op het dashboard verbergen of weer tonen. */
+export async function setChecklist(form: FormData) {
+  const dealer = await currentDealer();
+  if (!dealer) redirect("/login");
+  const hidden = form.get("hidden") === "1" ? 1 : 0;
+  db().prepare("UPDATE dealers SET checklist_hidden=? WHERE id=?").run(hidden, dealer.id);
+  redirect("/dashboard");
+}

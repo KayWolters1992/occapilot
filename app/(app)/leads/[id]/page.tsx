@@ -1,3 +1,4 @@
+import { wanneer } from "@/components/LeadBits";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -45,7 +46,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
         <div className="titles">
           <Link href="/leads" className="backlink">← Terug naar overzicht</Link>
           <h1>{lead.customer_name || "Onbekende klant"} <StatusPill status={lead.status} /></h1>
-          <span className="subtitle">{lead.vehicle || "Onbekende auto"}{lead.source ? ` · via ${lead.source}` : ""} · binnengekomen {lead.created_at.slice(5, 16).replace("T", " ")}</span>
+          <span className="subtitle">{lead.vehicle || "Onbekende auto"}{lead.source ? ` · via ${lead.source}` : ""} · binnengekomen {wanneer(lead.created_at)}</span>
         </div>
       </div>
 
@@ -56,7 +57,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
           <b>{lead.status === "escalatie" && lead.escalation_reason ? lead.escalation_reason : info.uitleg}</b>
           <span className="beurt-next">
             <em>Wat doe jij?</em> {info.jijDoet}
-            {info.lane === "ai" && nextFup && <> Volgende herinnering: {nextFup.label.replace("dag", "dag ")} op {nextFup.due_at.slice(5, 16).replace("T", " ")}.</>}
+            {info.lane === "ai" && nextFup && <> Volgende herinnering: {nextFup.label.replace("dag", "dag ")} op {wanneer(nextFup.due_at)}.</>}
           </span>
         </div>
         <form action={closeLead} className="beurt-actions">
@@ -98,6 +99,17 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
           </div>
         </div>
       )}
+      {lead.question && (
+        <div className="klantvraag">
+          <span className="klantvraag-ic">💬</span>
+          <div>
+            <span className="klantvraag-k">Vraag van {lead.customer_name || "de klant"}{lead.source ? ` via ${lead.source}` : ""}</span>
+            <q>{lead.question}</q>
+          </div>
+          <a href="#gesprek" className="start-link">Lees het hele gesprek ↓</a>
+        </div>
+      )}
+
       <div className="detailgrid">
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div className="card">
@@ -141,7 +153,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
           <div className="card">
             <span className="cardlabel">Tijdlijn</span>
             <div className="tl">
-              <div className="tl-item done"><i /><div><b>Lead binnengekomen</b><span>{lead.source || "onbekend kanaal"} · {lead.created_at.slice(5, 16).replace("T", " ")}</span></div></div>
+              <div className="tl-item done"><i /><div><b>Lead binnengekomen</b><span>{lead.source || "onbekend kanaal"} · {wanneer(lead.created_at)}</span></div></div>
               {msgs.some((m) => m.direction === "out" && !m.meta.startsWith("verkoper")) && (
                 <div className="tl-item done"><i /><div><b>Persoonlijk beantwoord</b><span>door RepRight, in jouw naam</span></div></div>
               )}
@@ -151,7 +163,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
                   <div>
                     <b>Herinnering {f.label.replace("dag", "dag ")}</b>
                     <span>
-                      {f.status === "verzonden" ? "verstuurd" : f.status === "gepland" ? "gepland" : "niet nodig, klant reageerde"} · {(f.sent_at ?? f.due_at).slice(5, 16).replace("T", " ")}
+                      {f.status === "verzonden" ? "verstuurd" : f.status === "gepland" ? "gepland" : "niet nodig, klant reageerde"} · {wanneer(f.sent_at ?? f.due_at)}
                     </span>
                   </div>
                 </div>
@@ -164,7 +176,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" id="gesprek">
           <span className="cardtitle">Gesprek <span className="note" style={{ fontWeight: 400 }}>· e-mail, volledig gelogd</span></span>
           <div className="thread">
             {msgs.map((m) => {
@@ -177,7 +189,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
                     {m.direction === "in" ? (lead.customer_name || "Klant") :
                      m.direction === "system" ? `→ ${m.subject || "Systeem"}` :
                      isDealer ? `${dealer.seller_name} (jij)` : "RepRight"}
-                    {" "}<span className="when">· {m.created_at.slice(5, 16).replace("T", " ")}</span>
+                    {" "}<span className="when">· {wanneer(m.created_at)}</span>
                     {failed && m.direction === "out" && <span className="unsent">{m.meta.includes("geen e-mailadres") ? "niet verstuurd · klant heeft geen e-mailadres" : "niet verstuurd · e-mail nog niet gekoppeld"}</span>}
                   </span>
                   <div className="bub">
