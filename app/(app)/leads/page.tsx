@@ -1,3 +1,4 @@
+import { Ic } from "@/components/Ic";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { currentDealer } from "@/lib/auth";
@@ -57,7 +58,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             <Link href={href("")} className={!bak ? "on" : ""}>Alles <span className="tab-n">{gevonden.length}</span></Link>
             {LANES.map((l) => (
               <Link key={l.key} href={href(l.key)} className={`${bak === l.key ? "on" : ""} ${l.key === "jij" && count.jij > 0 ? "alert" : ""}`}>
-                {l.icon} {l.titel} <span className="tab-n">{count[l.key]}</span>
+                <Ic ic={l.icon} size={15} /> {l.titel} <span className="tab-n">{count[l.key]}</span>
               </Link>
             ))}
           </nav>

@@ -1,3 +1,4 @@
+import { Ic } from "@/components/Ic";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { currentDealer } from "@/lib/auth";
@@ -145,7 +146,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
       <div className="lanes">
         {LANES.map((l) => (
           <Link key={l.key} href={`/leads?bak=${l.key}`} className={`lane ${l.key} ${l.key === "jij" && count.jij > 0 ? "alert" : ""}`}>
-            <span className="lane-ic">{l.icon}</span>
+            <span className="lane-ic"><Ic ic={l.icon} size={22} /></span>
             <b><CountUp to={count[l.key]} /></b>
             <span className="lane-t">{l.titel}</span>
             <span className="lane-s">{l.sub}</span>

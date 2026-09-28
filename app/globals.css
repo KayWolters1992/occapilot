@@ -1241,3 +1241,6 @@ select:focus{outline:none;border-color:#6f93ff;box-shadow:0 0 0 3px #4f7cff26}
 @media (max-width:760px){.msg{max-width:100%}.msg-av{width:28px;height:28px;font-size:11px}}
 .check-row small b{font-size:12.5px;font-weight:700}
 .check-row small b.on{color:#86efac}.check-row small b.off{color:#fca5a5}
+.beurt.ai .beurt-ic{background:#0b1026;border:1px solid #7b6cff77;box-shadow:0 0 22px #7b6cff55}
+.lane.ai .lane-ic{background:#0b1026;border-color:#7b6cff66;box-shadow:0 0 14px #7b6cff33}
+.pill svg,.tabs svg,.st-lane svg,.btn svg{vertical-align:-3px}

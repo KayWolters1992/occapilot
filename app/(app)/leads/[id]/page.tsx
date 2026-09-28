@@ -1,3 +1,4 @@
+import { Ic } from "@/components/Ic";
 import { wanneer } from "@/components/LeadBits";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -52,7 +53,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
       </div>
 
       <div className={`beurt ${info.lane} ${lead.status}`}>
-        <div className="beurt-ic">{info.icon}</div>
+        <div className="beurt-ic"><Ic ic={info.icon} size={30} /></div>
         <div className="beurt-body">
           <span className="beurt-kicker">{info.lane === "jij" ? "Jij bent aan zet" : info.lane === "ai" ? "RepRight is bezig" : "Afgerond"}</span>
           <b>{lead.status === "escalatie" && lead.escalation_reason ? lead.escalation_reason : info.uitleg}</b>
@@ -71,7 +72,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
           )}
           {info.lane !== "klaar" && <a className="btn ghost small" href="#antwoord">✍️ Zelf reageren</a>}
           {info.lane === "jij" && (
-            <button className="btn ghost small" name="status" value="wacht">🤖 Geef terug aan RepRight</button>
+            <button className="btn ghost small" name="status" value="wacht"><Ic ic="🤖" size={16} /> Geef terug aan RepRight</button>
           )}
           {lead.status !== "gesloten" && lead.status !== "gestopt" && (
             <button className="btn ghost small subtle" name="status" value="gesloten">Sluit lead</button>

@@ -1,3 +1,4 @@
+import { Ic } from "@/components/Ic";
 import Link from "next/link";
 import { currentDealer } from "@/lib/auth";
 import { LANES, statusInfo } from "@/lib/status";
@@ -66,7 +67,7 @@ export default async function Handleiding() {
         <div className="hulp-lanes">
           {LANES.map((l) => (
             <div key={l.key} className={`hulp-lane ${l.key}`}>
-              <span className="lane-ic">{l.icon}</span>
+              <span className="lane-ic"><Ic ic={l.icon} size={22} /></span>
               <b>{l.titel}</b>
               <span>{l.sub}.</span>
             </div>
@@ -118,7 +119,7 @@ export default async function Handleiding() {
         <h2>Wat betekenen de statussen?</h2>
         {LANES.map((l) => (
           <div key={l.key} className="st-group">
-            <span className={`st-lane ${l.key}`}>{l.icon} {l.titel}</span>
+            <span className={`st-lane ${l.key}`}><Ic ic={l.icon} size={15} /> {l.titel}</span>
             {l.statuses.map((st) => {
               const i = statusInfo(st);
               return (
@@ -144,7 +145,7 @@ export default async function Handleiding() {
           <div><span className="dag-ic">3</span><b>Kies wie verder gaat</b><span>Vinkje aan: RepRight volgt daarna weer op. Vinkje uit: jij voert het gesprek en RepRight blijft stil.</span></div>
         </div>
         <p className="note" style={{ margin: 0 }}>
-          Met <b>🤖 Geef terug aan RepRight</b> laat je hem weer opvolgen. Met <b>Sluit lead</b> stop je alles, bijvoorbeeld als de auto verkocht is.
+          Met <b>Geef terug aan RepRight</b> laat je hem weer opvolgen. Met <b>Sluit lead</b> stop je alles, bijvoorbeeld als de auto verkocht is.
         </p>
       </section>
 
