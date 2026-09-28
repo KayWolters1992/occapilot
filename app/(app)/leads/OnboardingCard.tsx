@@ -78,13 +78,13 @@ export function TestLeadButton({ compact = false }: { compact?: boolean }) {
   return (
     <>
       <button type="button" className={compact ? "btn ghost small" : "btn small"} disabled={busy} onClick={run}>
-        {busy ? "Occapilot is bezig…" : "▶ Probeer met een voorbeeldlead"}
+        {busy ? "RepRight is bezig…" : "▶ Probeer met een voorbeeldlead"}
       </button>
       {error && <span className="note" style={{ color: "var(--red-ink)" }}>{error}</span>}
       {busy && (
         <div className="proc-overlay" role="status" aria-live="polite">
           <div className="proc">
-            <span className="app-live"><i />Occapilot werkt</span>
+            <span className="app-live"><i />RepRight werkt</span>
             <b>Een nieuwe lead komt binnen…</b>
             <ul>
               {STAPPEN.map((s, i) => (

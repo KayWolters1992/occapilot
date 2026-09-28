@@ -44,10 +44,10 @@ export async function notifyDealer(opts: {
   subject: string;
   text: string;
 }): Promise<void> {
-  const domain = process.env.INBOUND_DOMAIN || "occapilot.local";
+  const domain = process.env.INBOUND_DOMAIN || "repright.local";
   await sendEmail({
     from: `melding@${domain.replace(/^in\./, "")}`,
-    fromName: "Occapilot",
+    fromName: "RepRight",
     to: opts.dealerEmail,
     replyTo: opts.dealerEmail,
     subject: opts.subject,

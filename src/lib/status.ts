@@ -14,28 +14,28 @@ export interface StatusInfo {
 const MAP: Record<string, StatusInfo> = {
   escalatie: {
     label: "Actie nodig", pill: "hot", icon: "👤", lane: "jij",
-    uitleg: "Occapilot heeft het gesprek aan jou overgedragen: een bod, inruilvraag, klacht of iets wat hij niet zeker weet.",
+    uitleg: "RepRight heeft het gesprek aan jou overgedragen: een bod, inruilvraag, klacht of iets wat hij niet zeker weet.",
     jijDoet: "Bel de klant of reageer in het gesprek. Daarna geef je het terug of sluit je de lead.",
   },
   overgenomen: {
     label: "Jij voert gesprek", pill: "you", icon: "👤", lane: "jij",
-    uitleg: "Jij hebt het gesprek overgenomen. Occapilot blijft stil en geeft je een seintje als de klant reageert.",
-    jijDoet: "Rond het gesprek af. Wil je dat Occapilot weer opvolgt? Geef het terug.",
+    uitleg: "Jij hebt het gesprek overgenomen. RepRight blijft stil en geeft je een seintje als de klant reageert.",
+    jijDoet: "Rond het gesprek af. Wil je dat RepRight weer opvolgt? Geef het terug.",
   },
   nieuw: {
     label: "Wordt verwerkt", pill: "ai", icon: "🤖", lane: "ai",
-    uitleg: "De lead is net binnen. Occapilot leest hem uit en schrijft een antwoord.",
+    uitleg: "De lead is net binnen. RepRight leest hem uit en schrijft een antwoord.",
     jijDoet: "Niets. Binnen 2 minuten is hij beantwoord.",
   },
   actief: {
-    label: "Occapilot volgt op", pill: "ai", icon: "🤖", lane: "ai",
-    uitleg: "De klant heeft antwoord gekregen. Blijft het stil, dan stuurt Occapilot na 1, 3 en 7 dagen een herinnering.",
+    label: "RepRight volgt op", pill: "ai", icon: "🤖", lane: "ai",
+    uitleg: "De klant heeft antwoord gekregen. Blijft het stil, dan stuurt RepRight na 1, 3 en 7 dagen een herinnering.",
     jijDoet: "Niets. Is de lead heet, dan kun je alvast bellen.",
   },
   wacht: {
     label: "Wacht op klant", pill: "ai", icon: "🤖", lane: "ai",
-    uitleg: "Het gesprek loopt en de bal ligt bij de klant. Reageert hij, dan antwoordt Occapilot meteen.",
-    jijDoet: "Niets. Occapilot pakt het op zodra de klant iets stuurt.",
+    uitleg: "Het gesprek loopt en de bal ligt bij de klant. Reageert hij, dan antwoordt RepRight meteen.",
+    jijDoet: "Niets. RepRight pakt het op zodra de klant iets stuurt.",
   },
   afspraak: {
     label: "Proefrit gepland", pill: "ok", icon: "✓", lane: "klaar",
@@ -49,7 +49,7 @@ const MAP: Record<string, StatusInfo> = {
   },
   gestopt: {
     label: "Afgemeld", pill: "wait", icon: "✓", lane: "klaar",
-    uitleg: "De klant wil geen berichten meer. Occapilot stuurt hem nooit meer iets.",
+    uitleg: "De klant wil geen berichten meer. RepRight stuurt hem nooit meer iets.",
     jijDoet: "Niets meer.",
   },
 };
@@ -60,7 +60,7 @@ export function statusInfo(status: string): StatusInfo {
 
 export const LANES: { key: Lane; icon: string; titel: string; sub: string; statuses: string[] }[] = [
   { key: "jij", icon: "👤", titel: "Jij bent aan zet", sub: "Escalaties en gesprekken die jij voert", statuses: ["escalatie", "overgenomen"] },
-  { key: "ai", icon: "🤖", titel: "Occapilot is bezig", sub: "Beantwoord en in opvolging. Jij hoeft niets te doen", statuses: ["nieuw", "actief", "wacht"] },
+  { key: "ai", icon: "🤖", titel: "RepRight is bezig", sub: "Beantwoord en in opvolging. Jij hoeft niets te doen", statuses: ["nieuw", "actief", "wacht"] },
   { key: "klaar", icon: "✓", titel: "Afgerond", sub: "Proefrit gepland, gesloten of afgemeld", statuses: ["afspraak", "gesloten", "gestopt"] },
 ];
 

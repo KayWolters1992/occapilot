@@ -36,7 +36,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           <span className="cardic">🏢</span>
           <div>
             <span className="cardtitle">Bedrijf</span>
-            <span className="carddesc">Deze gegevens gebruikt Occapilot in elk gesprek namens jou.</span>
+            <span className="carddesc">Deze gegevens gebruikt RepRight in elk gesprek namens jou.</span>
           </div>
         </div>
         <form action={updateSettings} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -57,7 +57,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           <span className="cardic">🗓️</span>
           <div>
             <span className="cardtitle">Proefrit- en bezichtigingsmomenten</span>
-            <span className="carddesc">Occapilot stelt klanten alleen momenten voor die in dit rooster passen. In het voorbeeld zie je live wat hij nu zou voorstellen.</span>
+            <span className="carddesc">RepRight stelt klanten alleen momenten voor die in dit rooster passen. In het voorbeeld zie je live wat hij nu zou voorstellen.</span>
           </div>
         </div>
         <ScheduleEditor initial={parseSchedule(dealer.schedule_json)} />
@@ -68,7 +68,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           <span className="cardic">📥</span>
           <div>
             <span className="cardtitle">Leads binnen laten komen</span>
-            <span className="carddesc">Eén doorstuurregel. Daarna doet Occapilot de rest, voorgoed.</span>
+            <span className="carddesc">Eén doorstuurregel. Daarna doet RepRight de rest, voorgoed.</span>
           </div>
         </div>
         <p className="note" style={{ margin: 0 }}>
@@ -78,7 +78,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           leads-{dealer.inbound_token}@{domain}
         </code>
         <p className="note" style={{ margin: 0 }}>
-          Dat is alles. Vanaf dan beantwoordt en volgt Occapilot elke lead automatisch op.
+          Dat is alles. Vanaf dan beantwoordt en volgt RepRight elke lead automatisch op.
         </p>
       </div>
     </>

@@ -25,7 +25,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <Link href="/dashboard" className="logo"><Logo onDark markSize={36} wordHeight={19} /></Link>
         <SideNav jij={c.jij ?? 0} ritten={c.ritten ?? 0} />
         <div className="sfoot">
-          <div className="sfoot-status"><i />Occapilot staat aan</div>
+          <div className="sfoot-status"><i />RepRight staat aan</div>
           <div className="sfoot-me">
             <span className="avatar sm">{initials(dealer.seller_name || dealer.name)}</span>
             <div>

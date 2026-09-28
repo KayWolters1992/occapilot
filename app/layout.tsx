@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Occapilot",
+  title: "RepRight AI · Je tweede verkoper die nooit slaapt",
   description: "Elke online lead beantwoord en opgevolgd tot er een proefrit staat.",
   icons: { icon: "/favicon.svg" },
 };
@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Exo+2:ital,wght@1,800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
         />
       </head>
       <body>{children}</body>

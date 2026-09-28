@@ -43,6 +43,6 @@ export function replySig(leadId: number, secret: string): string {
   return crypto.createHmac("sha256", SECRET()).update(`${leadId}:${secret}`).digest("hex").slice(0, 10);
 }
 export function replyAddress(leadId: number, secret: string): string {
-  const domain = process.env.INBOUND_DOMAIN || "occapilot.local";
+  const domain = process.env.INBOUND_DOMAIN || "repright.local";
   return `lead-${leadId}-${replySig(leadId, secret)}@${domain}`;
 }

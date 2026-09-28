@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 const OVERDRACHT = [
   { ic: "💶", t: "Een bod of prijsvraag", s: "\"Kan er nog wat af?\" Onderhandelen doe jij." },
-  { ic: "🔁", t: "Inruil", s: "Occapilot noemt nooit een inruilwaarde." },
+  { ic: "🔁", t: "Inruil", s: "RepRight noemt nooit een inruilwaarde." },
   { ic: "🏦", t: "Financiering of lease", s: "Bedragen en voorwaarden zijn jouw terrein." },
   { ic: "😠", t: "Een ontevreden klant", s: "Hij reageert neutraal en geeft het direct door." },
   { ic: "⚖️", t: "Juridische vragen", s: "Garantie, klachten, geschillen: altijd naar jou." },
@@ -16,14 +16,14 @@ const OVERDRACHT = [
 ];
 
 const FAQ: { q: string; a: string }[] = [
-  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. Occapilot verlaagt geen prijzen, belooft geen garanties en claimt geen beschikbaarheid. Bij een bod of prijsvraag geeft hij het gesprek direct aan jou." },
+  { q: "Kan de AI korting geven of iets toezeggen?", a: "Nee, nooit. RepRight verlaagt geen prijzen, belooft geen garanties en claimt geen beschikbaarheid. Bij een bod of prijsvraag geeft hij het gesprek direct aan jou." },
   { q: "Waar haalt de AI zijn informatie vandaan?", a: "Alleen uit de advertentie in de lead en uit de officiële RDW-gegevens (trekgewicht, APK, kleur). Weet hij iets niet, dan zegt hij dat jij er persoonlijk op terugkomt." },
   { q: "Hoe weet ik dat er iets op mij wacht?", a: "Je krijgt een e-mail zodra een lead aan jou wordt overgedragen of een proefrit is gepland. In het overzicht staat alles bovenaan bij 'Vandaag bellen' en in de bak 'Jij bent aan zet'." },
-  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Open de lead en klik op 'Zelf reageren'. Je bepaalt zelf of Occapilot daarna weer mag opvolgen. Met 'Sluit lead' stop je alles." },
-  { q: "Hoe weet Occapilot wanneer een proefrit kan?", a: "Uit je proefritrooster bij Instellingen. Daar zet je per dag open of dicht met tijden, hoe lang een proefrit duurt, hoe snel na een aanvraag het mag en je vrije dagen. Occapilot stelt alleen momenten voor die daarin passen, meestal één ochtend en één middag." },
-  { q: "Op welke tijden verstuurt Occapilot berichten?", a: "Het eerste antwoord gaat direct, dag en nacht. Herinneringen gaan alleen tussen 08:00 en 20:30, zodat niemand 's nachts een opvolgmail krijgt." },
-  { q: "Kunnen klanten zich afmelden?", a: "Ja. Antwoordt een klant 'stop', dan bevestigt Occapilot dat netjes en stuurt hij deze klant nooit meer iets." },
-  { q: "Wat als er meerdere leads op dezelfde auto binnenkomen?", a: "Occapilot herkent dat aan het kenteken. Je ziet '👀 andere lead(s) op deze auto' in het overzicht, zodat je die auto met voorrang behandelt." },
+  { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Open de lead en klik op 'Zelf reageren'. Je bepaalt zelf of RepRight daarna weer mag opvolgen. Met 'Sluit lead' stop je alles." },
+  { q: "Hoe weet RepRight wanneer een proefrit kan?", a: "Uit je proefritrooster bij Instellingen. Daar zet je per dag open of dicht met tijden, hoe lang een proefrit duurt, hoe snel na een aanvraag het mag en je vrije dagen. RepRight stelt alleen momenten voor die daarin passen, meestal één ochtend en één middag." },
+  { q: "Op welke tijden verstuurt RepRight berichten?", a: "Het eerste antwoord gaat direct, dag en nacht. Herinneringen gaan alleen tussen 08:00 en 20:30, zodat niemand 's nachts een opvolgmail krijgt." },
+  { q: "Kunnen klanten zich afmelden?", a: "Ja. Antwoordt een klant 'stop', dan bevestigt RepRight dat netjes en stuurt hij deze klant nooit meer iets." },
+  { q: "Wat als er meerdere leads op dezelfde auto binnenkomen?", a: "RepRight herkent dat aan het kenteken. Je ziet '👀 andere lead(s) op deze auto' in het overzicht, zodat je die auto met voorrang behandelt." },
 ];
 
 export default async function Handleiding() {
@@ -40,7 +40,7 @@ export default async function Handleiding() {
       <div className="pagehead">
         <div className="titles">
           <h1>Hulp & <em>uitleg</em></h1>
-          <span className="subtitle">Occapilot in 3 minuten. Zoek je iets specifieks? Spring direct naar het onderwerp.</span>
+          <span className="subtitle">RepRight in 3 minuten. Zoek je iets specifieks? Spring direct naar het onderwerp.</span>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ export default async function Handleiding() {
         <span className="hulp-n">01</span>
         <h2>In het kort</h2>
         <p className="hulp-lead">
-          Occapilot is je tweede verkoper. Elke online lead krijgt <b>binnen 2 minuten</b> een persoonlijk antwoord in jouw naam,
+          RepRight is je tweede verkoper. Elke online lead krijgt <b>binnen 2 minuten</b> een persoonlijk antwoord in jouw naam,
           dag en nacht. Daarna volgt hij op tot er een proefrit staat. Iets wat een verkoper moet doen? Dan geeft hij het aan jou.
         </p>
         <div className="flowline">
@@ -77,16 +77,16 @@ export default async function Handleiding() {
         <span className="hulp-n">02</span>
         <h2>Zo ziet je dag eruit</h2>
         <div className="dag">
-          <div><span className="dag-ic">☕</span><b>&apos;s Ochtends</b><span>Open Occapilot en bel de lijst bij <em>Vandaag bellen</em> af. Bovenaan wat op jou wacht, daarna de hete leads.</span></div>
+          <div><span className="dag-ic">☕</span><b>&apos;s Ochtends</b><span>Open RepRight en bel de lijst bij <em>Vandaag bellen</em> af. Bovenaan wat op jou wacht, daarna de hete leads.</span></div>
           <div><span className="dag-ic">🔔</span><b>Tussendoor</b><span>Krijg je een mail &quot;Actie nodig&quot; of &quot;Proefrit gepland&quot;? Klik op de link en handel het af. Meer hoeft niet.</span></div>
-          <div><span className="dag-ic">🌙</span><b>&apos;s Avonds en in het weekend</b><span>Niets. Occapilot beantwoordt en volgt op terwijl jij vrij bent.</span></div>
+          <div><span className="dag-ic">🌙</span><b>&apos;s Avonds en in het weekend</b><span>Niets. RepRight beantwoordt en volgt op terwijl jij vrij bent.</span></div>
         </div>
       </section>
 
       <section className="card hulp" id="instellen">
         <span className="hulp-n">03</span>
         <h2>Aan de slag: leads doorsturen</h2>
-        <p className="hulp-lead">Occapilot werkt via e-mail. Je stuurt de lead-mails van je kanalen automatisch door naar jouw eigen Occapilot-adres:</p>
+        <p className="hulp-lead">RepRight werkt via e-mail. Je stuurt de lead-mails van je kanalen automatisch door naar jouw eigen RepRight-adres:</p>
         <InboundAddress address={inbound} />
         <div className="howto">
           <div>
@@ -94,13 +94,13 @@ export default async function Handleiding() {
             <ol>
               <li>Ga naar Instellingen → E-mail → Regels → Nieuwe regel.</li>
               <li>Voorwaarde: afzender bevat <code>autoscout24</code> (herhaal voor AutoTrack en Marktplaats).</li>
-              <li>Actie: Doorsturen naar je Occapilot-adres hierboven. Opslaan.</li>
+              <li>Actie: Doorsturen naar je RepRight-adres hierboven. Opslaan.</li>
             </ol>
           </div>
           <div>
             <b>In Gmail</b>
             <ol>
-              <li>Instellingen → Alle instellingen → Doorsturen en POP/IMAP: voeg je Occapilot-adres toe.</li>
+              <li>Instellingen → Alle instellingen → Doorsturen en POP/IMAP: voeg je RepRight-adres toe.</li>
               <li>Maak daarna een filter: Van <code>autoscout24</code> → Doorsturen naar dat adres.</li>
               <li>Herhaal het filter voor AutoTrack en Marktplaats.</li>
             </ol>
@@ -108,7 +108,7 @@ export default async function Handleiding() {
         </div>
         <p className="note" style={{ margin: 0 }}>
           Tip: stuur daarna een voorbeeldlead vanuit het overzicht om te zien of alles werkt. Kom je er niet uit? Mail{" "}
-          <a href="mailto:hallo@occapilot.nl">hallo@occapilot.nl</a>, dan stellen we het samen in. Kost vijf minuten.
+          <a href="mailto:hallo@repright.ai">hallo@repright.ai</a>, dan stellen we het samen in. Kost vijf minuten.
         </p>
       </section>
 
@@ -140,17 +140,17 @@ export default async function Handleiding() {
         <div className="dag">
           <div><span className="dag-ic">1</span><b>Open de lead</b><span>Bovenaan zie je direct wie aan zet is en wat er van jou verwacht wordt.</span></div>
           <div><span className="dag-ic">2</span><b>Klik op &quot;Zelf reageren&quot;</b><span>Typ je bericht of kies een snelle zin. Het gaat vanaf jouw adres, in hetzelfde gesprek.</span></div>
-          <div><span className="dag-ic">3</span><b>Kies wie verder gaat</b><span>Vinkje aan: Occapilot volgt daarna weer op. Vinkje uit: jij voert het gesprek en Occapilot blijft stil.</span></div>
+          <div><span className="dag-ic">3</span><b>Kies wie verder gaat</b><span>Vinkje aan: RepRight volgt daarna weer op. Vinkje uit: jij voert het gesprek en RepRight blijft stil.</span></div>
         </div>
         <p className="note" style={{ margin: 0 }}>
-          Met <b>🤖 Geef terug aan Occapilot</b> laat je hem weer opvolgen. Met <b>Sluit lead</b> stop je alles, bijvoorbeeld als de auto verkocht is.
+          Met <b>🤖 Geef terug aan RepRight</b> laat je hem weer opvolgen. Met <b>Sluit lead</b> stop je alles, bijvoorbeeld als de auto verkocht is.
         </p>
       </section>
 
       <section className="card hulp" id="overdracht">
         <span className="hulp-n">06</span>
-        <h2>Wanneer geeft Occapilot het aan jou?</h2>
-        <p className="hulp-lead">Occapilot stopt direct en stuurt jou een melding bij:</p>
+        <h2>Wanneer geeft RepRight het aan jou?</h2>
+        <p className="hulp-lead">RepRight stopt direct en stuurt jou een melding bij:</p>
         <div className="overdracht">
           {OVERDRACHT.map((o) => (
             <div key={o.t}><span>{o.ic}</span><b>{o.t}</b><small>{o.s}</small></div>
@@ -172,7 +172,7 @@ export default async function Handleiding() {
       </section>
 
       <div className="hulp-foot">
-        Nog een vraag? Mail <a href="mailto:hallo@occapilot.nl">hallo@occapilot.nl</a> of <Link href="/leads">ga terug naar je overzicht →</Link>
+        Nog een vraag? Mail <a href="mailto:hallo@repright.ai">hallo@repright.ai</a> of <Link href="/leads">ga terug naar je overzicht →</Link>
       </div>
     </>
   );

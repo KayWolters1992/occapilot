@@ -36,8 +36,8 @@ export default async function Proefritten() {
           <div className="empty big">
             <span className="empty-ic">📅</span>
             <b>Nog geen proefritten gepland</b>
-            <span>Zodra een klant een moment kiest, zet Occapilot hem hier neer en krijg jij een melding.</span>
-            <Link href="/leads?bak=ai" className="start-link">Bekijk de leads waar Occapilot mee bezig is →</Link>
+            <span>Zodra een klant een moment kiest, zet RepRight hem hier neer en krijg jij een melding.</span>
+            <Link href="/leads?bak=ai" className="start-link">Bekijk de leads waar RepRight mee bezig is →</Link>
           </div>
         </div>
       ) : (

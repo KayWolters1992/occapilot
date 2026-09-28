@@ -90,7 +90,7 @@ const CHANNELS = [
   },
   {
     name: "Eigen website",
-    desc: "Contactformulieren van je eigen site gaan direct naar Occapilot. Geen lead valt meer tussen wal en schip.",
+    desc: "Contactformulieren van je eigen site gaan direct naar RepRight. Geen lead valt meer tussen wal en schip.",
     klant: "Ahmed El Idrissi",
     auto: "Audi A4 Avant 40 TDI",
     vraag: "Kan ik deze week een proefrit maken?",
@@ -148,7 +148,7 @@ export function ChannelTabs() {
           <p>{c.vraag}</p>
         </div>
         <div className="x-reply">
-          <span className="x-reply-who">Occapilot antwoordt namens jou</span>
+          <span className="x-reply-who">RepRight antwoordt namens jou</span>
           <p>
             {typed}
             {!done && <i className="x-caret" />}

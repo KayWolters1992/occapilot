@@ -69,7 +69,7 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
       .run("AI kon de lead niet verwerken. Handmatig oppakken.", leadId);
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: "Occapilot: lead kon niet automatisch verwerkt worden",
+      subject: "RepRight: lead kon niet automatisch verwerkt worden",
       text: rawEmail.slice(0, 2000),
     });
     return leadId;
@@ -140,13 +140,13 @@ export async function handleNewLead(dealer: Dealer, rawEmail: string): Promise<n
   if (result.escalatie_nu) {
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `🔔 Occapilot escalatie: ${result.lead.naam || "lead"} · ${result.lead.auto}`,
+      subject: `🔔 RepRight escalatie: ${result.lead.naam || "lead"} · ${result.lead.auto}`,
       text: `${result.escalatie_reden}\n\nKlant: ${result.lead.naam} · ${result.lead.telefoon || result.lead.email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
   } else if (rivals > 0) {
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `👀 Occapilot: ${rivals + 1} leads op ${result.lead.auto || "hetzelfde voertuig"}`,
+      subject: `👀 RepRight: ${rivals + 1} leads op ${result.lead.auto || "hetzelfde voertuig"}`,
       text: `Er loopt nu een ${rivals + 1}e lead op kenteken ${plate}. Overweeg deze auto met voorrang te behandelen.\n\nNieuwste klant: ${result.lead.naam} · ${result.lead.telefoon || result.lead.email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
   }
@@ -183,7 +183,7 @@ Jij voert dit gesprek. Bekijk: ${process.env.APP_URL}/leads/${leadId}`,
     .prepare("SELECT * FROM messages WHERE lead_id=? ORDER BY created_at")
     .all(leadId) as Msg[])
     .filter((m) => m.meta !== "lead")
-    .map((m) => `[${m.direction === "in" ? "Klant" : "Occapilot"}]\n${m.body}`)
+    .map((m) => `[${m.direction === "in" ? "Klant" : "RepRight"}]\n${m.body}`)
     .join("\n\n");
 
   const rdw = lead.rdw_json ? (JSON.parse(lead.rdw_json) as RdwInfo) : null;
@@ -206,7 +206,7 @@ Jij voert dit gesprek. Bekijk: ${process.env.APP_URL}/leads/${leadId}`,
     addMsg(leadId, "system", "Overdracht aan verkoper", reden, "escalatie");
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `🔔 Occapilot escalatie: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
+      subject: `🔔 RepRight escalatie: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
       text: `${reden}\n\nKlant: ${lead.customer_name} · ${lead.customer_phone || lead.customer_email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
     return;
@@ -226,7 +226,7 @@ Jij voert dit gesprek. Bekijk: ${process.env.APP_URL}/leads/${leadId}`,
     addMsg(leadId, "system", "Afspraak", result.reden || "Klant koos een moment. Bevestigd.", "afspraak");
     await notifyDealer({
       dealerEmail: dealer.email,
-      subject: `✅ Occapilot afspraak: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
+      subject: `✅ RepRight afspraak: ${lead.customer_name || "lead"} · ${lead.vehicle}`,
       text: `${result.reden}\n\nKlant: ${lead.customer_name} · ${lead.customer_phone || lead.customer_email}\nBekijk: ${process.env.APP_URL}/leads/${leadId}`,
     });
   } else {
@@ -251,10 +251,10 @@ export async function sendDealerReply(dealer: Dealer, lead: Lead, text: string, 
   addMsg(
     lead.id,
     "system",
-    handBack ? "Terug naar Occapilot" : "Overgenomen door verkoper",
+    handBack ? "Terug naar RepRight" : "Overgenomen door verkoper",
     handBack
-      ? `${dealer.seller_name} heeft gereageerd. Occapilot pakt het gesprek weer op zodra de klant antwoordt.`
-      : `${dealer.seller_name} voert dit gesprek nu zelf. Occapilot blijft stil.`,
+      ? `${dealer.seller_name} heeft gereageerd. RepRight pakt het gesprek weer op zodra de klant antwoordt.`
+      : `${dealer.seller_name} voert dit gesprek nu zelf. RepRight blijft stil.`,
     "overname"
   );
   return ok;

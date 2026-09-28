@@ -9,11 +9,11 @@ const FAQ = [
   { q: "Moet ik iets installeren of koppelen?", a: "Nee. Eén doorstuurregel in je mailbox per verkoopkanaal en je bent live. Geen koppeling met je voorraadsysteem nodig om te starten." },
   { q: "Wat merkt de klant ervan?", a: "Niets geks. Hij krijgt een persoonlijke e-mail namens jouw verkoper, vanaf jouw eigen e-mailadres. Snel, vriendelijk en inhoudelijk correct." },
   { q: "Klinkt het niet als een robot?", a: "Nee. Hij schrijft kort en persoonlijk, spiegelt het je of u van de klant en ondertekent met jouw naam. Klanten merken vooral dat je snel bent." },
-  { q: "Kan de AI iets beloven wat niet klopt?", a: "Nee. Occapilot gebruikt alleen de advertentie en officiële RDW-data. Weet hij iets niet, dan zegt hij dat de verkoper er persoonlijk op terugkomt. Hij verzint niets." },
+  { q: "Kan de AI iets beloven wat niet klopt?", a: "Nee. RepRight gebruikt alleen de advertentie en officiële RDW-data. Weet hij iets niet, dan zegt hij dat de verkoper er persoonlijk op terugkomt. Hij verzint niets." },
   { q: "Wat gebeurt er bij een bod of inruilvraag?", a: "Dan stopt de AI direct en krijg jij een melding. Onderhandelen, inruil en financiering blijven altijd jouw werk." },
   { q: "Kan ik zelf ingrijpen in een gesprek?", a: "Altijd. Elk gesprek staat woord voor woord in je dashboard. Je kunt meelezen, een lead sluiten of het gesprek overnemen." },
   { q: "Zit ik vast aan een contract?", a: "Nee. Geen jaarcontract en geen opstartkosten. Je betaalt per maand en zegt maandelijks op." },
-  { q: "Voor wie is Occapilot bedoeld?", a: "Voor autobedrijven en occasiondealers in Nederland, van één vestiging tot dealergroepen. Geen technische kennis nodig." },
+  { q: "Voor wie is RepRight bedoeld?", a: "Voor autobedrijven en occasiondealers in Nederland, van één vestiging tot dealergroepen. Geen technische kennis nodig." },
 ];
 
 const LOG = [
@@ -58,7 +58,7 @@ export default async function Landing() {
             <span className="x-pill"><i className="x-dot" />Je tweede verkoper · werkt ook als jij dicht bent</span>
             <h1>Die lead van 22:14? <em>Die is al beantwoord.</em></h1>
             <p>
-              Jij zit thuis aan tafel of staat in de werkplaats. Occapilot niet. Hij beantwoordt elke autolead
+              Jij zit thuis aan tafel of staat in de werkplaats. RepRight niet. Hij beantwoordt elke autolead
               binnen 2 minuten in jouw naam en volgt op tot de proefrit in je agenda staat.
               Komt er een bod of inruilvraag? Dan geeft hij het gesprek direct aan jou.
             </p>
@@ -146,7 +146,7 @@ export default async function Landing() {
             </div>
           </Reveal>
           <Reveal className="x-card vs good" delay={120}>
-            <h3>Met Occapilot: <em>jij bent altijd de eerste</em></h3>
+            <h3>Met RepRight: <em>jij bent altijd de eerste</em></h3>
             <p className="x-muted">Elke lead krijgt direct een persoonlijk antwoord en wordt opgevolgd tot de proefrit staat.</p>
             <ul className="x-list yes">
               <li>Binnen 2 minuten een persoonlijk antwoord, dag en nacht</li>
@@ -188,7 +188,7 @@ export default async function Landing() {
             <div>
               <span className="x-kicker">Wat hij voor je doet</span>
               <h2>Denkt als een verkoper. <em>Niet als een chatbot.</em></h2>
-              <p>Een goede verkoper weet wie serieus is, kent zijn auto&apos;s en weet wanneer de baas moet bellen. Occapilot ook.</p>
+              <p>Een goede verkoper weet wie serieus is, kent zijn auto&apos;s en weet wanneer de baas moet bellen. RepRight ook.</p>
             </div>
             <Link href="/registreren" className="x-textlink">Probeer het gratis →</Link>
           </div>
@@ -300,7 +300,7 @@ export default async function Landing() {
           </Reveal>
           <div className="x-tiles">
             {[
-              { n: "1", ic: "📨", t: "Doorsturen", s: "Eén regel in je mailbox. Lead-mails van al je kanalen gaan naar je Occapilot-adres." },
+              { n: "1", ic: "📨", t: "Doorsturen", s: "Eén regel in je mailbox. Lead-mails van al je kanalen gaan naar je RepRight-adres." },
               { n: "2", ic: "⚡", t: "Hij antwoordt", s: "Binnen 2 minuten, in jouw naam, met feiten uit de RDW." },
               { n: "3", ic: "🔁", t: "Hij volgt op", s: "Geen reactie? Na 1, 3 en 7 dagen een vriendelijke herinnering." },
               { n: "4", ic: "🤝", t: "Jij verkoopt", s: "Staat de proefrit? Dan krijg jij een melding. De deal sluit jij." },
@@ -323,7 +323,7 @@ export default async function Landing() {
           <div className="x-head center">
             <span className="x-kicker">Prijs</span>
             <h2>Goedkoper dan <em>één gemiste verkoop.</em></h2>
-            <p>Eén extra verkochte occasion per half jaar en Occapilot heeft zichzelf terugverdiend. Alles daarboven is winst.</p>
+            <p>Eén extra verkochte occasion per half jaar en RepRight heeft zichzelf terugverdiend. Alles daarboven is winst.</p>
           </div>
         </Reveal>
         <Reveal>
@@ -386,7 +386,7 @@ export default async function Landing() {
           </div>
           <div>
             <span>Product</span>
-            <a href="#omslag">Waarom Occapilot</a>
+            <a href="#omslag">Waarom RepRight</a>
             <a href="#kanalen">Live demo</a>
             <a href="#functies">Functies</a>
             <a href="#prijs">Prijs</a>
@@ -399,10 +399,10 @@ export default async function Landing() {
           <div>
             <span>Support</span>
             <a href="#faq">FAQ</a>
-            <a href="mailto:hallo@occapilot.nl">hallo@occapilot.nl</a>
+            <a href="mailto:hallo@repright.ai">hallo@repright.ai</a>
           </div>
         </div>
-        <div className="x-foot-bottom">© {new Date().getFullYear()} Occapilot · Alle rechten voorbehouden</div>
+        <div className="x-foot-bottom">© {new Date().getFullYear()} RepRight AI · Your always-on sales rep for automotive · Alle rechten voorbehouden</div>
       </footer>
     </main>
   );

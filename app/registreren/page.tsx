@@ -6,7 +6,7 @@ import { register } from "../actions";
 import { Logo } from "@/components/Logo";
 
 const PERKS = [
-  { ic: "⚡", t: "Live binnen één middag", s: "Eén doorstuurregel instellen en Occapilot beantwoordt vanaf dat moment elke lead." },
+  { ic: "⚡", t: "Live binnen één middag", s: "Eén doorstuurregel instellen en RepRight beantwoordt vanaf dat moment elke lead." },
   { ic: "🌙", t: "Nooit meer een gemiste lead", s: "24/7, ook om 23:00 en op zondag. Precies wanneer de concurrentie slaapt." },
   { ic: "🛡️", t: "Veilig en onder controle", s: "Harde vangrails, volledige logging, jij houdt altijd de regie." },
 ];
@@ -18,7 +18,7 @@ export default function RegisterPage() {
       <div className="authpanel">
         <Logo onDark markSize={38} wordHeight={20} />
         <div className="authwelcome">
-          <span className="lp-badge">🎉 Welkom bij Occapilot</span>
+          <span className="lp-badge">🎉 Welkom bij RepRight AI</span>
           <h1>Fijn dat je er bent.</h1>
           <p>Je bent 2 minuten verwijderd van een verkoopteam dat nooit slaapt, nooit vergeet en nooit een lead laat liggen.</p>
         </div>

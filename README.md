@@ -1,8 +1,8 @@
-# Occapilot
+# RepRight
 
 **Elke online lead beantwoord, gekwalificeerd en opgevolgd tot er een proefrit staat — automatisch.**
 
-Occapilot vangt de lead-e-mails van AutoScout24, AutoTrack en de eigen website van een autobedrijf op,
+RepRight vangt de lead-e-mails van AutoScout24, AutoTrack en de eigen website van een autobedrijf op,
 laat Claude de lead uitlezen en kwalificeren (heet/warm/koud), verrijkt met officiële RDW-voertuigdata,
 stuurt binnen een minuut een persoonlijke eerste reactie namens de verkoper, en volgt daarna automatisch
 op (dag 1/3/7) tot de klant reageert. Antwoorden van de klant worden door de AI afgehandeld, met harde
@@ -66,7 +66,7 @@ en de geplande opvolgreeks.
    `npm run build && npm start`. *Let op: Vercel serverless heeft geen persistente schijf —
    gebruik daar een externe database (zie Upgraden) of kies een VPS.*
 2. **Postmark**: maak een server aan; verifieer het afzenderdomein van de dealer (outbound) en
-   stel een **inbound domain** in (bijv. `in.occapilot.nl`, MX naar Postmark). Zet de inbound
+   stel een **inbound domain** in (bijv. `in.repright.ai`, MX naar Postmark). Zet de inbound
    webhook-URL op `https://jouwdomein/api/inbound/<CRON_SECRET>`.
 3. **Env**: vul `.env` (zie `.env.example`) — `ANTHROPIC_API_KEY`, `POSTMARK_SERVER_TOKEN`,
    `INBOUND_DOMAIN`, `AUTH_SECRET`, `CRON_SECRET`, `APP_URL`, `DATABASE_PATH`.
@@ -99,7 +99,7 @@ en de geplande opvolgreeks.
 app/api/inbound/[token]/route.ts   Postmark webhook (nieuwe leads + klantantwoorden)
 app/api/cron/route.ts              opvolg-verzender (venster 08.00–20.30)
 app/api/test-lead/route.ts         lead simuleren zonder Postmark
-app/(app)/leads[/…]                dashboard (monochrome Occapilot-stijl)
+app/(app)/leads[/…]                dashboard (monochrome RepRight-stijl)
 src/lib/ai.ts                      Claude-prompts + schema's (intake & reply)
 src/lib/pipeline.ts                de kernlogica
 src/lib/rdw.ts                     RDW open data-verrijking

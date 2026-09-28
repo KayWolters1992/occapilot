@@ -36,7 +36,7 @@ export function ReplyBox({ leadId, sellerName, escalated }: { leadId: number; se
       <div className="replybox-foot">
         <label className="check">
           <input type="checkbox" name="handback" value="1" defaultChecked={!escalated} />
-          <span>Laat Occapilot daarna weer opvolgen</span>
+          <span>Laat RepRight daarna weer opvolgen</span>
         </label>
         <button className="btn" disabled={busy}>{busy ? "Versturen…" : `Verstuur als ${sellerName} →`}</button>
       </div>

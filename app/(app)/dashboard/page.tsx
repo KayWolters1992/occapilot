@@ -16,8 +16,8 @@ function activiteitTekst(a: Activiteit): { ic: string; t: string; cls: string } 
   if (a.direction === "in") return a.meta === "lead" ? { ic: "📨", t: `Nieuwe lead van ${naam}`, cls: "in" } : { ic: "💬", t: `${naam} reageerde`, cls: "in" };
   if (a.direction === "out") {
     if (a.meta.startsWith("verkoper")) return { ic: "✍️", t: `Jij stuurde ${naam} een bericht`, cls: "you" };
-    if (a.meta.startsWith("dag")) return { ic: "🔁", t: `Occapilot stuurde ${naam} een herinnering`, cls: "ai" };
-    return { ic: "⚡", t: `Occapilot beantwoordde ${naam}`, cls: "ai" };
+    if (a.meta.startsWith("dag")) return { ic: "🔁", t: `RepRight stuurde ${naam} een herinnering`, cls: "ai" };
+    return { ic: "⚡", t: `RepRight beantwoordde ${naam}`, cls: "ai" };
   }
   if (a.meta === "afspraak") return { ic: "✓", t: `Proefrit gepland met ${naam}`, cls: "ok" };
   if (a.meta === "escalatie") return { ic: "👤", t: `${naam} is aan jou overgedragen`, cls: "esc" };
@@ -57,9 +57,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
 
   const echteLead = all.some((l) => !l.raw_email.includes("testklant@voorbeeld.nl"));
   const stappen = [
-    { done: all.length > 0, t: "Zie Occapilot aan het werk", s: "Stuur een voorbeeldlead en kijk hoe hij binnen seconden wordt beantwoord." },
-    { done: echteLead, t: "Stuur je leads door naar Occapilot", s: "Eén doorstuurregel per kanaal in je mailbox. Daarna komt elke lead hier binnen." },
-    { done: !!dealer.settings_checked, t: "Controleer je gegevens en proefritrooster", s: "Occapilot ondertekent met jouw naam en stelt alleen afspraken voor binnen jouw rooster." },
+    { done: all.length > 0, t: "Zie RepRight aan het werk", s: "Stuur een voorbeeldlead en kijk hoe hij binnen seconden wordt beantwoord." },
+    { done: echteLead, t: "Stuur je leads door naar RepRight", s: "Eén doorstuurregel per kanaal in je mailbox. Daarna komt elke lead hier binnen." },
+    { done: !!dealer.settings_checked, t: "Controleer je gegevens en proefritrooster", s: "RepRight ondertekent met jouw naam en stelt alleen afspraken voor binnen jouw rooster." },
   ];
   const klaar = stappen.filter((s) => s.done).length;
 
@@ -68,10 +68,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
 
   const samenvatting =
     all.length === 0
-      ? "Nog geen leads. Volg de stappen hieronder, dan staat Occapilot vandaag nog aan."
+      ? "Nog geen leads. Volg de stappen hieronder, dan staat RepRight vandaag nog aan."
       : count.jij > 0
-        ? `Er ${count.jij === 1 ? "wacht 1 lead" : `wachten ${count.jij} leads`} op jou. Occapilot heeft ${count.ai} ${count.ai === 1 ? "lead" : "leads"} onder handen.`
-        : `Niemand wacht op je. Occapilot heeft ${count.ai} ${count.ai === 1 ? "lead" : "leads"} onder handen.`;
+        ? `Er ${count.jij === 1 ? "wacht 1 lead" : `wachten ${count.jij} leads`} op jou. RepRight heeft ${count.ai} ${count.ai === 1 ? "lead" : "leads"} onder handen.`
+        : `Niemand wacht op je. RepRight heeft ${count.ai} ${count.ai === 1 ? "lead" : "leads"} onder handen.`;
 
   return (
     <>
@@ -79,7 +79,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         <div className="demobar ok">
           <span className="demobar-ic">✓</span>
           <div>
-            <b>Welkom bij Occapilot, {dealer.seller_name}!</b>
+            <b>Welkom bij RepRight AI, {dealer.seller_name}!</b>
             <span>Je account staat klaar. Loop de drie stappen hieronder door en je tweede verkoper gaat aan de slag.</span>
           </div>
         </div>
@@ -151,7 +151,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             {bellen.length > 0 && <span className="bellen-count">{bellen.length}</span>}
           </div>
           {bellen.length === 0 ? (
-            <div className="bellen-empty">✓ Niemand wacht op je. Occapilot heeft alles onder controle.</div>
+            <div className="bellen-empty">✓ Niemand wacht op je. RepRight heeft alles onder controle.</div>
           ) : (
             <div className="bellen-grid">
               {bellen.map((l) => (
@@ -178,7 +178,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <div className="bellen-head">
             <div>
               <span className="cardtitle">⚡ Laatste activiteit</span>
-              <span className="note">Wat Occapilot en jij recent hebben gedaan.</span>
+              <span className="note">Wat RepRight en jij recent hebben gedaan.</span>
             </div>
             <span className="app-live"><i />Live</span>
           </div>

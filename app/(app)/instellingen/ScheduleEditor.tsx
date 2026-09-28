@@ -84,7 +84,7 @@ export function ScheduleEditor({ initial }: { initial: Schedule }) {
 
           <div className="rooster-preview">
             <span className="app-live"><i />Voorbeeld</span>
-            <b>Zo stelt Occapilot nu momenten voor</b>
+            <b>Zo stelt RepRight nu momenten voor</b>
             <span className="note">{scheduleSummary(s)} · proefrit {s.duur} min</span>
             <div className="slots">
               {preview.length ? preview.map((m) => <span key={m.label} className="slot">{m.label}</span>) : <span className="note">Geen vrije momenten. Zet minstens één dag open.</span>}
@@ -94,7 +94,7 @@ export function ScheduleEditor({ initial }: { initial: Schedule }) {
       </div>
 
       <div className="rooster-foot">
-        <span className="note">Occapilot stelt altijd twee momenten voor, bij voorkeur één ochtend en één middag.</span>
+        <span className="note">RepRight stelt altijd twee momenten voor, bij voorkeur één ochtend en één middag.</span>
         <button className="btn" disabled={busy}>{busy ? "Opslaan…" : "Rooster opslaan"}</button>
       </div>
     </form>

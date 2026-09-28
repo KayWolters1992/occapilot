@@ -77,7 +77,7 @@ addLead({
   msgs: [
     { direction: "in", subject: "Vraag over BMW 3-Serie 320i Touring", body: "Goedemorgen, ik zag de BMW 320i Touring op AutoScout24 staan. Mooie auto! Is er nog onderhandelingsruimte op de prijs? Ik kan snel beslissen als we eruit komen.", created_at: "2026-09-27 08:14:00" },
     { direction: "out", subject: "Re: BMW 3-Serie 320i Touring", body: "Hallo Mark, dank voor je interesse in de BMW 320i Touring! Over de prijs kan ik als digitale assistent zelf geen toezeggingen doen, daarvoor verbind ik je graag met Kay. Zullen we ondertussen een proefrit inplannen zodat je de auto meteen kunt ervaren?", created_at: "2026-09-27 08:16:00" },
-    { direction: "system", subject: "Overdracht aan verkoper", meta: "escalatie", body: "Klant vraagt om korting. Dat is aan de verkoper, dus Occapilot heeft het gesprek overgedragen.", created_at: "2026-09-27 08:16:05" },
+    { direction: "system", subject: "Overdracht aan verkoper", meta: "escalatie", body: "Klant vraagt om korting. Dat is aan de verkoper, dus RepRight heeft het gesprek overgedragen.", created_at: "2026-09-27 08:16:05" },
   ],
 });
 
