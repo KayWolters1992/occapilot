@@ -52,7 +52,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
             <input type="checkbox" name="stock_live" defaultChecked={dealer.stock_live !== 0} />
             <span>
               <b>Mijn advertenties staan alleen online zolang de auto te koop is</b>
-              <small>Aan: RepRight mag zeggen dat een auto nog te koop staat. Uit: hij zegt dat nooit en nodigt de klant uit voor een proefrit, waarbij jij de auto vooraf bevestigt.</small>
+              <small><b className="on">Aan:</b> vraagt een klant of de auto er nog is, dan zegt RepRight "ja, hij staat nog te koop" en plant direct een proefrit.<br /><b className="off">Uit:</b> RepRight laat de klant weten dat jij het checkt en geeft de lead aan jou. Je ziet hem bij "Jij bent aan zet" en krijgt een melding. Jij bevestigt per bericht of telefoon.</small>
             </span>
           </label>
           <button className="btn" style={{ alignSelf: "flex-start" }}>Opslaan</button>
