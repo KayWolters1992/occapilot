@@ -1244,3 +1244,36 @@ select:focus{outline:none;border-color:#6f93ff;box-shadow:0 0 0 3px #4f7cff26}
 .beurt.ai .beurt-ic{background:#0b1026;border:1px solid #7b6cff77;box-shadow:0 0 22px #7b6cff55}
 .lane.ai .lane-ic{background:#0b1026;border-color:#7b6cff66;box-shadow:0 0 14px #7b6cff33}
 .pill svg,.tabs svg,.st-lane svg,.btn svg{vertical-align:-3px}
+/* Dashboard: onderste blokken lijnen uit met de vier tegels erboven en zijn even hoog */
+.dash-grid{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.1fr);gap:14px;align-items:stretch}
+.dash-grid>.bellen{grid-column:1 / span 2}
+.dash-grid>.feed{grid-column:3 / span 2}
+.dash-grid>.card{display:flex;flex-direction:column}
+.dash-grid>.feed>.start-link{margin-top:auto;padding-top:6px}
+.dash-grid>.bellen>.bellen-empty{margin-bottom:auto}
+@media (max-width:1100px){.dash-grid{grid-template-columns:1fr}.dash-grid>.bellen,.dash-grid>.feed{grid-column:auto}}
+/* Handleiding v2 */
+.dag.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.dag>div.ok{border-color:#22c55e44;background:#22c55e0a}
+.dag>div.ok .dag-ic{background:#22c55e33;border-color:#22c55e66}
+.todo{display:flex;flex-direction:column;gap:10px}
+.todo>div{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:#ffffff06;border:1px solid var(--line)}
+.todo-n{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;background:var(--grad);box-shadow:0 0 14px #6f93ff55}
+.todo>div>div{display:flex;flex-direction:column;gap:3px}
+.todo b{color:#fff;font-size:14.5px}
+.todo>div>div>span{font-size:13.5px;line-height:1.6;color:var(--body)}
+.todo em,.stap em,.howto em{font-style:normal;color:#fff;font-weight:600}
+.stap{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:16px;background:#ffffff05;border:1px solid var(--line)}
+.stap-n{flex:none;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(135deg,#4f7cff55,#8b5cf655);border:1px solid #8b5cf677}
+.stap>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.stap>div>b{color:#fff;font-size:15px}
+.stap>div>span{font-size:13.5px;line-height:1.65;color:var(--body)}
+.labels,.knoppen{display:flex;flex-direction:column;gap:8px}
+.labels>div,.knoppen>div{display:grid;grid-template-columns:230px minmax(0,1fr);gap:14px;align-items:center;padding:12px 14px;border-radius:12px;background:#ffffff05;border:1px solid var(--line);font-size:13.5px;line-height:1.55;color:var(--body)}
+.labels .pill{justify-self:start}
+.knoppen b{color:#fff;font-size:13.5px}
+.kleur{font-weight:700;padding:1px 8px;border-radius:999px}
+.kleur.klant{background:#eef1ff;color:#151a3d}.kleur.ai{background:#4f7cff33;color:#c7d2ff}.kleur.jij{background:#22c55e26;color:#86efac}
+.st-all{display:flex;flex-direction:column;gap:14px;padding:4px 18px 18px}
+@media (max-width:900px){.dag.four{grid-template-columns:1fr 1fr}.labels>div,.knoppen>div{grid-template-columns:1fr}.stap{padding:14px;gap:12px}}
+@media (max-width:560px){.dag.four{grid-template-columns:1fr}}
