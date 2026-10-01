@@ -248,7 +248,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
               return (
                 <div key={m.id} className={`msg ${soort}`}>
                   <span className="msg-av">
-                    {soort === "ai" ? <LogoMark size={22} onDark /> : initialen(soort === "klant" ? naamKlant : dealer.seller_name)}
+                    {soort === "ai" ? <LogoMark size={18} onDark /> : initialen(soort === "klant" ? naamKlant : dealer.seller_name)}
                   </span>
                   <div className="msg-col">
                     <span className="msg-who">
@@ -276,7 +276,7 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
             })}
             {info.lane === "ai" && fups.filter((f) => f.status === "gepland").slice(0, 1).map((f) => (
               <div key={f.id} className="msg ai planned">
-                <span className="msg-av"><LogoMark size={22} onDark /></span>
+                <span className="msg-av"><LogoMark size={18} onDark /></span>
                 <div className="msg-col">
                   <span className="msg-who">
                     <b>RepRight</b><span className="msg-tag">Gepland: herinnering {f.label.replace("dag", "dag ")}</span>

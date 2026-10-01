@@ -4,7 +4,7 @@ import { currentDealer } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { logout } from "../actions";
 import { SideNav } from "./SideNav";
-import { LogoWordmark } from "@/components/Logo";
+import { Logo } from "@/components/Logo";
 
 function initials(name: string) {
   return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("") || "?";
@@ -22,7 +22,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="shell">
       <aside className="sidebar">
-        <Link href="/dashboard" className="logo"><LogoWordmark onDark height={21} /></Link>
+        <Link href="/dashboard" className="logo"><Logo onDark markSize={28} /></Link>
         <SideNav jij={c.jij ?? 0} ritten={c.ritten ?? 0} />
         <div className="sfoot">
           <div className="sfoot-status"><i />RepRight staat aan</div>

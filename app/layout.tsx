@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "RepRight AI · Je tweede verkoper die nooit slaapt",
   description: "Elke online lead beantwoord en opgevolgd tot er een proefrit staat.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: [{ url: "/brand/icon-64.png", type: "image/png" }], apple: "/brand/apple-icon.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

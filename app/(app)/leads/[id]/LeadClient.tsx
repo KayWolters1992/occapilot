@@ -18,7 +18,7 @@ export function ReplyBox({ leadId, sellerName, escalated }: { leadId: number; se
       <input type="hidden" name="id" value={leadId} />
       <div className="replybox-head">
         <b>{escalated ? "Neem het gesprek over" : "Zelf reageren"}</b>
-        <span>Je bericht gaat vanaf jouw adres naar de klant, in hetzelfde gesprek.</span>
+        <span>Je bericht gaat uit jouw naam naar de klant, in hetzelfde gesprek.</span>
       </div>
       <div className="replybox-chips">
         {SNEL.map((s) => (
