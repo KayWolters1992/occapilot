@@ -33,6 +33,10 @@ d.prepare("DELETE FROM followups WHERE lead_id IN (SELECT id FROM leads WHERE de
 d.prepare("DELETE FROM messages WHERE lead_id IN (SELECT id FROM leads WHERE dealer_id=?)").run(dealerId);
 d.prepare("DELETE FROM leads WHERE dealer_id=?").run(dealerId);
 
+// Alle demo-tijden schuiven mee met vandaag, zodat de demo er altijd vers uitziet.
+const SHIFT = Date.now() - Date.parse("2026-09-28T10:00:00Z");
+const t = (ts: string) => new Date(Date.parse(ts.replace(" ", "T") + "Z") + SHIFT).toISOString().slice(0, 19).replace("T", " ");
+
 function addLead(l: {
   status: string; qual_label: string; qual_reason: string; customer_name: string; customer_email: string;
   customer_phone: string; vehicle: string; license_plate: string; price: string; source: string; question: string;
@@ -49,12 +53,12 @@ function addLead(l: {
       dealerId, crypto.randomBytes(6).toString("hex"), l.status, l.qual_label, l.qual_reason,
       l.customer_name, l.customer_email, l.customer_phone, l.vehicle, l.license_plate, l.price, l.source,
       l.question, l.rdw_json ?? "", `Van: ${l.customer_name} <${l.customer_email}>\n\n${l.question}`,
-      l.escalation_reason ?? "", l.created_at, l.created_at
+      l.escalation_reason ?? "", t(l.created_at), t(l.created_at)
     );
   const leadId = Number(info.lastInsertRowid);
   for (const m of l.msgs) {
     d.prepare("INSERT INTO messages (lead_id, direction, channel, subject, body, meta, created_at) VALUES (?,?,?,?,?,?,?)")
-      .run(leadId, m.direction, "email", m.subject ?? "", m.body, m.meta ?? "", m.created_at);
+      .run(leadId, m.direction, "email", m.subject ?? "", m.body, m.meta ?? "", t(m.created_at));
   }
   return leadId;
 }
@@ -144,7 +148,7 @@ const koudeLeadId = addLead({
   ],
 });
 d.prepare("INSERT INTO followups (lead_id, label, due_at, subject, body, status) VALUES (?,?,?,?,?,?)")
-  .run(koudeLeadId, "dag3", "2026-09-30T09:00:00Z", "Nog interesse in de Toyota Yaris?", "Hoi Linda, ik wilde even checken of je nog vragen hebt over de Yaris. Zin om een proefrit te plannen?", "gepland");
+  .run(koudeLeadId, "dag3", t("2026-09-30 09:00:00").replace(" ", "T") + "Z", "Nog interesse in de Toyota Yaris?", "Hoi Linda, ik wilde even checken of je nog vragen hebt over de Yaris. Zin om een proefrit te plannen?", "gepland");
 
 // 5) Tweede lead op dezelfde Audi A4 als Ahmed, test de "meerdere leads op dit voertuig"-badge
 addLead({
@@ -166,6 +170,16 @@ addLead({
     { direction: "out", subject: "Re: Audi A4 Avant", body: "Hoi Petra, inruil is zeker bespreekbaar! Kun je het kenteken en de kilometerstand van je huidige auto doorgeven? Dan neemt Kay de mogelijkheden persoonlijk met je door.", created_at: "2026-09-27 09:32:00" },
   ],
 });
+
+// Proefrit met echte tijd: eerstvolgende zaterdag 11:00; overdracht met tijdstip
+{
+  const nu = new Date();
+  const za = new Date(Date.UTC(nu.getUTCFullYear(), nu.getUTCMonth(), nu.getUTCDate() + ((6 - nu.getUTCDay() + 7) % 7 || 7)));
+  const tijd = `${za.toISOString().slice(0, 10)} 11:00`;
+  d.prepare("UPDATE leads SET afspraak_tijd=? WHERE dealer_id=? AND status='afspraak'").run(tijd, dealerId);
+  d.prepare("UPDATE messages SET subject='Proefrit gepland' WHERE meta='afspraak' AND lead_id IN (SELECT id FROM leads WHERE dealer_id=?)").run(dealerId);
+  d.prepare("UPDATE leads SET escalated_at=updated_at WHERE dealer_id=? AND status='escalatie'").run(dealerId);
+}
 
 console.log("✓ Demo-data geladen.");
 console.log(`  Login:     ${email}`);

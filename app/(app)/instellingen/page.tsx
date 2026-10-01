@@ -46,8 +46,13 @@ export default async function Settings({ searchParams }: { searchParams: Promise
             <input id="city" name="city" type="text" defaultValue={dealer.city} /></div>
           <div className="field"><label htmlFor="seller_name">Naam verkoper</label>
             <input id="seller_name" name="seller_name" type="text" defaultValue={dealer.seller_name} /></div>
-          <div className="field"><label htmlFor="from_email">Afzenderadres richting klant (geverifieerd in Postmark)</label>
-            <input id="from_email" name="from_email" type="email" defaultValue={dealer.from_email} /></div>
+          <div className="info-row">
+            <span>✉️</span>
+            <div>
+              <b>Zo zien klanten je berichten</b>
+              <small>Afzender: <em>{dealer.seller_name || "Jouw naam"} | {dealer.name || "Jouw bedrijf"}</em>. RepRight verstuurt de mail voor je, zodat je niets aan je eigen mail hoeft in te stellen. Antwoorden van klanten komen automatisch terug in RepRight, en jij krijgt een melding als iets op jou wacht ({dealer.email}).</small>
+            </div>
+          </div>
           <label className="check-row">
             <input type="checkbox" name="stock_live" defaultChecked={dealer.stock_live !== 0} />
             <span>

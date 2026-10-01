@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "test:engine": "REPRIGHT_FAKE_AI=1 ANTHROPIC_API_KEY=test AUTH_SECRET=test DATABASE_PATH=/tmp/repright-test.db tsx scripts/test-engine.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.72.1",

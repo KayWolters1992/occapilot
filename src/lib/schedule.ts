@@ -73,10 +73,81 @@ function amsterdamNow(now: Date) {
   return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute);
 }
 
-export interface Moment { label: string; dag: string }
+export interface Moment { label: string; dag: string; tijd: string }
+
+/* ── Afspraaktijden: altijd Amsterdamse wandklok als tekst "YYYY-MM-DD HH:MM" ── */
+
+const MAAND_LANG = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** Nu, als Amsterdamse wandklok-tekst. */
+export function nuLokaal(now = new Date()): string {
+  const d = new Date(amsterdamNow(now));
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+}
+
+/** Klopt de vorm "YYYY-MM-DD HH:MM" (ook "T" als scheiding is goed)? Geeft genormaliseerde tekst of "". */
+export function normTijd(t: string | null | undefined): string {
+  const m = (t || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if (!m) return "";
+  const ms = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  if (Number.isNaN(ms)) return "";
+  return `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}`;
+}
+
+/** Tekst → milliseconden (als wandklok, alleen bedoeld om te vergelijken). */
+export function tijdMs(t: string): number {
+  const n = normTijd(t);
+  if (!n) return NaN;
+  const [d, h] = n.split(" ");
+  const [y, mo, da] = d.split("-").map(Number);
+  const [hh, mm] = h.split(":").map(Number);
+  return Date.UTC(y, mo - 1, da, hh, mm);
+}
+
+/** Overlapt dit moment met een al geboekte proefrit (binnen de proefritduur)? Geeft het botsende moment terug. */
+export function botsing(t: string, bezet: string[], duur: number): string | null {
+  const a = tijdMs(t);
+  if (Number.isNaN(a)) return null;
+  for (const b of bezet) {
+    const bm = tijdMs(b);
+    if (!Number.isNaN(bm) && Math.abs(a - bm) < duur * 60000) return b;
+  }
+  return null;
+}
+
+/** Valt het moment binnen het weekrooster (dag open, begin en eind binnen de tijden)? */
+export function binnenRooster(s: Schedule, t: string): boolean {
+  const ms = tijdMs(t);
+  if (Number.isNaN(ms)) return false;
+  const d = new Date(ms);
+  const dag = s.days[(d.getUTCDay() + 6) % 7];
+  if (!dag.open) return false;
+  const m = d.getUTCHours() * 60 + d.getUTCMinutes();
+  return m >= toMin(dag.van) && m + s.duur <= toMin(dag.tot);
+}
+
+/** "zaterdag 4 oktober om 11.00" */
+export function afspraakLabel(t: string): string {
+  const ms = tijdMs(t);
+  if (Number.isNaN(ms)) return t;
+  const d = new Date(ms);
+  return `${DAGEN[(d.getUTCDay() + 6) % 7]} ${d.getUTCDate()} ${MAAND_LANG[d.getUTCMonth()]} om ${pad(d.getUTCHours())}.${pad(d.getUTCMinutes())}`;
+}
+
+/** "Vandaag", "Morgen" of null, t.o.v. nu (Amsterdam). */
+export function dagWoord(t: string, now = new Date()): string | null {
+  const n = normTijd(t);
+  if (!n) return null;
+  const vandaag = nuLokaal(now).slice(0, 10);
+  const morgen = nuLokaal(new Date(now.getTime() + 86400000)).slice(0, 10);
+  if (n.startsWith(vandaag)) return "Vandaag";
+  if (n.startsWith(morgen)) return "Morgen";
+  return null;
+}
 
 /** Concrete vrije momenten in de komende dagen, verspreid (max. 2 per dag: ochtend en middag). */
-export function nextSlots(s: Schedule, count = 6, now = new Date()): Moment[] {
+export function nextSlots(s: Schedule, count = 6, now = new Date(), bezet: string[] = []): Moment[] {
   const nowLocal = amsterdamNow(now);
   const earliest = nowLocal + s.vooraf * 3600_000;
   const base = new Date(nowLocal);
@@ -91,29 +162,33 @@ export function nextSlots(s: Schedule, count = 6, now = new Date()): Moment[] {
     const kandidaten: number[] = [];
     for (let m = Math.ceil(start / 60) * 60; m <= end; m += 60) kandidaten.push(m);
     if (!kandidaten.length) kandidaten.push(start);
-    const ochtend = kandidaten.find((m) => m >= 600 && m < 720 && day.getTime() + m * 60000 >= earliest)
-      ?? kandidaten.find((m) => m < 720 && day.getTime() + m * 60000 >= earliest);
-    const middag = kandidaten.find((m) => m >= 900 && day.getTime() + m * 60000 >= earliest)
-      ?? kandidaten.find((m) => m >= 780 && day.getTime() + m * 60000 >= earliest);
+    const tekst = (m: number) => `${day.getUTCFullYear()}-${pad(day.getUTCMonth() + 1)}-${pad(day.getUTCDate())} ${fmt(m)}`;
+    const ok = (m: number) => day.getTime() + m * 60000 >= earliest && !botsing(tekst(m), bezet, s.duur);
+    const ochtend = kandidaten.find((m) => m >= 600 && m < 720 && ok(m))
+      ?? kandidaten.find((m) => m < 720 && ok(m));
+    const middag = kandidaten.find((m) => m >= 900 && ok(m))
+      ?? kandidaten.find((m) => m >= 780 && ok(m));
     for (const m of [ochtend, middag]) {
       if (m === undefined || out.length >= count) continue;
       const label = `${DAG_KORT[idx]} ${day.getUTCDate()} ${MAAND_KORT[day.getUTCMonth()]} ${nl(fmt(m))}`;
-      out.push({ label, dag: DAGEN[idx] });
+      out.push({ label, dag: DAGEN[idx], tijd: tekst(m) });
     }
   }
   return out;
 }
 
 /** Tekst voor de AI: vandaag, rooster, regels en concrete vrije momenten. */
-export function planningForAI(s: Schedule, now = new Date()): string {
+export function planningForAI(s: Schedule, now = new Date(), bezet: string[] = []): string {
   const vandaag = new Intl.DateTimeFormat("nl-NL", {
     timeZone: "Europe/Amsterdam", weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
   }).format(now);
-  const slots = nextSlots(s, 6, now).map((m) => m.label).join("; ");
+  const slots = nextSlots(s, 6, now, bezet).map((m) => `${m.label} [${m.tijd}]`).join("; ");
+  const komend = bezet.filter((b) => tijdMs(b) >= tijdMs(nuLokaal(now))).sort();
   return [
     `Het is nu ${vandaag}.`,
     `Proefritrooster: ${scheduleSummary(s)}. Een proefrit duurt ongeveer ${s.duur} minuten.`,
     `Stel NOOIT een moment voor binnen ${s.vooraf} uur vanaf nu of buiten het rooster.`,
+    komend.length ? `AL GEBOEKT (nooit voorstellen of bevestigen, ook niet binnen ${s.duur} minuten ervoor of erna): ${komend.join("; ")}.` : "",
     s.gesloten.trim() ? `Gesloten of niet beschikbaar: ${s.gesloten.trim().replace(/[.!]+$/, "")}.` : "",
     slots ? `Stel bij voorkeur twee van deze vrije momenten voor (één ochtend, één middag als dat kan): ${slots}.` : "Er zijn geen vrije momenten bekend; stel alleen dagdelen voor.",
     s.notitie.trim() ? `Vermeld bij een afspraak kort: ${s.notitie.trim().replace(/[.!]+$/, "")}.` : "",

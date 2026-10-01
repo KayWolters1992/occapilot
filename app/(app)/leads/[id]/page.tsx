@@ -10,10 +10,13 @@ import { ReplyBox, TypedText } from "./LeadClient";
 import { statusInfo } from "@/lib/status";
 import { StatusPill } from "@/components/StatusPill";
 import { LogoMark } from "@/components/Logo";
+import { AfspraakKnop } from "@/components/AfspraakKnop";
+import { parseSchedule, nextSlots, afspraakLabel, dagWoord } from "@/lib/schedule";
+import { bezetteTijdenMetNaam } from "@/lib/afspraken";
 
 export const dynamic = "force-dynamic";
 
-export default async function LeadDetail({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ nieuw?: string; t?: string; verzonden?: string }> }) {
+export default async function LeadDetail({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ nieuw?: string; t?: string; verzonden?: string; afspraak?: string }> }) {
   const { id } = await params;
   const sp = await searchParams;
   const dealer = (await currentDealer())!;
@@ -39,6 +42,23 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
     : 0;
 
   const info = statusInfo(lead.status);
+  const schedule = parseSchedule(dealer.schedule_json);
+  const bezet = bezetteTijdenMetNaam(dealer.id, lead.id);
+  const voorstel = nextSlots(schedule, 1, new Date(), bezet.map((b) => b.tijd))[0]?.tijd ?? "";
+  const ritLabel = lead.status === "afspraak" && lead.afspraak_tijd ? afspraakLabel(lead.afspraak_tijd) : "";
+  const afspraakKnop = (verzet: boolean) => (
+    <AfspraakKnop
+      leadId={lead.id}
+      klant={lead.customer_name || "de klant"}
+      huidig={verzet ? lead.afspraak_tijd || "" : ""}
+      voorstel={voorstel}
+      bezet={bezet}
+      schedule={schedule}
+      heeftEmail={!!lead.customer_email}
+      label={verzet ? "🔁 Verzetten" : "📅 Afspraak gemaakt"}
+      className={verzet ? "btn ghost small" : "btn ghost small"}
+    />
+  );
   const nextFup = fups.find((f) => f.status === "gepland");
   const lastOutId = msgs.map((m) => m.direction === "out" && !m.meta.startsWith("verkoper") ? m.id : 0).reduce((a, b) => Math.max(a, b), 0);
 
@@ -55,34 +75,52 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
       <div className={`beurt ${info.lane} ${lead.status}`}>
         <div className="beurt-ic"><Ic ic={info.icon} size={30} /></div>
         <div className="beurt-body">
-          <span className="beurt-kicker">{info.lane === "jij" ? "Jij bent aan zet" : info.lane === "ai" ? "RepRight is bezig" : "Afgerond"}</span>
-          <b>{lead.status === "escalatie" && lead.escalation_reason ? lead.escalation_reason : info.uitleg}</b>
+          <span className="beurt-kicker">{info.lane === "jij" ? "Jij bent aan zet" : info.lane === "ai" ? "RepRight is bezig" : lead.status === "afspraak" ? "Proefrit gepland" : "Afgerond"}</span>
+          {ritLabel ? (
+            <b className="beurt-rit">🗓️ {dagWoord(lead.afspraak_tijd!) ? `${dagWoord(lead.afspraak_tijd!)}, ` : ""}{ritLabel}</b>
+          ) : (
+            <b>{lead.status === "escalatie" && lead.escalation_reason ? lead.escalation_reason : info.uitleg}</b>
+          )}
+          {ritLabel && <span className="beurt-sub">{lead.afspraak_herinnerd ? "✓ De klant heeft een herinnering gekregen." : "De klant krijgt een dag van tevoren automatisch een herinnering."}</span>}
           <span className="beurt-next">
             <em>Wat doe jij?</em> {info.jijDoet}
             {info.lane === "ai" && nextFup && <> Volgende herinnering: {nextFup.label.replace("dag", "dag ")} op {wanneer(nextFup.due_at)}.</>}
           </span>
         </div>
-        <form action={closeLead} className="beurt-actions">
-          <input type="hidden" name="id" value={lead.id} />
-          {lead.customer_phone && info.lane !== "klaar" && (
+        <div className="beurt-actions">
+          {lead.customer_phone && !["gesloten", "gestopt"].includes(lead.status) && (
             <a className="btn small" href={`tel:${lead.customer_phone.replace(/\s/g, "")}`}>📞 Bel {lead.customer_phone}</a>
           )}
-          {lead.status === "afspraak" && lead.customer_phone && (
-            <a className="btn small" href={`tel:${lead.customer_phone.replace(/\s/g, "")}`}>📞 Bevestig: {lead.customer_phone}</a>
-          )}
-          {info.lane !== "klaar" && <a className="btn ghost small" href="#antwoord">✍️ Zelf reageren</a>}
-          {info.lane === "jij" && (
-            <button className="btn ghost small" name="status" value="wacht"><Ic ic="🤖" size={16} /> Geef terug aan RepRight</button>
-          )}
-          {lead.status !== "gesloten" && lead.status !== "gestopt" && (
-            <button className="btn ghost small subtle" name="status" value="gesloten">Sluit lead</button>
-          )}
-          {lead.status === "gesloten" && (
-            <button className="btn ghost small" name="status" value="wacht">Heropen lead</button>
-          )}
-        </form>
+          {info.lane !== "klaar" && afspraakKnop(false)}
+          {lead.status === "afspraak" && afspraakKnop(true)}
+          <form action={closeLead} className="beurt-form">
+            <input type="hidden" name="id" value={lead.id} />
+            {info.lane !== "klaar" && <a className="btn ghost small" href="#antwoord">✍️ Zelf reageren</a>}
+            {info.lane === "jij" && (
+              <button className="btn ghost small" name="status" value="wacht"><Ic ic="🤖" size={16} /> Geef terug aan RepRight</button>
+            )}
+            {lead.status === "afspraak" && (
+              <button className="btn ghost small" name="status" value="gesloten">✓ Proefrit geweest</button>
+            )}
+            {!["gesloten", "gestopt", "afspraak"].includes(lead.status) && (
+              <button className="btn ghost small subtle" name="status" value="gesloten">Sluit lead</button>
+            )}
+            {lead.status === "gesloten" && (
+              <button className="btn ghost small" name="status" value="wacht">Heropen lead</button>
+            )}
+          </form>
+        </div>
       </div>
 
+      {sp.afspraak && ritLabel && (
+        <div className="demobar ok">
+          <span className="demobar-ic">✓</span>
+          <div>
+            <b>Proefrit {sp.afspraak === "verzet" ? "verzet naar" : "vastgelegd op"} {ritLabel}.</b>
+            <span>RepRight stopt met opvolgen. De afspraak staat bij Proefritten en de klant krijgt een dag van tevoren een herinnering.</span>
+          </div>
+        </div>
+      )}
       {sp.nieuw && lastOutId > 0 && (
         <div className="demobar">
           <span className="demobar-ic">⚡</span>
@@ -165,12 +203,13 @@ export default async function LeadDetail({ params, searchParams }: { params: Pro
                   <div>
                     <b>Herinnering {f.label.replace("dag", "dag ")}</b>
                     <span>
-                      {f.status === "verzonden" ? "verstuurd" : f.status === "gepland" ? "gepland" : "niet nodig, klant reageerde"} · {wanneer(f.sent_at ?? f.due_at)}
+                      {f.status === "verzonden" ? "verstuurd" : f.status === "gepland" ? "gepland" : f.status === "mislukt" ? "niet verstuurd, e-mail nog niet gekoppeld" : "niet nodig, klant reageerde"} · {wanneer(f.sent_at ?? f.due_at)}
                     </span>
                   </div>
                 </div>
               ))}
-              {lead.status === "afspraak" && <div className="tl-item done ok"><i /><div><b>Proefrit gepland</b><span>jij krijgt de klant in de showroom</span></div></div>}
+              {lead.status === "afspraak" && <div className="tl-item done ok"><i /><div><b>Proefrit gepland</b><span>{ritLabel || "tijd nog onbekend"}</span></div></div>}
+              {lead.status === "afspraak" && <div className={`tl-item ${lead.afspraak_herinnerd ? "done" : "next"}`}><i /><div><b>Herinnering naar klant</b><span>{lead.afspraak_herinnerd ? "verstuurd" : "een dag van tevoren, automatisch"}</span></div></div>}
               {lead.status === "escalatie" && <div className="tl-item next esc"><i /><div><b>Wacht op jou</b><span>{lead.escalation_reason}</span></div></div>}
               {lead.status === "overgenomen" && <div className="tl-item next"><i /><div><b>Jij voert het gesprek</b><span>RepRight blijft stil</span></div></div>}
               {lead.status === "gestopt" && <div className="tl-item skip"><i /><div><b>Klant heeft zich afgemeld</b><span>er wordt niets meer verstuurd</span></div></div>}

@@ -14,8 +14,8 @@ export interface StatusInfo {
 const MAP: Record<string, StatusInfo> = {
   escalatie: {
     label: "Actie nodig", pill: "hot", icon: "👤", lane: "jij",
-    uitleg: "RepRight heeft het gesprek aan jou overgedragen: een bod, inruilvraag, klacht of iets wat hij niet zeker weet.",
-    jijDoet: "Bel de klant of reageer in het gesprek. Daarna geef je het terug of sluit je de lead.",
+    uitleg: "RepRight heeft het gesprek aan jou overgedragen: een bod, inruilvraag, klacht of iets wat hij niet zeker weet. RepRight antwoordt nu niet meer; reageert de klant, dan krijg jij een seintje.",
+    jijDoet: "Bel de klant of reageer in het gesprek. Spreek je een proefrit af? Klik op 'Afspraak gemaakt'. Na 3 uur zonder reactie krijg je nog een herinnering.",
   },
   overgenomen: {
     label: "Jij voert gesprek", pill: "you", icon: "👤", lane: "jij",
@@ -34,13 +34,13 @@ const MAP: Record<string, StatusInfo> = {
   },
   wacht: {
     label: "Wacht op klant", pill: "ai", icon: "🤖", lane: "ai",
-    uitleg: "Het gesprek loopt en de bal ligt bij de klant. Reageert hij, dan antwoordt RepRight meteen.",
+    uitleg: "Het gesprek loopt en de bal ligt bij de klant. Reageert hij, dan antwoordt RepRight meteen. Blijft het stil, dan stuurt RepRight na 2 en 5 dagen nog een herinnering.",
     jijDoet: "Niets. RepRight pakt het op zodra de klant iets stuurt.",
   },
   afspraak: {
     label: "Proefrit gepland", pill: "ok", icon: "✓", lane: "klaar",
-    uitleg: "De klant heeft een moment gekozen. Jij hebt hiervan een melding gekregen.",
-    jijDoet: "Bel of app de klant even ter bevestiging en zet de auto klaar.",
+    uitleg: "De proefrit staat vast en jij hebt een melding gekregen. De klant krijgt een dag van tevoren automatisch een herinnering.",
+    jijDoet: "Zet de auto klaar. Verandert er iets? Klik op 'Verzetten'.",
   },
   gesloten: {
     label: "Gesloten", pill: "wait", icon: "✓", lane: "klaar",

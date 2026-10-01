@@ -8,6 +8,7 @@ import { Plate, groet, wanneer } from "@/components/LeadBits";
 import { InboundAddress, TestLeadButton } from "../leads/OnboardingCard";
 import { CountUp } from "../../_lp/Interactive";
 import { setChecklist } from "../../actions";
+import { dagWoord, afspraakLabel } from "@/lib/schedule";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,9 @@ function activiteitTekst(a: Activiteit): { ic: string; t: string; cls: string } 
   if (a.direction === "out") {
     if (a.meta.startsWith("verkoper")) return { ic: "✍️", t: `Jij stuurde ${naam} een bericht`, cls: "you" };
     if (a.meta.startsWith("dag")) return { ic: "🔁", t: `RepRight stuurde ${naam} een herinnering`, cls: "ai" };
+    if (a.meta.startsWith("bevestiging")) return { ic: "📅", t: `Bevestiging proefrit naar ${naam}`, cls: "ok" };
+    if (a.meta.startsWith("herinnering-afspraak")) return { ic: "🔔", t: `${naam} kreeg een herinnering voor de proefrit`, cls: "ok" };
+    if (a.meta.startsWith("escalatie-bevestiging")) return { ic: "👤", t: `RepRight liet ${naam} weten dat jij contact opneemt`, cls: "ai" };
     return { ic: "⚡", t: `RepRight beantwoordde ${naam}`, cls: "ai" };
   }
   if (a.meta === "afspraak") return { ic: "✓", t: `Proefrit gepland met ${naam}`, cls: "ok" };
@@ -43,17 +47,17 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   // Moet: wat op jou wacht (overdracht, zelf overgenomen) en proefritten om te bevestigen.
   // Kan: hete leads die RepRight al heeft beantwoord; een belletje erbij vergroot de kans op een proefrit.
   const soort = (l: Lead): "moet" | "rit" | "kan" | null =>
-    laneOf(l) === "jij" ? "moet" : l.status === "afspraak" && l.customer_phone ? "rit" : l.qual_label === "Heet" && laneOf(l) === "ai" && l.customer_phone ? "kan" : null;
+    laneOf(l) === "jij" ? "moet" : l.status === "afspraak" && l.afspraak_tijd && dagWoord(l.afspraak_tijd) ? "rit" : l.qual_label === "Heet" && laneOf(l) === "ai" && l.customer_phone ? "kan" : null;
   const volgorde = { moet: 0, rit: 1, kan: 2 };
   const bellen = all
     .map((l) => ({ l, k: soort(l) }))
     .filter((x): x is { l: Lead; k: "moet" | "rit" | "kan" } => x.k !== null)
-    .sort((a, b) => volgorde[a.k] - volgorde[b.k])
+    .sort((a, b) => volgorde[a.k] - volgorde[b.k] || (a.k === "rit" ? (a.l.afspraak_tijd || "").localeCompare(b.l.afspraak_tijd || "") : 0))
     .slice(0, 5);
-  const moetAantal = bellen.filter((x) => x.k !== "kan").length;
+  const moetAantal = bellen.filter((x) => x.k === "moet").length;
 
   const month = new Date().toISOString().slice(0, 7);
-  const afspraken = all.filter((l) => l.status === "afspraak" && l.created_at.startsWith(month)).length;
+  const afspraken = all.filter((l) => l.status === "afspraak" && (l.afspraak_tijd || l.updated_at).startsWith(month)).length;
   const marge = afspraken * 1200;
 
   const activiteit = d
@@ -165,7 +169,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <div className="bellen-head">
             <div>
               <span className="cardtitle">📞 Vandaag bellen</span>
-              <span className="note">Bovenaan wat moet. Daaronder hete leads: RepRight heeft ze al gemaild, een belletje erbij is optioneel maar vergroot de kans op een proefrit.</span>
+              <span className="note">Bovenaan wat moet. Daarna proefritten van vandaag en morgen, en hete leads waar een belletje erbij de kans op verkoop vergroot.</span>
             </div>
             {moetAantal > 0 && <span className="bellen-count">{moetAantal}</span>}
           </div>
@@ -174,26 +178,27 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           ) : (
             <div className="bellen-grid">
               {bellen.map(({ l, k }) => (
-                <div key={l.id} className={`bel compact ${k === "moet" ? "esc" : k === "rit" ? "rit" : "hot"}`}>
+                <div key={l.id} className={`bel compact ${k === "moet" ? "esc" : k === "rit" ? "bevestig" : "hot"}`}>
                   <div className="bel-top">
                     <span className={`pill ${k === "moet" ? "hot" : k === "rit" ? "ok" : "heat"}`}>
-                      {k === "moet" ? "👤 Moet: wacht op jou" : k === "rit" ? "📅 Proefrit bevestigen" : "🔥 Optioneel: heet"}
+                      {k === "moet" ? "👤 Moet: wacht op jou" : k === "rit" ? `📅 Proefrit ${dagWoord(l.afspraak_tijd!)?.toLowerCase()} ${l.afspraak_tijd!.slice(11, 16)}` : "🔥 Optioneel: heet"}
                     </span>
                     <Plate p={l.license_plate} />
                   </div>
                   <div className="bel-info">
                     <b>{l.customer_name || "Onbekend"} <span className="bel-car">· {l.vehicle || "Onbekende auto"}</span></b>
                     {l.question && <q className="bel-q">{l.question}</q>}
+                    {k === "moet" && l.status === "escalatie" && l.escalated_at && <span className="bel-sinds">⏱ Wacht op jou sinds {wanneer(l.escalated_at)}</span>}
                     <p>
                       {k === "moet"
                         ? l.escalation_reason || "Jij voert dit gesprek."
                         : k === "rit"
-                          ? "De klant koos een moment. Bel even ter bevestiging en zet de auto klaar."
+                          ? `Zet de auto klaar voor ${afspraakLabel(l.afspraak_tijd!)}. ${l.afspraak_herinnerd ? "De klant heeft een herinnering gekregen." : "De klant krijgt automatisch een herinnering."}`
                           : "✓ Al beantwoord door RepRight. Nabellen is niet nodig, wel een kans."}
                     </p>
                   </div>
                   <div className="bel-actions">
-                    {l.customer_phone && <a className={`btn small ${k === "kan" ? "ghost" : ""}`} href={`tel:${l.customer_phone.replace(/\s/g, "")}`}>📞 Bel</a>}
+                    {l.customer_phone && <a className={`btn small ${k !== "moet" ? "ghost" : ""}`} href={`tel:${l.customer_phone.replace(/\s/g, "")}`}>📞 Bel</a>}
                     <Link className="btn ghost small" href={`/leads/${l.id}`}>Open →</Link>
                   </div>
                 </div>

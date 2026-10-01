@@ -32,6 +32,10 @@ export interface Lead {
   rdw_json: string;
   raw_email: string;
   escalation_reason: string;
+  afspraak_tijd?: string;
+  afspraak_herinnerd?: number;
+  escalated_at?: string;
+  esc_herinnerd?: number;
   created_at: string;
   updated_at: string;
 }
@@ -54,7 +58,7 @@ export interface Followup {
   due_at: string;
   subject: string;
   body: string;
-  status: "gepland" | "verzonden" | "geannuleerd";
+  status: "gepland" | "verzonden" | "geannuleerd" | "mislukt";
   sent_at: string | null;
 }
 

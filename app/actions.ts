@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import { verifyPassword, hashPassword, sessionToken, currentDealer } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { cancelFollowups, sendDealerReply } from "@/lib/pipeline";
+import { cancelFollowups, sendDealerReply, planAfspraakDoorVerkoper } from "@/lib/pipeline";
 import type { Dealer, Lead } from "@/lib/types";
 import { parseSchedule, scheduleSummary } from "@/lib/schedule";
 
@@ -134,4 +134,18 @@ export async function setChecklist(form: FormData) {
   const hidden = form.get("hidden") === "1" ? 1 : 0;
   db().prepare("UPDATE dealers SET checklist_hidden=? WHERE id=?").run(hidden, dealer.id);
   redirect("/dashboard");
+}
+
+/** Verkoper legt een proefrit vast of verzet hem. */
+export async function planAfspraak(form: FormData) {
+  const dealer = await currentDealer();
+  if (!dealer) redirect("/login");
+  const id = Number(form.get("id"));
+  const lead = db().prepare("SELECT * FROM leads WHERE id=? AND dealer_id=?").get(id, dealer.id) as Lead | undefined;
+  if (!lead) redirect("/leads");
+  const tijd = `${String(form.get("datum") ?? "")} ${String(form.get("tijd") ?? "")}`;
+  const uitkomst = await planAfspraakDoorVerkoper(dealer, lead, tijd, form.get("bevestig") === "on");
+  revalidatePath("/", "layout");
+  const terug = String(form.get("terug") ?? "");
+  redirect(terug === "proefritten" ? `/proefritten?ok=${uitkomst}` : `/leads/${id}?afspraak=${uitkomst}`);
 }
